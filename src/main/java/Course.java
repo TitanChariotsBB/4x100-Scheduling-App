@@ -29,4 +29,12 @@ public class Course {
     public boolean overlapsWith(Course toCompare) {
         return false;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public ArrayList<Point> getMeetingTimes() {
+        return meetingTimes;
+    }
 }
