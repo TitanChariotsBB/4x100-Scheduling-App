@@ -9,7 +9,7 @@ public class SemesterSchedule extends CourseList {
     }
 
     public void addCourse(Course course) {
-        // Checks for conflict
+        courses.add(course);
     }
 
     @Override
