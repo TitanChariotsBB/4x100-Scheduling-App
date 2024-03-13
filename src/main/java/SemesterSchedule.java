@@ -5,7 +5,7 @@ public class SemesterSchedule extends CourseList {
     private Boolean isFall;
 
     public void addCourse(Course course) {
-        // checks for conflict
+        // Checks for conflict
     }
 
     @Override
