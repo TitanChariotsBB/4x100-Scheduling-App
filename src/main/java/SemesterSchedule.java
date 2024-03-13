@@ -7,6 +7,7 @@ public class SemesterSchedule extends CourseList {
     private Boolean isFall;
 
     public SemesterSchedule(){
+        courses = new ArrayList<>();
         // we'll probably want a constructor that loads from a file.
     }
 
@@ -17,37 +18,28 @@ public class SemesterSchedule extends CourseList {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\tMonday \tTuesday \tWednesday \tThursday \tFriday\n");
+        sb.append("\tMonday   \tTuesday  \tWednesday\tThursday \tFriday\n");
 
-        String[] rows = new String[12];
+        String[] rows = {"\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n"};
 
         for (Course course : courses) {
             String code = course.getCode();
+            int timeSliceIdx = 0;
+            String timeSlice = "";
             for (int i = 0; i < 5; i++) {
                 LocalDateTime[] day = course.getMeetingTimes()[i];
-                String space = "\t";
-                switch (i) {
-                    case 1:
-                        space = "      \t";
-                        break;
-                    case 2:
-                        space = "            \t";
-                        break;
-                    case 3:
-                        space = "                  \t";
-                        break;
-                    case 4:
-                        space = "                        \t";
-                        break;
-                    default:
-                        space = "";
-                }
                 if (day != null) {
-                    int idx = day[0].getHour();
-                    rows[idx] = space + code + "\n";
+                    timeSliceIdx = day[0].getHour() - 8;
+                    timeSlice += "\t" + code + " ";
+                } else {
+                    timeSlice += "\t         ";
                 }
             }
+            rows[timeSliceIdx] = timeSlice;
         }
-        return "";
+        for (String row : rows) {
+            sb.append(row);
+        }
+        return sb.toString();
     }
 }
