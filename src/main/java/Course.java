@@ -24,6 +24,8 @@ public class Course {
         this.prerequisites = prerequisites;
     }
 
+    public int getCredits() {return credits;}
+
     public boolean overlapsWith(Course toCompare) {
         return false;
     }
