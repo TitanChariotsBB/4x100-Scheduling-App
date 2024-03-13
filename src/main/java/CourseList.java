@@ -5,6 +5,10 @@ public class CourseList {
     private int totalCredits;
 
     public void addCourse(Course course) {
+        if(totalCredits+course.getCredits() > 19){
+            throw new RuntimeException("You have attempted to add more than 19 credits worth of classes");
+        }
+        
         totalCredits = totalCredits + course.getCredits();
     }
 
