@@ -9,7 +9,15 @@ public class SemesterSchedule extends CourseList {
     }
 
     public void addCourse(Course course) {
-        // Checks for conflict
+        boolean overlapsWith = false;
+        for (int i = 0; i < courses.size(); i++) {
+            if (course.overlapsWith(courses.get(i))) {
+                overlapsWith = true;
+            }
+        }
+        if (!overlapsWith) {
+            courses.add(course);
+        }
     }
 
     @Override
