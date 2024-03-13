@@ -5,11 +5,11 @@ public class CourseList {
     private int totalCredits;
 
     public void addCourse(Course course) {
-
+        totalCredits = totalCredits + course.getCredits();
     }
 
     public void removeCourse(Course course) {
-
+        totalCredits = totalCredits - course.getCredits();
     }
 
     @Override
