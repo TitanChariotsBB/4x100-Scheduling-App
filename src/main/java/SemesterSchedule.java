@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SemesterSchedule extends CourseList {
@@ -18,12 +19,12 @@ public class SemesterSchedule extends CourseList {
         StringBuilder sb = new StringBuilder();
         sb.append("\tMonday \tTuesday \tWednesday \tThursday \tFriday\n");
 
-        String[] rows = new String[24];
+        String[] rows = new String[12];
 
         for (Course course : courses) {
             String code = course.getCode();
             for (int i = 0; i < 5; i++) {
-                Point p = course.getMeetingTimes().get(i);
+                LocalDateTime[] day = course.getMeetingTimes()[i];
                 String space = "\t";
                 switch (i) {
                     case 1:
@@ -41,8 +42,8 @@ public class SemesterSchedule extends CourseList {
                     default:
                         space = "";
                 }
-                if (p != null) {
-                    int idx = p.x * 2 - 16;
+                if (day != null) {
+                    int idx = day[0].getHour();
                     rows[idx] = space + code + "\n";
                 }
             }
