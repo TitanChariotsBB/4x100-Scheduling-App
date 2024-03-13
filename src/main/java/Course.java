@@ -6,16 +6,16 @@ public class Course {
     private String name;
     private String code;
     private LocalDateTime[][] meetingTimes;
-    private boolean isFall;
+    private Boolean isFall;
     private String description;
     private String location;
     private String professor;
-    private int credits;
+    private Integer credits;
     private ArrayList<String> prerequisites;
 
-    public Course(String name, String code, LocalDateTime[][] meetingTimes, boolean isFall,
+    public Course(String name, String code, LocalDateTime[][] meetingTimes, Boolean isFall,
                   String description, String location, String professor,
-                  int credits, ArrayList<String> prerequisites) {
+                  Integer credits, ArrayList<String> prerequisites) {
         this.name = name;
         this.code = code;
         this.isFall = isFall;
@@ -40,4 +40,5 @@ public class Course {
     public LocalDateTime[][] getMeetingTimes() {
         return meetingTimes;
     }
+
 }

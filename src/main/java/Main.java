@@ -4,20 +4,27 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Main {
     private static CourseList catalog;
-    private static final String iFilePath = "C:\\Users\\STRIEBELNJ21\\Documents\\Software Engineering\\UpdatedCourseData\\catalog.xlsx";
 
     public static void run() {
         // run
     }
 
-    public static void loadCatalog() {
-        try {
-            File iFile = new File(iFilePath);
+      public static void loadCatalog() {
+       Path currentPath = FileSystems.getDefault().getPath("");
+       String currentName = currentPath.toAbsolutePath().toString();
+       String catalogFilePath = currentName + "\\src\\CourseLists\\catalog.xlsx.";
+
+       catalog = new CourseList();
+
+       try {
+            File iFile = new File(catalogFilePath);
             FileInputStream iStream = new FileInputStream(iFile); //could throw fileNotFoundException
 
             Workbook catalogFile = new XSSFWorkbook(iStream); //could throw IOException
@@ -46,29 +53,69 @@ public class Main {
 
             for(int x = 1; x <= numRows; x++){
                 Row thisRow = catalogSheet.getRow(x);
-                String name = thisRow.getCell(5).getStringCellValue();
-                String code = thisRow.getCell(2).getStringCellValue() + thisRow.getCell(3).getStringCellValue();
-                boolean isFall = thisRow.getCell(1).getNumericCellValue() == 10.0;
-                LocalDateTime sTime = thisRow.getCell(14).getLocalDateTimeCellValue();
-                LocalDateTime eTime = thisRow.getCell(14).getLocalDateTimeCellValue();;
-                LocalDateTime timeRange[] = {sTime, eTime};
-                boolean[] days = new boolean[5];
-                for(int y = 9; y < 14; y++){
-                    days[y] = (thisRow.getCell(y).getCellType() != CellType.BLANK);
+
+                String name = null;
+                Cell nameCell = thisRow.getCell(5);
+                if(nameCell != null){
+                    name = nameCell.getStringCellValue();
                 }
-                ArrayList<LocalDateTime[]> meetTimes = new ArrayList<>();
-                for(int y = 0; y < 5; y++){
-                    if(days[y]){
-                        meetTimes.add(timeRange);
+
+                String code = null;
+                Cell deptCell = thisRow.getCell(2);
+                Cell numCell = thisRow.getCell(3);
+                if(deptCell != null && numCell != null) {
+                    code = deptCell.getStringCellValue() + numCell.getStringCellValue();
+                }
+
+                Boolean isFall = null;
+                Cell fallCell = thisRow.getCell(1);
+                if(fallCell != null){
+                    isFall = (fallCell.getStringCellValue().equals("10"));
+                }
+
+                LocalDateTime[][] meetTimes = null;
+                Cell sTimeCell = thisRow.getCell(14);
+                Cell eTimeCell = thisRow.getCell(15);
+                if(sTimeCell != null && eTimeCell != null) {
+                    LocalDateTime sTime = sTimeCell.getLocalDateTimeCellValue();
+                    LocalDateTime eTime = eTimeCell.getLocalDateTimeCellValue();
+                    LocalDateTime timeRange[] = {sTime, eTime};
+                    boolean[] days = new boolean[5];
+                    for (int y = 9; y < 14; y++) {
+                        Cell dayCell = thisRow.getCell(y);
+                        if(dayCell != null) {
+                            days[y - 9] = ((thisRow.getCell(y).getCellType() != CellType.BLANK));
+                        }else{
+                            days[y-9] = false;
+                        }
                     }
-                    else{
-                        meetTimes.add(null);
+                    meetTimes = new LocalDateTime[5][];
+                    for (int y = 0; y < 5; y++) {
+                        if (days[y]) {
+                            meetTimes[y] = timeRange;
+                        } else {
+                            meetTimes[y] = null;
+                        }
                     }
                 }
+
                 String description = null;
+
                 String location = null;
-                String professor = thisRow.getCell(17).getStringCellValue() + thisRow.getCell(16).getStringCellValue();
-                int credits = (int)thisRow.getCell(6).getNumericCellValue();
+
+                String professor = null;
+                Cell professorFirstCell = thisRow.getCell(17);
+                Cell professorLastCell = thisRow.getCell(16);
+                if(professorFirstCell != null && professorLastCell != null) {
+                    professor = professorFirstCell.getStringCellValue() + " " + professorLastCell.getStringCellValue();
+                }
+
+                Integer credits = null;
+                Cell creditsCell = thisRow.getCell(6);
+                if(creditsCell != null) {
+                    credits = (int) creditsCell.getNumericCellValue();
+                }
+
                 ArrayList<String> prereqs = null;
 
                 Course thisCourse = new Course(name, code, meetTimes, isFall, description, location, professor, credits, prereqs);
@@ -77,5 +124,8 @@ public class Main {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+    public static CourseList getCatalog(){//needed
+        return catalog;
     }
 }
