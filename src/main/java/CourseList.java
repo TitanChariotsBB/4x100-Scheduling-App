@@ -7,8 +7,10 @@ public class CourseList {
 
     }
 
-    public void removeCourse(Course course) {
-
+    public void removeCourse(Course course) throws Exception {
+        if (!courses.remove(course)) {
+            throw new Exception("Course not found!");
+        }
     }
 
     @Override
