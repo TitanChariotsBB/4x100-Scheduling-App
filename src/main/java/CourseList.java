@@ -14,8 +14,8 @@ public class CourseList {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Course cours : courses) {
-            sb.append(cours);
+        for (Course course : courses) {
+            sb.append(course.getName());
         }
         return sb.toString();
     }

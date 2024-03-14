@@ -26,6 +26,11 @@ public class Course {
 
     // Hey hey this is Alex Zeilstra changing up the Course claaassss
 
+
+    public String getName() {
+        return name;
+    }
+
     public boolean overlapsWith(Course toCompare) {
         return false;
     }
