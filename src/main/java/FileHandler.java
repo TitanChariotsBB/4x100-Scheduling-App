@@ -9,11 +9,28 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class FileHandler {
-    public static CourseList loadCatalog(){
+    public static String createPath(String nameAndExt){
         Path currentPath = FileSystems.getDefault().getPath("");
         String currentName = currentPath.toAbsolutePath().toString();
-        String catalogFilePath = currentName + "\\src\\CourseLists\\catalog.xlsx.";
+        String filePath = currentName + "\\src\\CourseLists\\";
+        return filePath + nameAndExt;
+    }
 
+    public static void saveList(CourseList courses, String fileName){
+//        //JSON format: an array of course objects with all the attributes they have filled in. Null attributes are left as empty strings
+//        StringBuilder fileContents = new StringBuilder();
+//        fileContents.append('{')
+//        for(Course course : courses.getCourses()){
+//
+//        }
+    }
+
+    public static CourseList loadList(String fileName){
+        return null;
+    }
+
+    public static CourseList loadCatalog(){
+        String catalogFilePath = createPath("catalog.xlsx");
         CourseList catalog = new CourseList();
 
         try {
@@ -113,11 +130,12 @@ public class FileHandler {
 
                 Course thisCourse = new Course(name, code, meetTimes, isFall, description, location, professor, credits, prereqs);
                 catalog.addCourse(thisCourse);
+
+                //TODO Prerequisites!!!
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         return catalog;
     }
-
 }
