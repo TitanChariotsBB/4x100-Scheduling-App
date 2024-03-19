@@ -4,7 +4,7 @@ class loadCatalogTest {
 
     @Test
     void loadCatalog() {
-        Main.loadCatalog();
-        System.out.println(Main.getCatalog());
+        CourseList myCourses = FileHandler.loadCatalog();
+        System.out.println(myCourses);
     }
 }
