@@ -12,7 +12,22 @@ public class SemesterSchedule extends CourseList {
     }
 
     public void addCourse(Course course) {
-        courses.add(course);
+        boolean overlapsWith = false;
+        if (courses != null) {
+            for (Course cours : courses) {
+                if (course.overlapsWith(cours)) {
+                    overlapsWith = true;
+                    System.out.println("Error: Overlaps with course " + cours.getName());
+                }
+            }
+            if (!overlapsWith) {
+                courses.add(course);
+            }
+        }
+        else {
+            courses = new ArrayList<>();
+            courses.add(course);
+        }
     }
 
     @Override
