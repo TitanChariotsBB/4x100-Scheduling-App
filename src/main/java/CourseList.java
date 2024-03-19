@@ -3,12 +3,18 @@ import java.util.ArrayList;
 public class CourseList {
     private ArrayList<Course> courses;
 
+    public ArrayList<Course> getCourses(){
+        return courses;
+    }
+
     public void addCourse(Course course) {
         courses.add(course);
     }
 
-    public void removeCourse(Course course) {
-
+    public void removeCourse(Course course) throws Exception {
+        if (!courses.remove(course)) {
+            throw new Exception("Course not found!");
+        }
     }
 
     @Override
