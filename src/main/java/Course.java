@@ -41,4 +41,7 @@ public class Course {
         return meetingTimes;
     }
 
+    public String getName() {
+        return name;
+    }
 }
