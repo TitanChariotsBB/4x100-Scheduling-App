@@ -1,8 +1,11 @@
+import com.cedarsoftware.io.JsonWriter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
@@ -17,12 +20,19 @@ public class FileHandler {
     }
 
     public static void saveList(CourseList courses, String fileName){
-//        //JSON format: an array of course objects with all the attributes they have filled in. Null attributes are left as empty strings
-//        StringBuilder fileContents = new StringBuilder();
-//        fileContents.append('{')
-//        for(Course course : courses.getCourses()){
-//
-//        }
+        String filePath = createPath(fileName + ".json");
+        File outFile = new File(filePath);
+        FileOutputStream outStream = null;
+        try{
+            outStream = new FileOutputStream(outFile);
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        JsonWriter writer = new JsonWriter(outStream);
+
+        for(Course course : courses.getCourses()){
+            writer.write(course);
+        }
     }
 
     public static CourseList loadList(String fileName){
