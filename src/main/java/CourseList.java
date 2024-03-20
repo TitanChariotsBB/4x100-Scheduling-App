@@ -8,7 +8,7 @@ public class CourseList {
     }
 
     public void addCourse(Course course) {
-
+        courses.add(course);
     }
 
     public void removeCourse(Course course) throws Exception {
@@ -18,5 +18,11 @@ public class CourseList {
     }
 
     @Override
-    public String toString() { return ""; }
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Course course : courses) {
+            sb.append(course.getName());
+        }
+        return sb.toString();
+    }
 }
