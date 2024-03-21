@@ -1,4 +1,5 @@
-import java.awt.*;
+package org.example;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 

@@ -1,3 +1,5 @@
+package org.example;
+
 import java.util.ArrayList;
 
 public class CourseList {
@@ -13,7 +15,7 @@ public class CourseList {
 
     public void removeCourse(Course course) throws Exception {
         if (!courses.remove(course)) {
-            throw new Exception("Course not found!");
+            throw new Exception("org.example.Course not found!");
         }
     }
 
