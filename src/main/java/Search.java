@@ -25,9 +25,15 @@ public class Search {
             || courseCatalog.getCourses().get(i).getCode().contains(currentQuery)
             || courseCatalog.getCourses().get(i).getProfessor().contains(currentQuery))) {
                 unfilteredResults.add(courseCatalog.getCourses().get(i));
-                results.add(courseCatalog.getCourses().get(i));
             }
         }
+    }
+
+    public Search(CourseList courseCatalog) {
+        unfilteredResults = new ArrayList<>();
+        results = new ArrayList<>();
+
+        unfilteredResults.addAll(courseCatalog.getCourses());
     }
 
     public ArrayList<Course> getResults() {
