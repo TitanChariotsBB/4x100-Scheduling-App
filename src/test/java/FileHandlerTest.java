@@ -1,6 +1,6 @@
+import org.example.CourseList;
+import org.example.FileHandler;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class FileHandlerTest {
     @Test

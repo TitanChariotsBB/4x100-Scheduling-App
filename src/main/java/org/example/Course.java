@@ -1,4 +1,5 @@
-import java.awt.*;
+package org.example;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class Course {
         this.prerequisites = prerequisites;
     }
 
-    // Hey hey this is Alex Zeilstra changing up the Course claaassss
+    // Hey hey this is Alex Zeilstra changing up the org.example.Course claaassss
 
     public boolean overlapsWith(Course toCompare) {
         return false;
