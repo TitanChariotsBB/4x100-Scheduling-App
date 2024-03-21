@@ -1,5 +1,4 @@
-package org.example;
-
+import com.cedarsoftware.io.JsonReader;
 import com.cedarsoftware.io.JsonWriter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -12,9 +11,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FileHandler {
-    public static String createPath(String nameAndExt){
+    private static String createPath(String nameAndExt){
         Path currentPath = FileSystems.getDefault().getPath("");
         String currentName = currentPath.toAbsolutePath().toString();
         String filePath = currentName + "\\src\\CourseLists\\";
@@ -38,7 +38,53 @@ public class FileHandler {
     }
 
     public static CourseList loadList(String fileName){
-        return null;
+        String filePath = createPath(fileName + ".json");
+        FileInputStream inStream = null;
+        try {
+            inStream = new FileInputStream(filePath);
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        Scanner scan = new Scanner(inStream);
+        scan.useDelimiter(",");
+        String workingStr = "";
+        /* workingStr will represent some fraction of the input file, starting from a '{'
+        *  When an object has been read from the json file, the beginning of workingStr advances
+        *   to the start of the next object
+        * */
+        int openBrackets = 0;
+        int currentIndex = 0;
+
+        CourseList loadedList = new CourseList();
+
+        while(scan.hasNext()){
+            Course loadedCourse = null;
+
+            workingStr += scan.next();
+            if(scan.hasNext()){
+                workingStr += ','; //add a comma every time except the last time
+            }
+
+            for(; currentIndex < workingStr.length(); currentIndex++){
+                if(workingStr.charAt(currentIndex) == '{'){//the first char of an object should always be '{'
+                    openBrackets++;
+                }
+                else if(workingStr.charAt(currentIndex) == '}'){
+                    openBrackets--;
+                }
+
+
+                if(openBrackets == 0){//we've reached the end of an object
+                    String objectString = workingStr.substring(0,currentIndex+1);
+                    loadedCourse = (Course) JsonReader.jsonToJava(objectString);
+                    workingStr = workingStr.substring(currentIndex+1);
+                    currentIndex = -1; //the for statement will set it back to 0
+                }
+            }
+            loadedList.addCourse(loadedCourse);
+        }
+
+        return loadedList;
     }
 
     public static CourseList loadCatalog(){
