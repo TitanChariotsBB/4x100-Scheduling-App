@@ -11,7 +11,7 @@ public class Search {
     }
     private ArrayList<Course> unfilteredResults;
     private ArrayList<Course> results;
-    private String[] activeFilters;
+    private ArrayList<String> activeFilters;
 
     public Search(CourseList courseCatalog) {
         unfilteredResults = new ArrayList<>();
@@ -20,38 +20,58 @@ public class Search {
         unfilteredResults.addAll(courseCatalog.getCourses());
     }
 
-    public ArrayList<Course> getResults(String currentQuery) {
+    public ArrayList<Course> getResults() {
+        populateResults();
         return results;
     }
 
-    public void addFilter(SearchBy sb, String filter) {
-        results.clear(); // Clears results in preparation for adding classes matching filter
+    public void setQuery(String currentQuery) {
+        this.currentQuery = currentQuery;
+        populateResults();
+    }
 
-        if (sb.toString().equals("ALL")) { // Returns unfilteredResults
+    public void populateResults() {
+        // Will use currentQuery and filters array to populate results list
+        for (int i = 0; i < unfilteredResults.size(); i++) {
+            if (unfilteredResults.get(i).getName().contains(currentQuery) ||
+            unfilteredResults.get(i).getCode().contains(currentQuery) ||
+            unfilteredResults.get(i).getProfessor().contains(currentQuery)) {
+                results.add(unfilteredResults.get(i));
+            }
+        }
+    }
+
+
+    public void addFilter(SearchBy sb, String filter) {
+        activeFilters.add("Category: " + sb.toString() + " filter: " + filter);
+
+        if (sb.toString().equals("ALL")) { // Returns results with no filter
             return;
         }
         else if (sb.toString().equals("COURSE_CODE")) { // If filtering by course_code
-            for (int i = 0; i < unfilteredResults.size(); i++) {
-                if (unfilteredResults.get(i).getCode().equals(filter)) {
-                    results.add(unfilteredResults.get(i));
+            for (int i = 0; i < results.size(); i++) {
+                if (!results.get(i).getCode().equals(filter)) {
+                    results.remove(results.get(i)); // Remove courses that don't match
                 }
             }
         }
         else if (sb.toString().equals("COURSE_NAME")) { // If filtering by course_name
-            for (int i = 0; i < unfilteredResults.size(); i++) {
-                if (unfilteredResults.get(i).getName().equals(filter)) {
-                    results.add(unfilteredResults.get(i));
+            for (int i = 0; i < results.size(); i++) {
+                if (!results.get(i).getName().equals(filter)) {
+                    results.remove(results.get(i));
                 }
             }
         }
         else if (sb.toString().equals("PROFESSOR")) {
             for (int i = 0; i < unfilteredResults.size(); i++) {
-                if (unfilteredResults.get(i).getProfessor().equals(filter)) {
-                    results.add(unfilteredResults.get(i));
+                if (!results.get(i).getProfessor().equals(filter)) {
+                    results.add(results.get(i));
                 }
             }
         }
     }
 
-    public void removeFilter(SearchBy sb) {}
+    public void removeFilter(SearchBy sb) {
+        activeFilters.remove(activeFilters.contains(sb));
+    }
 }
