@@ -2,6 +2,8 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class Course {
     private String name;
@@ -47,5 +49,4 @@ public class Course {
     }
 
     public int getCredits(){return credits;}
-
 }

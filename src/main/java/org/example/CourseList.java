@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-
 public class CourseList {
     private ArrayList<Course> courses;
     private int totalCredits;
