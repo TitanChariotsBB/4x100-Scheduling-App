@@ -29,6 +29,7 @@ public class CourseList {
         if (!courses.remove(course)) {
             throw new Exception("org.example.Course not found!");
         }
+        totalCredits -= course.getCredits();
     }
 
     @Override
