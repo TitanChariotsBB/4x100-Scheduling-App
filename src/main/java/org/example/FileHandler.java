@@ -13,6 +13,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class FileHandler {
@@ -51,9 +53,9 @@ public class FileHandler {
         scan.useDelimiter(",");
         String workingStr = "";
         /* workingStr will represent some fraction of the input file, starting from a '{'
-        *  When an object has been read from the json file, the beginning of workingStr advances
-        *   to the start of the next object
-        * */
+         *  When an object has been read from the json file, the beginning of workingStr advances
+         *   to the start of the next object
+         * */
         int openBrackets = 0;
         int currentIndex = 0;
 
@@ -187,15 +189,111 @@ public class FileHandler {
                 }
 
                 ArrayList<String> prereqs = null;
+                Cell preReqCell = thisRow.getCell(19);
+                if(preReqCell != null){
+                    prereqs = parsePrereqs(preReqCell.getStringCellValue());
+                }
 
                 Course thisCourse = new Course(name, code, meetTimes, isFall, description, location, professor, credits, prereqs);
                 catalog.addCourse(thisCourse);
-
-                //TODO Prerequisites!!!
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         return catalog;
     }
+
+    /*
+     * Proposed algorithm:
+     *
+     * Receives the prereqs string from one cell, returns an arraylist of course codes
+     */
+    private static ArrayList<String> parsePrereqs(String reqsFromFile){
+        try {
+            ArrayList<String> result = new ArrayList<>();
+
+            ArrayList<String> pieces = new ArrayList<>();
+            Scanner scan = new Scanner(reqsFromFile);
+            while(scan.hasNext()){
+                pieces.add(scan.next());
+            }
+
+            Map<String, String> abbrs = new HashMap<String, String>();
+            abbrs.put("AS","ASTR");
+            abbrs.put("PH","PHYS");
+            abbrs.put("CHM","CHEM");
+            abbrs.put("CM","COMM");
+            abbrs.put("CP","COMP");
+            abbrs.put("MT","Math");
+            abbrs.put("EN","ENGR");
+            abbrs.put("ENG","ENGR");
+            abbrs.put("CH","CHEM");
+            abbrs.put("ME","MECE");
+            abbrs.put("FN","FNCE");
+            abbrs.put("IN","INBS");
+            abbrs.put("M","MATH");
+            abbrs.put("MA","MATH");
+
+            //format pieces
+            for(int x = 0; x < pieces.size(); x++){
+                String thisPiece = pieces.get(x);
+                if(abbrs.containsKey(thisPiece)){
+                    pieces.set(x,abbrs.get(thisPiece));//replace the abbreviation with the full code
+                    continue;
+                }
+
+                if(thisPiece.toLowerCase().equals("fee".toLowerCase())){
+                    pieces.remove(x);
+                    x--;
+                    continue;
+                }
+
+            }
+
+            //add course codes to result as appropriate
+            for(int x = 0; x < pieces.size(); x++) {
+                String thisPiece = pieces.get(x);
+                if(thisPiece.length() >= 3){
+                    boolean isNumCode = true;
+                    for(int i = 0; i < 3; i++){
+                        if(!((int)thisPiece.charAt(i) >= 48 && (int)thisPiece.charAt(i) <= 57)){//one of the first 3 chars is non-numeric
+                            isNumCode = false;
+                        }
+                    }
+                    if(isNumCode && x > 0) {
+                        result.add(pieces.get(x - 1) + thisPiece.substring(0, 3));
+                    }
+                }
+
+
+                for(int y = 0; y < pieces.get(x).length(); y++){
+
+                }
+            }
+
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /*
+     *unusual department codes:
+     * ART is only 3 letters
+     * AS is short for ASTR
+     * PH is short for PHYS
+     * CHM is short for CHEM
+     * CM is short for COMM
+     * CP is short for COMP
+     * MT is short for MATH
+     * ENG is short for ENGR
+     * EN is short for ENGR
+     * CH is short for CHEM
+     * ME is short for MECE
+     * FN is short for FNCE
+     * IN is short for INBS
+     * MA is short for MATH
+     * M is short for MATH
+     */
+
 }
