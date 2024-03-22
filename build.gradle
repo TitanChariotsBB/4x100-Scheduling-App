@@ -1,5 +1,6 @@
 plugins {
-    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 group = 'org.example'
@@ -10,10 +11,22 @@ repositories {
 }
 
 dependencies {
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.5'
+
+    implementation "com.cedarsoftware:json-io:4.19.9"
+
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
 test {
     useJUnitPlatform()
 }
+
+
+mainClassName = 'org.example.Main'
