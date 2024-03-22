@@ -1,9 +1,11 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CourseList {
     private ArrayList<Course> courses;
+    private int totalCredits;
 
     public CourseList(){
         courses = new ArrayList<Course>();
@@ -13,8 +15,14 @@ public class CourseList {
         return courses;
     }
 
-    public void addCourse(Course course) {
+    public int getTotalCredits(){return totalCredits;}
+
+    public void addCourse(Course course) throws IllegalArgumentException {
+        if(totalCredits+course.getCredits() > 19) {
+            throw new IllegalArgumentException("org.example.Too many credits");
+        }
         courses.add(course);
+        totalCredits += course.getCredits();
     }
 
     public void removeCourse(Course course) throws Exception {

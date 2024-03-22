@@ -45,4 +45,6 @@ public class Course {
     public String getName() {
         return name;
     }
+
+    public int getCredits(){return credits;}
 }
