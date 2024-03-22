@@ -28,9 +28,9 @@
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="228.0">
                                             <children>
-                                                <TextField fx:id="courseNumber" layoutX="114.0" layoutY="26.0" prefHeight="25.0" prefWidth="90.0" />
-                                    <TextField fx:id="courseName" layoutX="14.0" layoutY="76.0" prefHeight="25.0" prefWidth="190.0" />
-                                    <TextField fx:id="professor" layoutX="14.0" layoutY="129.0" prefHeight="25.0" prefWidth="190.0" />
+                                                <TextField fx:id="courseNumberTF" layoutX="114.0" layoutY="26.0" prefHeight="25.0" prefWidth="90.0" />
+                                    <TextField fx:id="courseNameTF" layoutX="14.0" layoutY="76.0" prefHeight="25.0" prefWidth="190.0" />
+                                    <TextField fx:id="professorTF" layoutX="14.0" layoutY="129.0" prefHeight="25.0" prefWidth="190.0" />
                                     <ComboBox fx:id="dptComboBox" layoutX="14.0" layoutY="26.0" prefHeight="25.0" prefWidth="90.0" />
                                     <ComboBox fx:id="mtgDaysComboBox" layoutX="14.0" layoutY="184.0" prefHeight="25.0" prefWidth="90.0" />
                                     <ComboBox fx:id="startTimeComboBox" layoutX="112.0" layoutY="184.0" prefHeight="25.0" prefWidth="94.0" />

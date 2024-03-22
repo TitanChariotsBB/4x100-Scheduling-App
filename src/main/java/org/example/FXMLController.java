@@ -24,11 +24,11 @@ public class FXMLController {
     @FXML
     private ComboBox<String> startTimeComboBox;
     @FXML
-    private TextField courseNumber;
+    private TextField courseNumberTF;
     @FXML
-    private TextField courseName;
+    private TextField courseNameTF;
     @FXML
-    private TextField professor;
+    private TextField professorTF;
 
     @FXML
     public void initialize() {
@@ -53,9 +53,9 @@ public class FXMLController {
 
     @FXML
     protected void onClearFiltersButtonClicked() {
-        courseNumber.setText("");
-        courseName.setText("");
-        professor.setText("");
+        courseNumberTF.setText("");
+        courseNameTF.setText("");
+        professorTF.setText("");
         dptComboBox.getSelectionModel().clearSelection();
         mtgDaysComboBox.getSelectionModel().clearSelection();
         startTimeComboBox.getSelectionModel().clearSelection();
@@ -64,6 +64,13 @@ public class FXMLController {
 
     @FXML
     protected void onApplyFiltersButtonClicked() {
+        String courseName = courseNameTF.getText();
+        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
+                courseNumberTF.getText();
+        String professor = professorTF.getText();
+        // TODO: format date
+
+        // TODO: call addFilter
 
     }
 }
