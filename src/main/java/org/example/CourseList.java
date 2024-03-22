@@ -3,6 +3,8 @@ package org.example;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+
 public class CourseList {
     private ArrayList<Course> courses;
     private int totalCredits;
@@ -21,6 +23,7 @@ public class CourseList {
         if(totalCredits+course.getCredits() > 19) {
             throw new IllegalArgumentException("org.example.Too many credits");
         }
+
         courses.add(course);
         totalCredits += course.getCredits();
     }
