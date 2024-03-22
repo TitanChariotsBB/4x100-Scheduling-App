@@ -13,22 +13,6 @@ public class Search {
     private ArrayList<Course> results;
     private String[] activeFilters;
 
-    public Search(String currentQuery, CourseList courseCatalog) {
-        this.currentQuery = currentQuery;
-        unfilteredResults = new ArrayList<>();
-        results = new ArrayList<>();
-
-        // Adds courses matching query to name, code, or professor to
-        // unfilteredResults (and results).
-        for (int i = 0; i < courseCatalog.getCourses().size(); i++) {
-            if ((courseCatalog.getCourses().get(i).getName().contains(currentQuery)
-            || courseCatalog.getCourses().get(i).getCode().contains(currentQuery)
-            || courseCatalog.getCourses().get(i).getProfessor().contains(currentQuery))) {
-                unfilteredResults.add(courseCatalog.getCourses().get(i));
-            }
-        }
-    }
-
     public Search(CourseList courseCatalog) {
         unfilteredResults = new ArrayList<>();
         results = new ArrayList<>();
@@ -36,7 +20,7 @@ public class Search {
         unfilteredResults.addAll(courseCatalog.getCourses());
     }
 
-    public ArrayList<Course> getResults() {
+    public ArrayList<Course> getResults(String currentQuery) {
         return results;
     }
 
