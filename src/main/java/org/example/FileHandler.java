@@ -25,9 +25,18 @@ public class FileHandler {
         return filePath + nameAndExt;
     }
 
-    public static void saveList(CourseList courses, String fileName){
+    /**
+     * @return true if the file was saved with no problems,
+     *      false if the named already exists and it has not been told to overwrite
+     */
+    public static boolean saveList(CourseList courses, String fileName, boolean overWrite){
         String filePath = createPath(fileName + ".json");
         File outFile = new File(filePath);
+
+        if(outFile.exists() && !overWrite){
+            return false;
+        }
+
         FileOutputStream outStream = null;
         try{
             outStream = new FileOutputStream(outFile);
@@ -39,16 +48,14 @@ public class FileHandler {
         for(Course course : courses.getCourses()){
             writer.write(course);
         }
+        return true;
     }
 
-    public static CourseList loadList(String fileName){
+    public static CourseList loadList(String fileName) throws FileNotFoundException {
         String filePath = createPath(fileName + ".json");
         FileInputStream inStream = null;
-        try {
-            inStream = new FileInputStream(filePath);
-        }catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
+        inStream = new FileInputStream(filePath);
+
         Scanner scan = new Scanner(inStream);
         scan.useDelimiter(",");
         String workingStr = "";
