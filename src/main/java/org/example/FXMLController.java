@@ -125,7 +125,7 @@ public class FXMLController {
             Label label = new Label(code);
             Button addButton = new Button("Add");
             addButton.setOnMouseClicked(event -> {onAddButtonClicked(c);});
-            topCourses.add(new HBox(label, addButton));
+            topCourses.add(new HBox(20, label, addButton));
         }
         searchResults.getChildren().setAll(topCourses);
     }
@@ -143,7 +143,7 @@ public class FXMLController {
                     throw new RuntimeException(e);
                 }
             });
-            courses.add(new HBox(label, removeButton));
+            courses.add(new HBox(20, label, removeButton));
         }
         scheduleVBox.getChildren().setAll(courses);
     }
