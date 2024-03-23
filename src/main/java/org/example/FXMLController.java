@@ -9,6 +9,10 @@ import java.util.ArrayList;
 
 public class FXMLController {
     private Search search;
+    private CourseList fallSemester;
+    private CourseList springSemester;
+    private CourseList past;
+    private CourseList future;
 
     @FXML
     private Label debugLabel;
@@ -41,10 +45,12 @@ public class FXMLController {
     @FXML
     public void initialize() {
         search = Main.search;
+        fallSemester = Main.fallSemester;
         ControllerHelper ch = new ControllerHelper();
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
+        fallSemesterSchedule.setText(fallSemester.getFormattedSchedule());
     }
 
     @FXML
