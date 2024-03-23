@@ -3,6 +3,7 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -55,7 +56,6 @@ public class FXMLController {
 
     @FXML
     protected void onSearchButtonClick() {
-        // String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
         search.setCurrentQuery(searchQuery);
@@ -99,7 +99,30 @@ public class FXMLController {
 
     public void displaySearchResults(ArrayList<Course> courses) {
         // TODO: display searh results
-        searchResults.getChildren().add(new Label(courses.get(0).getCode()));
+        ArrayList<HBox> topCourses = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Course c = courses.get(i);
+            String code = c.getCode();
+            Label label = new Label(code);
+            Button addButton = new Button("Add");
+            addButton.setOnMouseClicked(event -> {onAddButtonClicked(c);});
+            topCourses.add(new HBox(label, addButton));
+        }
+        searchResults.getChildren().setAll(topCourses);
+    }
+
+    public void onAddButtonClicked(Course c) {
+        String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
+        switch (selectedTabText) {
+            case "Fall Semester":
+                fallSemester.addCourse(c);
+                break;
+            case "Spring Semester":
+                springSemester.addCourse(c);
+                break;
+            default:
+                break;
+        }
     }
 
     public void setSearch(Search search) {
