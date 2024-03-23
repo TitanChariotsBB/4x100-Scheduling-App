@@ -47,11 +47,13 @@ public class FXMLController {
     public void initialize() {
         search = Main.search;
         fallSemester = Main.fallSemester;
+        springSemester = Main.springSemester;
         ControllerHelper ch = new ControllerHelper();
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
-        displayFallSemester();
+        displaySemesterSchedule(fallSemester, fallSemesterVBox);
+        displaySemesterSchedule(springSemester, springSemesterVBox);
     }
 
     @FXML
@@ -71,13 +73,30 @@ public class FXMLController {
 
     @FXML
     protected void onClearFiltersButtonClicked() {
+        // THIS COULD ALL BE REPLACED BY search.removeAllFilters(),
+        // if such a method were implemented
+        String courseName = courseNameTF.getText();
+        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
+                courseNumberTF.getText();
+        String professor = professorTF.getText();
+        String date = "";
+        // TODO: format date
+
+        if (!courseName.isEmpty())
+            search.removeFilter(Search.SearchBy.COURSE_NAME);
+        if (!courseCode.equals(" "))
+            search.removeFilter(Search.SearchBy.COURSE_CODE);
+        if (!professor.isEmpty())
+            search.removeFilter(Search.SearchBy.PROFESSOR);
+        if (!date.isEmpty())
+            search.removeFilter(Search.SearchBy.TIME);
+
         courseNumberTF.setText("");
         courseNameTF.setText("");
         professorTF.setText("");
         dptComboBox.getSelectionModel().clearSelection();
         mtgDaysComboBox.getSelectionModel().clearSelection();
         startTimeComboBox.getSelectionModel().clearSelection();
-        // TODO: call remove filter
     }
 
     @FXML
@@ -111,9 +130,9 @@ public class FXMLController {
         searchResults.getChildren().setAll(topCourses);
     }
 
-    public void displayFallSemester() {
+    public void displaySemesterSchedule(CourseList courseList, VBox scheduleVBox) {
         ArrayList<HBox> courses = new ArrayList<>();
-        for (Course c : fallSemester.getCourses()) {
+        for (Course c : courseList.getCourses()) {
             String code = c.getCode();
             Label label = new Label(code);
             Button removeButton = new Button("Remove");
@@ -126,7 +145,7 @@ public class FXMLController {
             });
             courses.add(new HBox(label, removeButton));
         }
-        fallSemesterVBox.getChildren().setAll(courses);
+        scheduleVBox.getChildren().setAll(courses);
     }
 
     public void onAddButtonClicked(Course c) {
@@ -134,10 +153,11 @@ public class FXMLController {
         switch (selectedTabText) {
             case "Fall Semester":
                 fallSemester.addCourse(c);
-                displayFallSemester();
+                displaySemesterSchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
                 springSemester.addCourse(c);
+                displaySemesterSchedule(springSemester, springSemesterVBox);
                 break;
             default:
                 break;
@@ -149,10 +169,11 @@ public class FXMLController {
         switch (selectedTabText) {
             case "Fall Semester":
                 fallSemester.removeCourse(c);
-                displayFallSemester();
+                displaySemesterSchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
                 springSemester.removeCourse(c);
+                displaySemesterSchedule(springSemester, springSemesterVBox);
                 break;
             default:
                 break;

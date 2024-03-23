@@ -29,6 +29,7 @@ public class Main {
         fallSemester = new CourseList();
         fallSemester.addCourse(course1);
         fallSemester.addCourse(course2);
+        springSemester = new CourseList();
 
         MainApp.launchGUI();
     }
