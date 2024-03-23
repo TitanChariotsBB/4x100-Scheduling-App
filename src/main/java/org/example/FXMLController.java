@@ -12,8 +12,8 @@ public class FXMLController {
     private Search search;
     private CourseList fallSemester;
     private CourseList springSemester;
-    private CourseList past;
-    private CourseList future;
+    private CourseList completedCourses;
+    private CourseList courseWishList;
 
     @FXML
     private Label debugLabel;
@@ -42,6 +42,10 @@ public class FXMLController {
     private VBox fallSemesterVBox;
     @FXML
     private VBox springSemesterVBox;
+    @FXML
+    private VBox completedCoursesVBox;
+    @FXML
+    private VBox courseWishListVBox;
 
     @FXML
     public void initialize() {
