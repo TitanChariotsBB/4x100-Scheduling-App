@@ -3,6 +3,10 @@ import java.util.ArrayList;
 public class CourseList {
     private ArrayList<Course> courses;
 
+    public CourseList(){
+        courses = new ArrayList<Course>();
+    }
+
     public ArrayList<Course> getCourses(){
         return courses;
     }
