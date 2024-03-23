@@ -198,4 +198,45 @@ public class FileHandler {
         }
         return catalog;
     }
+
+    public boolean saveFutureList(ArrayList<CourseList> futureList, String filename, boolean overWrite){
+        //algorithm: make a new directory based on filename, and save each courselist inside that directory with the existing
+
+        String filePath = createPath(filename);
+        File directory = new File(filePath);
+
+        if(directory.exists() && !overWrite) {
+            return false;
+        }
+        if(!directory.mkdir()){//the directory should exist now
+            return false;
+        }
+
+        for(int x = 0; x < futureList.size(); x++){
+            String thisPath = filePath + "\\" + x + filename + ".json";
+            if(!saveList(futureList.get(x),thisPath,overWrite)){//this is fine. It will work once my last pull request is approved
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public ArrayList<CourseList> loadFutureList(String filename) throws FileNotFoundException{
+        ArrayList<CourseList> result = new ArrayList<>();
+
+        String filePath = createPath(filename);
+        File directory = new File(filePath);
+        if(!directory.exists()){
+            throw new FileNotFoundException("We could not find the file: " + filename);
+        }
+
+        File[] courseLists = directory.listFiles();
+        for(int x = 0; x < courseLists.length; x++){
+            String thisPath = courseLists[x].getPath();
+            result.add(loadList(thisPath));
+        }
+
+        return result;
+    }
+
 }
