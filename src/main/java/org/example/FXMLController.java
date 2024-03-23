@@ -3,8 +3,12 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 
@@ -147,7 +151,9 @@ public class FXMLController {
                     throw new RuntimeException(e);
                 }
             });
-            courses.add(new HBox(20, label, removeButton));
+            HBox courseHBox = new HBox(20, label, removeButton);
+            //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
+            courses.add(courseHBox);
         }
         scheduleVBox.getChildren().setAll(courses);
     }
