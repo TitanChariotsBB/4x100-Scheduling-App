@@ -2,11 +2,14 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+
 public class FXMLController {
+    private Search search;
+
     @FXML
     private Label debugLabel;
     @FXML
@@ -31,7 +34,13 @@ public class FXMLController {
     private TextField professorTF;
 
     @FXML
+    private TextArea fallSemesterSchedule;
+    @FXML
+    private TextArea springSemesterSchedule;
+
+    @FXML
     public void initialize() {
+        search = Main.search;
         ControllerHelper ch = new ControllerHelper();
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
@@ -43,12 +52,15 @@ public class FXMLController {
         // String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
+        search.setCurrentQuery(searchQuery);
+        search.populateResults();
+        displaySearchResults(search.getResults());
     }
 
     @FXML
     protected void onKeyPressed(KeyEvent ke) {
-        if (ke.getCode() == KeyCode.ENTER)
-            onSearchButtonClick();
+//        if (ke.getCode() == KeyCode.ENTER)
+//            onSearchButtonClick();
     }
 
     @FXML
@@ -70,7 +82,23 @@ public class FXMLController {
         String professor = professorTF.getText();
         // TODO: format date
 
-        // TODO: call addFilter
+        if (!courseName.isEmpty())
+            search.addFilter(Search.SearchBy.COURSE_NAME, courseName);
+        if (!courseCode.equals(" "))
+            search.addFilter(Search.SearchBy.COURSE_CODE, courseCode);
+        if (!professor.isEmpty())
+            search.addFilter(Search.SearchBy.PROFESSOR, professor);
+        // TODO: add date filter
+    }
 
+    public void displaySearchResults(ArrayList<Course> courses) {
+        // TODO: display searh results
+        searchResults.getChildren().add(new Label(courses.get(0).getCode()));
+    }
+
+    public void setSearch(Search search) {
+        this.search = search;
+        if (search == null)
+            System.out.println("ERROR! the Search object passed into FXMLController is null!!!\n\n");
     }
 }
