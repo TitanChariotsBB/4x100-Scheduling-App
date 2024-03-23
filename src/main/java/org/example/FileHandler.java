@@ -13,6 +13,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class FileHandler {
@@ -23,9 +25,18 @@ public class FileHandler {
         return filePath + nameAndExt;
     }
 
-    public static void saveList(CourseList courses, String fileName){
+    /**
+     * @return true if the file was saved with no problems,
+     *      false if the named already exists and it has not been told to overwrite
+     */
+    public static boolean saveList(CourseList courses, String fileName, boolean overWrite){
         String filePath = createPath(fileName + ".json");
         File outFile = new File(filePath);
+
+        if(outFile.exists() && !overWrite){
+            return false;
+        }
+
         FileOutputStream outStream = null;
         try{
             outStream = new FileOutputStream(outFile);
@@ -37,23 +48,21 @@ public class FileHandler {
         for(Course course : courses.getCourses()){
             writer.write(course);
         }
+        return true;
     }
 
-    public static CourseList loadList(String fileName){
+    public static CourseList loadList(String fileName) throws FileNotFoundException {
         String filePath = createPath(fileName + ".json");
         FileInputStream inStream = null;
-        try {
-            inStream = new FileInputStream(filePath);
-        }catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
+        inStream = new FileInputStream(filePath);
+
         Scanner scan = new Scanner(inStream);
         scan.useDelimiter(",");
         String workingStr = "";
         /* workingStr will represent some fraction of the input file, starting from a '{'
-        *  When an object has been read from the json file, the beginning of workingStr advances
-        *   to the start of the next object
-        * */
+         *  When an object has been read from the json file, the beginning of workingStr advances
+         *   to the start of the next object
+         * */
         int openBrackets = 0;
         int currentIndex = 0;
 
@@ -187,15 +196,121 @@ public class FileHandler {
                 }
 
                 ArrayList<String> prereqs = null;
+                Cell preReqCell = thisRow.getCell(19);
+                if(preReqCell != null){
+                    prereqs = parsePrereqs(preReqCell.getStringCellValue());
+                }
 
                 Course thisCourse = new Course(name, code, meetTimes, isFall, description, location, professor, credits, prereqs);
                 catalog.addCourse(thisCourse);
-
-                //TODO Prerequisites!!!
             }
         }catch(Exception e){
             e.printStackTrace();
         }
         return catalog;
     }
+
+    /*
+     *  Dr. Hutchins told me to focus on a simple proof of concept, then move on to something else,
+     *  so this method only works for a single prereq class, and it must be a course code that takes up the first eight chars of the string
+     */
+    private static ArrayList<String> parsePrereqs(String reqsFromFile){
+        try {
+            ArrayList<String> result = new ArrayList<>();
+
+            boolean validCode = true;
+            for(int x = 0; x < 8 && x < reqsFromFile.length() && validCode; x++){
+                char thisChar = reqsFromFile.charAt(x);
+                if(x < 4 && !((thisChar >= 'a' && thisChar <= 'z') || (thisChar >= 'A' && thisChar <= 'Z'))){
+                    validCode = false; //if any of the first four characters is not a letter, it's no good
+                }
+                if(x == 4 && reqsFromFile.charAt(x) != ' '){
+                    validCode = false;
+                }
+                if(x > 4 && !(thisChar >= '0' && thisChar <= '9')){
+                    validCode = false;
+                }
+            }
+            if(validCode) {
+                result.add(reqsFromFile.substring(0, 4) + reqsFromFile.substring(5, 8));
+                return result;
+            }
+            else{return null;}
+            /*
+            ArrayList<String> pieces = new ArrayList<>();
+            Scanner scan = new Scanner(reqsFromFile);
+            while(scan.hasNext()){
+                pieces.add(scan.next());
+            }
+
+            Map<String, String> abbrs = new HashMap<String, String>();
+            abbrs.put("AS","ASTR");
+            abbrs.put("PH","PHYS");
+            abbrs.put("CHM","CHEM");
+            abbrs.put("CM","COMM");
+            abbrs.put("CP","COMP");
+            abbrs.put("MT","Math");
+            abbrs.put("EN","ENGR");
+            abbrs.put("ENG","ENGR");
+            abbrs.put("CH","CHEM");
+            abbrs.put("ME","MECE");
+            abbrs.put("FN","FNCE");
+            abbrs.put("IN","INBS");
+            abbrs.put("M","MATH");
+            abbrs.put("MA","MATH");
+
+            //replace abbreviations with actual department codes
+            for(int x = 0; x < pieces.size(); x++){
+                String thisPiece = pieces.get(x);
+                if(abbrs.containsKey(thisPiece)){
+                    pieces.set(x,abbrs.get(thisPiece));//replace the abbreviation with the full code
+                    continue;
+                }
+            }
+
+            //add course codes to result as appropriate
+            for(int x = 0; x < pieces.size(); x++) {
+                String thisPiece = pieces.get(x);
+                if(thisPiece.length() >= 3){
+                    boolean isNumCode = true;
+                    for(int i = 0; i < 3; i++){
+                        if(!((int)thisPiece.charAt(i) >= 48 && (int)thisPiece.charAt(i) <= 57)){//one of the first 3 chars is non-numeric
+                            isNumCode = false;
+                        }
+                    }
+                    if(isNumCode && x > 0) {
+                        result.add(pieces.get(x - 1) + thisPiece.substring(0, 3));
+                    }
+                }
+
+
+                for(int y = 0; y < pieces.get(x).length(); y++){
+
+                }
+            }
+            */
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /*
+     *unusual department codes:
+     * ART is only 3 letters
+     * AS is short for ASTR
+     * PH is short for PHYS
+     * CHM is short for CHEM
+     * CM is short for COMM
+     * CP is short for COMP
+     * MT is short for MATH
+     * ENG is short for ENGR
+     * EN is short for ENGR
+     * CH is short for CHEM
+     * ME is short for MECE
+     * FN is short for FNCE
+     * IN is short for INBS
+     * MA is short for MATH
+     * M is short for MATH
+     */
+
 }
