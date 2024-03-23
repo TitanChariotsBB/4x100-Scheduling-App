@@ -204,14 +204,32 @@ public class FileHandler {
     }
 
     /*
-     * Proposed algorithm:
-     *
-     * Receives the prereqs string from one cell, returns an arraylist of course codes
+     *  Dr. Hutchins told me to focus on a simple proof of concept, then move on to something else,
+     *  so this method only works for a single prereq class, and it must be a course code that takes up the first eight chars of the string
      */
     private static ArrayList<String> parsePrereqs(String reqsFromFile){
         try {
             ArrayList<String> result = new ArrayList<>();
 
+            boolean validCode = true;
+            for(int x = 0; x < 8 && x < reqsFromFile.length() && validCode; x++){
+                char thisChar = reqsFromFile.charAt(x);
+                if(x < 4 && !((thisChar >= 'a' && thisChar <= 'z') || (thisChar >= 'A' && thisChar <= 'Z'))){
+                    validCode = false; //if any of the first four characters is not a letter, it's no good
+                }
+                if(x == 4 && reqsFromFile.charAt(x) != ' '){
+                    validCode = false;
+                }
+                if(x > 4 && !(thisChar >= '0' && thisChar <= '9')){
+                    validCode = false;
+                }
+            }
+            if(validCode) {
+                result.add(reqsFromFile.substring(0, 4) + reqsFromFile.substring(5, 8));
+                return result;
+            }
+            else{return null;}
+            /*
             ArrayList<String> pieces = new ArrayList<>();
             Scanner scan = new Scanner(reqsFromFile);
             while(scan.hasNext()){
@@ -234,20 +252,13 @@ public class FileHandler {
             abbrs.put("M","MATH");
             abbrs.put("MA","MATH");
 
-            //format pieces
+            //replace abbreviations with actual department codes
             for(int x = 0; x < pieces.size(); x++){
                 String thisPiece = pieces.get(x);
                 if(abbrs.containsKey(thisPiece)){
                     pieces.set(x,abbrs.get(thisPiece));//replace the abbreviation with the full code
                     continue;
                 }
-
-                if(thisPiece.toLowerCase().equals("fee".toLowerCase())){
-                    pieces.remove(x);
-                    x--;
-                    continue;
-                }
-
             }
 
             //add course codes to result as appropriate
@@ -270,8 +281,7 @@ public class FileHandler {
 
                 }
             }
-
-            return result;
+            */
         }catch(Exception e){
             e.printStackTrace();
             return null;
