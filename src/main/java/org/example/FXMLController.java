@@ -39,9 +39,9 @@ public class FXMLController {
     private TextField professorTF;
 
     @FXML
-    private TextArea fallSemesterSchedule;
+    private VBox fallSemesterVBox;
     @FXML
-    private TextArea springSemesterSchedule;
+    private VBox springSemesterVBox;
 
     @FXML
     public void initialize() {
@@ -51,7 +51,7 @@ public class FXMLController {
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
-        fallSemesterSchedule.setText(fallSemester.getFormattedSchedule());
+        displayFallSemester();
     }
 
     @FXML
@@ -98,7 +98,7 @@ public class FXMLController {
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
-        // TODO: display searh results
+        // TODO: test this! (also figure out a way to display more than 5 courses)
         ArrayList<HBox> topCourses = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Course c = courses.get(i);
@@ -111,11 +111,30 @@ public class FXMLController {
         searchResults.getChildren().setAll(topCourses);
     }
 
+    public void displayFallSemester() {
+        ArrayList<HBox> courses = new ArrayList<>();
+        for (Course c : fallSemester.getCourses()) {
+            String code = c.getCode();
+            Label label = new Label(code);
+            Button removeButton = new Button("Remove");
+            removeButton.setOnMouseClicked(event -> {
+                try {
+                    onRemoveButtonClicked(c);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            courses.add(new HBox(label, removeButton));
+        }
+        fallSemesterVBox.getChildren().setAll(courses);
+    }
+
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         switch (selectedTabText) {
             case "Fall Semester":
                 fallSemester.addCourse(c);
+                displayFallSemester();
                 break;
             case "Spring Semester":
                 springSemester.addCourse(c);
@@ -125,9 +144,20 @@ public class FXMLController {
         }
     }
 
-    public void setSearch(Search search) {
-        this.search = search;
-        if (search == null)
-            System.out.println("ERROR! the Search object passed into FXMLController is null!!!\n\n");
+    public void onRemoveButtonClicked(Course c) throws Exception {
+        String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
+        switch (selectedTabText) {
+            case "Fall Semester":
+                fallSemester.removeCourse(c);
+                displayFallSemester();
+                break;
+            case "Spring Semester":
+                springSemester.removeCourse(c);
+                break;
+            default:
+                break;
+        }
     }
+
+
 }
