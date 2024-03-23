@@ -45,6 +45,10 @@ public class Course {
         return name;
     }
 
+    public int getCredits() {
+        return credits;
+    }
+
     public String getProfessor() {
         return professor;
     }
