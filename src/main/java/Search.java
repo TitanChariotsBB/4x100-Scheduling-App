@@ -73,5 +73,29 @@ public class Search {
 
     public void removeFilter(SearchBy sb) {
         activeFilters.remove(activeFilters.contains(sb));
+        if (sb.toString().equals("ALL")) { // Returns results with no filter
+            populateResults();
+        }
+        else if (sb.toString().equals("COURSE_CODE")) { // If filtering by course_code
+            for (int i = 0; i < unfilteredResults.size(); i++) {
+                if (unfilteredResults.get(i).getCode().contains(currentQuery)) {
+                    results.add(unfilteredResults.get(i));
+                }
+            }
+        }
+        else if (sb.toString().equals("COURSE_NAME")) { // If filtering by course_name
+            for (int i = 0; i < unfilteredResults.size(); i++) {
+                if (unfilteredResults.get(i).getName().contains(currentQuery)) {
+                    results.add(unfilteredResults.get(i));
+                }
+            }
+        }
+        else if (sb.toString().equals("PROFESSOR")) {
+            for (int i = 0; i < unfilteredResults.size(); i++) {
+                if (unfilteredResults.get(i).getProfessor().contains(currentQuery)) {
+                    results.add(unfilteredResults.get(i));
+                }
+            }
+        }
     }
 }
