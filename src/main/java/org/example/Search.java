@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Search {
     private String currentQuery;
-    enum SearchBy {
+    public enum SearchBy {
         ALL,
         COURSE_CODE,
         COURSE_NAME,
@@ -18,29 +18,41 @@ public class Search {
     public Search(CourseList courseCatalog) {
         unfilteredResults = new ArrayList<>();
         results = new ArrayList<>();
-
+        activeFilters = new ArrayList<>();
         unfilteredResults.addAll(courseCatalog.getCourses());
     }
 
     public ArrayList<Course> getResults() {
-        populateResults();
+        if (results.isEmpty()) {
+            populateResults();
+        }
         return results;
     }
 
     public void setQuery(String currentQuery) {
         this.currentQuery = currentQuery;
-        populateResults();
+        if (results.isEmpty()) {
+            populateResults();
+        }
     }
 
-    public void populateResults() {
+    private void populateResults() {
         // Will use currentQuery and filters array to populate results list
-        for (int i = 0; i < unfilteredResults.size(); i++) {
-            if (unfilteredResults.get(i).getName().contains(currentQuery) ||
-            unfilteredResults.get(i).getCode().contains(currentQuery) ||
-            unfilteredResults.get(i).getProfessor().contains(currentQuery)) {
-                results.add(unfilteredResults.get(i));
+
+        if (currentQuery == null) {
+            results.addAll(unfilteredResults);
+        }
+        else {
+            for (Course unfilteredResult : unfilteredResults) {
+                if (unfilteredResult.getName().contains(currentQuery) ||
+                        unfilteredResult.getCode().contains(currentQuery) ||
+                        unfilteredResult.getProfessor().contains(currentQuery) &&
+                                !results.contains(unfilteredResult)) {
+                    results.add(unfilteredResult);
+                }
             }
         }
+
     }
 
 
@@ -51,25 +63,15 @@ public class Search {
             return;
         }
         else if (sb.toString().equals("COURSE_CODE")) { // If filtering by course_code
-            for (int i = 0; i < results.size(); i++) {
-                if (!results.get(i).getCode().equals(filter)) {
-                    results.remove(results.get(i)); // Remove courses that don't match
-                }
-            }
+            results.removeIf(result -> !result.getCode().equals(filter));
+
         }
         else if (sb.toString().equals("COURSE_NAME")) { // If filtering by course_name
-            for (int i = 0; i < results.size(); i++) {
-                if (!results.get(i).getName().equals(filter)) {
-                    results.remove(results.get(i));
-                }
-            }
+            results.removeIf(result -> !result.getName().equals(filter));
+
         }
-        else if (sb.toString().equals("PROFESSOR")) {
-            for (int i = 0; i < unfilteredResults.size(); i++) {
-                if (!results.get(i).getProfessor().equals(filter)) {
-                    results.add(results.get(i));
-                }
-            }
+        else if (sb.toString().equals("PROFESSOR")) { // If filtering by professor name
+            results.removeIf(result -> !result.getProfessor().equals(filter));
         }
     }
 
@@ -99,5 +101,13 @@ public class Search {
                 }
             }
         }
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < results.size(); i++) {
+            sb.append(results.get(i).getName());
+        }
+        return sb.toString();
     }
 }
