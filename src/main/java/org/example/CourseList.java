@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.apache.commons.lang3.Range;
 
 public class CourseList {
     private ArrayList<Course> courses;

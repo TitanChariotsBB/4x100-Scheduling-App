@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.apache.commons.lang3.Range;
 
 class CourseListTest {
     @Test
@@ -21,6 +22,12 @@ class CourseListTest {
         list1.addCourse(course1);
         list1.addCourse(course2);
         assertEquals(6,list1.getTotalCredits());
+
+        assertTrue((course1.timesAsRange()[0] == null)||(course1.timesAsRange()[0].isOverlappedBy(course1.timesAsRange()[0])));
+        assertTrue((course1.timesAsRange()[1] == null)||(course1.timesAsRange()[0].isOverlappedBy(course1.timesAsRange()[1])));
+        assertTrue((course1.timesAsRange()[2] == null)||(course1.timesAsRange()[0].isOverlappedBy(course1.timesAsRange()[2])));
+        assertTrue((course1.timesAsRange()[3] == null)||(course1.timesAsRange()[0].isOverlappedBy(course1.timesAsRange()[3])));
+        assertTrue((course1.timesAsRange()[4] == null)||(course1.timesAsRange()[0].isOverlappedBy(course1.timesAsRange()[4])));
     }
 
     @Test
