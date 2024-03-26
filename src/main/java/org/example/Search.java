@@ -15,9 +15,12 @@ public class Search {
     private ArrayList<Course> results;
     private String[] activeFilters;
 
-    public Search(String currentQuery) {
-        this.currentQuery = currentQuery;
-        // populate unfilteredResults
+    public void setCurrentQuery(String query) {
+        currentQuery = query;
+    }
+
+    public void populateResults() {
+
     }
 
     public ArrayList<Course> getResults() {
