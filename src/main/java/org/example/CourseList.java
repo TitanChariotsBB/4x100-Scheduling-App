@@ -21,6 +21,11 @@ public class CourseList {
         if(totalCredits+course.getCredits() > 19) {
             throw new IllegalArgumentException("org.example.Too many credits");
         }
+        for (int i = 0; i < courses.size(); i++) {
+            if (course.overlapsWith(courses.get(i))) {
+                throw new IllegalArgumentException("org.example.Overlaps with another course");
+            }
+        }
         courses.add(course);
         totalCredits += course.getCredits();
     }
