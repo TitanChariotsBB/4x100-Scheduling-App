@@ -77,7 +77,7 @@ public class FileHandler {
 
             workingStr += scan.next();
             if(scan.hasNext()){
-                workingStr += ','; //add a comma every time except the last time
+                workingStr += ','; //add a comma every time except the last time to preserve indexing
             }
 
             for(; currentIndex < workingStr.length(); currentIndex++){
@@ -89,14 +89,16 @@ public class FileHandler {
                 }
 
 
-                if(openBrackets == 0){//we've reached the end of an object
+                if(openBrackets == 0){//currentIndex is the end of an object
                     String objectString = workingStr.substring(0,currentIndex+1);
                     loadedCourse = (Course) JsonReader.jsonToJava(objectString);
+                    loadedList.addCourse(loadedCourse);
+
                     workingStr = workingStr.substring(currentIndex+1);
                     currentIndex = -1; //the for statement will set it back to 0
                 }
             }
-            loadedList.addCourse(loadedCourse);
+
         }
 
         return loadedList;
@@ -224,7 +226,11 @@ public class FileHandler {
             if(!overWrite){
                 return false;
             }else {
-                directory.delete();
+                File[] dirContents = directory.listFiles();
+                for(File f : dirContents){
+                    f.delete();
+                }
+                directory.delete();//can only delete an empty directory
             }
         }
         if(!directory.mkdir()){//the directory should exist now
@@ -232,7 +238,7 @@ public class FileHandler {
         }
 
         for(int x = 0; x < futureLists.size(); x++){
-            String thisPath = filePath + "\\" + x + '-' + filename + ".json";
+            String thisPath = filePath + "\\" + filename + "-" + x + ".json";
             if(!saveList(futureLists.get(x),thisPath,overWrite)){//this is fine. It will work once my last pull request is approved
                 return false;
             }
@@ -241,19 +247,19 @@ public class FileHandler {
     }
 
     //TODO any and all testing
-    public ArrayList<CourseList> loadFutureList(String filename) throws FileNotFoundException{
+    public static ArrayList<CourseList> loadFutureList(String filePath) throws FileNotFoundException{
         ArrayList<CourseList> result = new ArrayList<>();
 
-        String filePath = getDefaultPath(filename);
         File directory = new File(filePath);
         if(!directory.exists()){
-            throw new FileNotFoundException("We could not find the file: " + filename);
+            throw new FileNotFoundException("We could not find the file: " + filePath);
         }
 
         File[] courseLists = directory.listFiles();
         for(int x = 0; x < courseLists.length; x++){
             String thisPath = courseLists[x].getPath();
-            result.add(loadList(thisPath));
+            CourseList thisList = loadList(thisPath);
+            result.add(thisList);
         }
 
         return result;

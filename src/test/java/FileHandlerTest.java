@@ -13,7 +13,7 @@ class FileHandlerTest {
         String filePath = FileHandler.getDefaultPath("test-save.json");
         FileHandler.saveList(catalog, filePath, true);
         try{
-            CourseList loaded = FileHandler.loadList("test-save");
+            CourseList loaded = FileHandler.loadList(filePath);
             System.out.println(loaded);
         }
         catch(Exception e){e.printStackTrace();}
@@ -68,5 +68,17 @@ class FileHandlerTest {
 
         boolean saved = FileHandler.saveFutureList(cll, "test-wishlist",true);
         assert(saved);
+    }
+
+    @Test
+    void testWishlistLoad(){
+        String filePath = FileHandler.getDefaultPath("test-wishlist");
+        try {
+            ArrayList<CourseList> wishList = FileHandler.loadFutureList(filePath);
+            System.out.println(wishList);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
