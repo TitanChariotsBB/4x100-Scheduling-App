@@ -3,12 +3,8 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 
@@ -53,15 +49,24 @@ public class FXMLController {
 
     @FXML
     public void initialize() {
+        // Get references to Search and CourseList objects
         search = Main.search;
         fallSemester = Main.fallSemester;
         springSemester = Main.springSemester;
+        completedCourses = Main.past;
+        courseWishList = Main.future;
+
+        // Fill combo box options
         ControllerHelper ch = new ControllerHelper();
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
-        displaySemesterSchedule(fallSemester, fallSemesterVBox);
-        displaySemesterSchedule(springSemester, springSemesterVBox);
+
+        // Display schedules
+        displaySchedule(fallSemester, fallSemesterVBox);
+        displaySchedule(springSemester, springSemesterVBox);
+        displaySchedule(completedCourses, completedCoursesVBox);
+        displaySchedule(courseWishList, courseWishListVBox);
     }
 
     @FXML
@@ -138,7 +143,7 @@ public class FXMLController {
         searchResults.getChildren().setAll(topCourses);
     }
 
-    public void displaySemesterSchedule(CourseList courseList, VBox scheduleVBox) {
+    public void displaySchedule(CourseList courseList, VBox scheduleVBox) {
         ArrayList<HBox> courses = new ArrayList<>();
         for (Course c : courseList.getCourses()) {
             String code = c.getCode();
@@ -146,7 +151,7 @@ public class FXMLController {
             Button removeButton = new Button("Remove");
             removeButton.setOnMouseClicked(event -> {
                 try {
-                    onRemoveButtonClicked(c);
+                    onRemoveButtonClicked(c, courseList, scheduleVBox);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -163,31 +168,20 @@ public class FXMLController {
         switch (selectedTabText) {
             case "Fall Semester":
                 fallSemester.addCourse(c);
-                displaySemesterSchedule(fallSemester, fallSemesterVBox);
+                displaySchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
                 springSemester.addCourse(c);
-                displaySemesterSchedule(springSemester, springSemesterVBox);
+                displaySchedule(springSemester, springSemesterVBox);
                 break;
             default:
                 break;
         }
     }
 
-    public void onRemoveButtonClicked(Course c) throws Exception {
-        String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
-        switch (selectedTabText) {
-            case "Fall Semester":
-                fallSemester.removeCourse(c);
-                displaySemesterSchedule(fallSemester, fallSemesterVBox);
-                break;
-            case "Spring Semester":
-                springSemester.removeCourse(c);
-                displaySemesterSchedule(springSemester, springSemesterVBox);
-                break;
-            default:
-                break;
-        }
+    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
+        cl.removeCourse(c);
+        displaySchedule(cl, vb);
     }
 
 
