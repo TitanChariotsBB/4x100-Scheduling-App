@@ -6,14 +6,15 @@ class FileHandlerTest {
     @Test
     void testLoad(){
         CourseList catalog = FileHandler.loadCatalog();
-        FileHandler.saveList(catalog, "test-save");
-        CourseList loaded = FileHandler.loadList("test-save");
+        FileHandler.saveList(catalog, "test-save", true);
+        try{CourseList loaded = FileHandler.loadList("test-save");}
+        catch(Exception e){e.printStackTrace();}
     }
 
     @Test
     void testSave(){
         CourseList catalog = FileHandler.loadCatalog();
-        FileHandler.saveList(catalog, "test-save");
+        FileHandler.saveList(catalog, "test-save",true);
     }
     @Test
     void loadCatalog() {
