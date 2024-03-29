@@ -27,6 +27,7 @@ public class Search {
     }
 
     public void populateResults() {
+        results.clear();
         for (Course c : unfilteredResults) {
             if (c.getCode().contains(currentQuery)) {
                 results.add(c);
@@ -43,15 +44,15 @@ public class Search {
 
         for (Course c : results) {
             String codeFilter = activeFilters[SearchBy.COURSE_CODE.ordinal()];
-            if (!codeFilter.equals("")) {
+            if (!codeFilter.isEmpty()) {
                 if (c.getCode().contains(codeFilter)) results.remove(c);
             }
             String nameFilter = activeFilters[SearchBy.COURSE_NAME.ordinal()];
-            if (!nameFilter.equals("")) {
+            if (!nameFilter.isEmpty()) {
                 if (c.getName().contains(nameFilter)) results.remove(c);
             }
             String professorFilter = activeFilters[SearchBy.PROFESSOR.ordinal()];
-            if (!professorFilter.equals("")) {
+            if (!professorFilter.isEmpty()) {
                 if (c.getProfessor().contains(professorFilter)) results.remove(c);
             }
             // TODO: date/time
