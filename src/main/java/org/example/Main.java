@@ -18,7 +18,8 @@ public class Main {
     public static void main(String[] args) {
         // I am aware most of this stuff should go in run eventually. This is just for testing
         System.out.println("Hello!");
-        search = new Search();
+        CourseList cs = new CourseList();
+        search = new Search(cs);
 
         LocalDateTime time1 = LocalDateTime.of(2024, 1, 1, 9, 0);
         LocalDateTime[][] meetings1 = {{time1, time1}, null, {time1, time1}, null, {time1, time1}};

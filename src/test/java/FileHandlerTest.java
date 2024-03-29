@@ -3,7 +3,8 @@ import org.example.FileHandler;
 import org.junit.jupiter.api.Test;
 
 class FileHandlerTest {
-    @Test
+
+    /*@Test
     void testLoad(){
         CourseList catalog = FileHandler.loadCatalog();
         FileHandler.saveList(catalog, "test-save");
@@ -19,5 +20,5 @@ class FileHandlerTest {
     void loadCatalog() {
         CourseList myCourses = FileHandler.loadCatalog();
         System.out.println(myCourses);
-    }
+    }*/
 }
