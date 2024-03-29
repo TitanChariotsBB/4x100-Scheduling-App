@@ -1,25 +1,20 @@
 package org.example;
 
-import javax.swing.plaf.ColorUIResource;
+import org.junit.jupiter.api.Test;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-public class Main {
-    private static CourseList catalog;
-    public static Search search;
-    public static CourseList fallSemester;
-    public static CourseList springSemester;
-    public static CourseList past;
-    public static CourseList future;
+import static org.junit.jupiter.api.Assertions.*;
 
-    public static void run() {
-        catalog = FileHandler.loadCatalog();
-        // run
-    }
+class SearchTest {
 
-    public static void main(String[] args) {
-        // I am aware most of this stuff should go in run eventually. This is just for testing
-
-
+    @Test
+    void getResults() {
+        CourseList catalog;
+        Search search;
+        CourseList fallSemester;
+        CourseList springSemester;
         LocalDateTime time1 = LocalDateTime.of(2024, 1, 1, 9, 0);
         LocalDateTime[][] meetings1 = {{time1, time1}, null, {time1, time1}, null, {time1, time1}};
         Course course1 = new Course("Underwater basket weaving", "HUMA 201", meetings1,true, "A good class", "STEM 376", "Dr. Bibza", 3, null);
@@ -32,7 +27,10 @@ public class Main {
         springSemester = new CourseList();
         search = new Search(fallSemester);
 
-        MainApp.launchGUI();
+        search.setCurrentQuery("Underwater");
+        search.populateResults();
+        ArrayList<Course> expectedResults = new ArrayList<>();
+        expectedResults.add(course1);
+        assertEquals(expectedResults, search.getResults());
     }
-
 }

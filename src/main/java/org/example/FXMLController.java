@@ -125,15 +125,17 @@ public class FXMLController {
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
-        // TODO: test this! (also figure out a way to display more than 5 courses)
         ArrayList<HBox> topCourses = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        int i = 0;
+        int max = 5;
+        while (i < max && i < courses.size()) {
             Course c = courses.get(i);
             String code = c.getCode();
             Label label = new Label(code);
             Button addButton = new Button("Add");
-            addButton.setOnMouseClicked(event -> {onAddButtonClicked(c);});
+            addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
             topCourses.add(new HBox(20, label, addButton));
+            i++;
         }
         searchResults.getChildren().setAll(topCourses);
     }
