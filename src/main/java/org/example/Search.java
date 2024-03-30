@@ -1,9 +1,11 @@
 package org.example;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Search {
     private String currentQuery;
+    private LocalDateTime[][] meetings;
     public enum SearchBy {
         ALL,
         COURSE_CODE,
@@ -20,7 +22,7 @@ public class Search {
         results = new ArrayList<>();
         activeFilters = new ArrayList<>();
         unfilteredResults.addAll(courseCatalog.getCourses());
-        setQuery(null);
+        setQueryString(null);
     }
 
     public ArrayList<Course> getResults() {
@@ -30,11 +32,15 @@ public class Search {
         return results;
     }
 
-    public void setQuery(String currentQuery) {
+    public void setQueryString(String currentQuery) {
         this.currentQuery = currentQuery;
         if (results.isEmpty()) {
             populateResults();
         }
+    }
+
+    public void setQueryDateTime(LocalDateTime[][] meetings) {
+        this.meetings = meetings;
     }
 
     private void populateResults() {
@@ -66,8 +72,14 @@ public class Search {
 
     public void addFilter(SearchBy sb, String filter) {
         activeFilters.add(new Filter(sb, filter));
-        setQuery(filter);
+        setQueryString(filter);
         filterCourses(sb, filter);
+    }
+
+    public void addFilter(SearchBy sb, LocalDateTime[][] meetings) {
+        activeFilters.add(new Filter(sb, meetings));
+        setQueryDateTime(meetings);
+        filterCourses(sb, meetings);
     }
 
     private void filterCourses(SearchBy sb, String filter) {
@@ -85,6 +97,10 @@ public class Search {
         else if (sb.equals(SearchBy.PROFESSOR)) { // If filtering by professor name
             results.removeIf(result -> !result.getProfessor().contains(filter));
         }
+    }
+
+    private void filterCourses(SearchBy sb, LocalDateTime[][] meetings) {
+        results.removeIf(result -> !(result.getMeetingTimes() == meetings));
     }
 
     public void removeFilter(SearchBy sb) {
