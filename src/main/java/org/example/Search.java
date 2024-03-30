@@ -41,6 +41,9 @@ public class Search {
 
     public void setQueryDateTime(LocalDateTime[][] meetings) {
         this.meetings = meetings;
+        if (results.isEmpty()) {
+            populateResults();
+        }
     }
 
     private void populateResults() {
