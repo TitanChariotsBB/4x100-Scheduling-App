@@ -63,7 +63,12 @@ public class Search {
         else {
             results.addAll(unfilteredResults);
             for (Filter filter: activeFilters) {
-                filterCourses(filter.sb, filter.filter);
+                if (filter.sb != SearchBy.TIME) {
+                    filterCourses(filter.sb, filter.filter);
+                }
+                else {
+                    filterCourses(filter.sb, filter.meetings);
+                }
             }
         }
 
