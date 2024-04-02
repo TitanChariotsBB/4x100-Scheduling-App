@@ -31,6 +31,10 @@ public class Main {
         fallSemester.addCourse(course1);
         fallSemester.addCourse(course2);
         springSemester = new CourseList();
+        past = new CourseList();
+        future = new CourseList();
+        past.addCourse(course1);
+        future.addCourse(course2);
 
         MainApp.launchGUI();
     }
