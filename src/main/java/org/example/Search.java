@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Search {
     private String currentQuery;
-    enum SearchBy {
+    public enum SearchBy {
         ALL,
         COURSE_CODE,
         COURSE_NAME,

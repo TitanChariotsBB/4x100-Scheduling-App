@@ -18,8 +18,6 @@ public class Main {
 
     public static void main(String[] args) {
         // I am aware most of this stuff should go in run eventually. This is just for testing
-
-
         LocalDateTime time1 = LocalDateTime.of(2024, 1, 1, 9, 0);
         LocalDateTime[][] meetings1 = {{time1, time1}, null, {time1, time1}, null, {time1, time1}};
         Course course1 = new Course("Underwater basket weaving", "HUMA 201", meetings1,true, "A good class", "STEM 376", "Dr. Bibza", 3, null);
@@ -31,6 +29,10 @@ public class Main {
         fallSemester.addCourse(course2);
         springSemester = new CourseList();
         search = new Search(fallSemester);
+        past = new CourseList();
+        future = new CourseList();
+        past.addCourse(course1);
+        future.addCourse(course2);
 
         MainApp.launchGUI();
     }
