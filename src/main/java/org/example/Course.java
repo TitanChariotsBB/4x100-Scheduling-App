@@ -1,9 +1,8 @@
 package org.example;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 public class Course {
     private String name;
@@ -30,7 +29,7 @@ public class Course {
         this.prerequisites = prerequisites;
     }
 
-    // Hey hey this is Alex Zeilstra changing up the org.example.Course claaassss
+    // Hey hey this is Alex Zeilstra changing up the Course claaassss
 
     public boolean overlapsWith(Course toCompare) {
         return false;
@@ -48,5 +47,11 @@ public class Course {
         return name;
     }
 
-    public int getCredits(){return credits;}
+    public int getCredits() {
+        return credits;
+    }
+
+    public String getProfessor() {
+        return professor;
+    }
 }
