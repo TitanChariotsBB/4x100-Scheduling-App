@@ -68,7 +68,7 @@ public class FXMLController {
     protected void onSearchButtonClick() {
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
-        search.setQuery(searchQuery);
+        search.setQueryString(searchQuery);
         displaySearchResults(search.getResults());
     }
 

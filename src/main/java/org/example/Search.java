@@ -39,6 +39,8 @@ public class Search {
         }
     }
 
+
+    // Date filtering from the main search bar is unnecessary
     public void setQueryDateTime(LocalDateTime[][] meetings) {
         this.meetings = meetings;
         if (results.isEmpty()) {
@@ -162,6 +164,8 @@ public class Search {
         populateResults();
     }
 
+
+    // This was for testing purposes
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Course result : results) {
