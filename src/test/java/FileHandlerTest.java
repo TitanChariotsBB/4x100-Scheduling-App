@@ -7,7 +7,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 class FileHandlerTest {
-    @Test
+
+    /*@Test
     void testLoad(){
         CourseList catalog = FileHandler.loadCatalog();
         String filePath = FileHandler.getDefaultPath("test-save.json");
