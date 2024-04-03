@@ -129,7 +129,7 @@ public class FXMLController {
     public void displaySearchResults(ArrayList<Course> courses) {
         ArrayList<HBox> topCourses = new ArrayList<>();
         int i = 0;
-        int max = 5;
+        int max = 60;
         while (i < max && i < courses.size()) {
             Course c = courses.get(i);
             String code = c.getCode();
