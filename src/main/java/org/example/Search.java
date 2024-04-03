@@ -20,21 +20,20 @@ public class Search {
         results = new ArrayList<>();
         activeFilters = new ArrayList<>();
         unfilteredResults.addAll(courseCatalog.getCourses());
-        setQuery(null);
+        setQuery("");
     }
 
     public ArrayList<Course> getResults() {
-        if (results.isEmpty()) {
+        /*if (results.isEmpty()) {
             populateResults();
-        }
+        }*/
         return results;
     }
 
     public void setQuery(String currentQuery) {
         this.currentQuery = currentQuery;
-        if (results.isEmpty()) {
-            populateResults();
-        }
+        results.clear();
+        populateResults();
     }
 
     private void populateResults() {
@@ -43,7 +42,7 @@ public class Search {
         /*if (currentQuery == null) {
             results.addAll(unfilteredResults);
         }*/
-        if (activeFilters.isEmpty()) {
+        //if (activeFilters.isEmpty()) {
             /*for (Course unfilteredResult : unfilteredResults) {
                 if ((unfilteredResult.getName().contains(currentQuery) ||
                         unfilteredResult.getCode().contains(currentQuery) ||
@@ -52,21 +51,39 @@ public class Search {
                     results.add(unfilteredResult);
                 }
             }*/
-            results.addAll(unfilteredResults);
-        }
-        else {
+            if (currentQuery.isEmpty()) {
+                results.addAll(unfilteredResults);
+                for (Filter filter: activeFilters) {
+                    filterCourses(filter.sb, filter.filter);
+                }
+            }
+            else {
+                for (Course unfilteredResult : unfilteredResults) {
+                    if ((unfilteredResult.getName().contains(currentQuery) ||
+                            unfilteredResult.getCode().contains(currentQuery) ||
+                            unfilteredResult.getProfessor().contains(currentQuery)) &&
+                            !results.contains(unfilteredResult)) {
+                        results.add(unfilteredResult);
+                    }
+                }
+                for (Filter filter: activeFilters) {
+                    filterCourses(filter.sb, filter.filter);
+                }
+            }
+        //}
+        /*else {
             results.addAll(unfilteredResults);
             for (Filter filter: activeFilters) {
                 filterCourses(filter.sb, filter.filter);
             }
-        }
+        }*/
 
     }
 
 
     public void addFilter(SearchBy sb, String filter) {
         activeFilters.add(new Filter(sb, filter));
-        setQuery(filter);
+        //setQuery(filter);
         filterCourses(sb, filter);
     }
 

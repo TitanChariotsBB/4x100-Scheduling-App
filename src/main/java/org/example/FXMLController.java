@@ -73,6 +73,7 @@ public class FXMLController {
     protected void onSearchButtonClick() {
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
+        //System.out.println(searchQuery + "What the heck man"); -- Testing thingy
         search.setQuery(searchQuery);
         displaySearchResults(search.getResults());
     }
@@ -115,8 +116,10 @@ public class FXMLController {
     protected void onApplyFiltersButtonClicked() {
         String courseName = courseNameTF.getText();
         String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText();
+                courseNumberTF.getText(); // This line right here is a problem; it makes
+        // courseCode null if the user doesn't select anything from the dropdown menu
         String professor = professorTF.getText();
+        //System.out.println(professor); - testing thingy
         // TODO: format date
 
         if (!courseName.isEmpty())
@@ -126,18 +129,25 @@ public class FXMLController {
         if (!professor.isEmpty())
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
         // TODO: add date filter
+
+        for (Filter filter : search.activeFilters) {
+            System.out.println(filter.sb);
+            System.out.println(filter.filter);
+        }
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
-        // TODO: test this! (also figure out a way to display more than 5 courses)
         ArrayList<HBox> topCourses = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        int i = 0;
+        int max = 5;
+        while (i < max && i < courses.size()) {
             Course c = courses.get(i);
             String code = c.getCode();
             Label label = new Label(code);
             Button addButton = new Button("Add");
-            addButton.setOnMouseClicked(event -> {onAddButtonClicked(c);});
+            addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
             topCourses.add(new HBox(20, label, addButton));
+            i++;
         }
         searchResults.getChildren().setAll(topCourses);
     }
