@@ -13,6 +13,7 @@ public class Main {
 
     public static void run() {
         catalog = FileHandler.loadCatalog();
+        System.out.println(catalog);
         search = new Search(catalog);
 
         try {
