@@ -13,7 +13,18 @@ public class Main {
 
     public static void run() {
         catalog = FileHandler.loadCatalog();
-        // run
+        search = new Search(catalog);
+
+        try {
+            autoLoad();
+        }catch(FileNotFoundException fnfe){
+            springSemester = new CourseList();
+            fallSemester = new CourseList();
+            past = new CourseList();
+            future = new CourseList();
+        }
+        MainApp.launchGUI();
+        autoSave();
     }
 
     public static void main(String[] args) {
@@ -54,32 +65,12 @@ public class Main {
         FileHandler.saveList(future,saveFolder+"default-future.json",true);
     }
 
-    public static void autoLoad(){
+    public static void autoLoad() throws FileNotFoundException{
         String saveFolder = FileHandler.getDefaultPath(""); //ends with \
 
-        try {
-            springSemester = FileHandler.loadList(saveFolder + "default-spring.json");
-        }
-        catch(FileNotFoundException fnfe){
-            System.out.println("Error: Spring File Not Found");
-        }
-        try {
-            fallSemester = FileHandler.loadList(saveFolder + "default-fall.json");
-        }
-        catch(FileNotFoundException fnfe){
-            System.out.println("Error: Fall File Not Found");
-        }
-        try {
-            past = FileHandler.loadList(saveFolder + "default-past.json");
-        }
-        catch(FileNotFoundException fnfe){
-            System.out.println("Error: Past File Not Found");
-        }
-        try {
-            future = FileHandler.loadList(saveFolder + "default-future.json");
-        }
-        catch(FileNotFoundException fnfe){
-            System.out.println("Error: Future File Not Found");
-        }
+        springSemester = FileHandler.loadList(saveFolder + "default-spring.json");
+        fallSemester = FileHandler.loadList(saveFolder + "default-fall.json");
+        past = FileHandler.loadList(saveFolder + "default-past.json");
+        future = FileHandler.loadList(saveFolder + "default-future.json");
     }
 }
