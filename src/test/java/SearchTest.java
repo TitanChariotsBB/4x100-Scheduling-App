@@ -61,9 +61,12 @@ public class SearchTest {
         }
         System.out.println(s);
         assertEquals(1, s.getResults().size());
+        assertEquals(2, s.activeFilters.size());
         s.removeFilter(Search.SearchBy.PROFESSOR);
         assertEquals(1, s.activeFilters.size());
         assertEquals(1, s.getResults().size());
+        assertEquals("Foundations of balloon fabrication", s.getResults().get(0).getName());
+        assertEquals("Dr. Bibza", s.getResults().get(0).getProfessor());
         System.out.println(s);
         s.removeFilter(Search.SearchBy.COURSE_CODE);
         assertEquals(0, s.activeFilters.size());
