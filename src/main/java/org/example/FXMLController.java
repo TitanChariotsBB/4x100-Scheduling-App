@@ -115,9 +115,15 @@ public class FXMLController {
     @FXML
     protected void onApplyFiltersButtonClicked() {
         String courseName = courseNameTF.getText();
-        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText(); // This line right here is a problem; it makes
-        // courseCode null if the user doesn't select anything from the dropdown menu
+
+        String dpt = dptComboBox.getSelectionModel().getSelectedItem();
+        String courseCode;
+        if (dpt != null) {
+            courseCode = dpt + courseNumberTF.getText();
+        } else {
+            courseCode = "";
+        }
+
         String professor = professorTF.getText();
         //System.out.println(professor); - testing thingy
         // TODO: format date
