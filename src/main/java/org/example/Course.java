@@ -29,8 +29,6 @@ public class Course {
         this.prerequisites = prerequisites;
     }
 
-    // Hey hey this is Alex Zeilstra changing up the Course claaassss
-
     public boolean overlapsWith(Course toCompare) {
         return false;
     }

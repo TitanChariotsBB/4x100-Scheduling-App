@@ -34,7 +34,7 @@ public class CourseList {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Course course : courses) {
-            sb.append(course.getName());
+            sb.append(course.getName() + "\n");
         }
         return sb.toString();
     }
