@@ -146,7 +146,9 @@ public class FXMLController {
         ArrayList<HBox> courses = new ArrayList<>();
         for (Course c : courseList.getCourses()) {
             String code = c.getCode();
-            Label label = new Label(code);
+            String name = c.getName();
+            Label codeLabel = new Label(code);
+            Label nameLabel = new Label(name);
             Button removeButton = new Button("Remove");
             removeButton.setOnMouseClicked(event -> {
                 try {
@@ -155,7 +157,7 @@ public class FXMLController {
                     throw new RuntimeException(e);
                 }
             });
-            HBox courseHBox = new HBox(20, label, removeButton);
+            HBox courseHBox = new HBox(20, codeLabel, nameLabel, removeButton);
             //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
             courses.add(courseHBox);
         }
