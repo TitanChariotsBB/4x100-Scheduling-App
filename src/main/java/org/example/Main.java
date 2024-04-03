@@ -28,6 +28,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        run();
+        /*
         // I am aware most of this stuff should go in run eventually. This is just for testing
         LocalDateTime time1 = LocalDateTime.of(2024, 1, 1, 9, 0);
         LocalDateTime[][] meetings1 = {{time1, time1}, null, {time1, time1}, null, {time1, time1}};
@@ -54,6 +56,7 @@ public class Main {
         search = new Search(catalog);
 
         MainApp.launchGUI();
+         */
     }
 
     public static void autoSave(){
@@ -68,8 +71,10 @@ public class Main {
     public static void autoLoad() throws FileNotFoundException{
         String saveFolder = FileHandler.getDefaultPath(""); //ends with \
 
-        springSemester = FileHandler.loadList(saveFolder + "default-spring.json");
-        fallSemester = FileHandler.loadList(saveFolder + "default-fall.json");
+        CourseList springList = FileHandler.loadList(saveFolder + "default-spring.json");
+        springSemester = new SemesterSchedule(springList, false);
+        CourseList fallList = FileHandler.loadList(saveFolder + "default-fall.json");
+        fallSemester = new SemesterSchedule(fallList, true);
         past = FileHandler.loadList(saveFolder + "default-past.json");
         future = FileHandler.loadList(saveFolder + "default-future.json");
     }
