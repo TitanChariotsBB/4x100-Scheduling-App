@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Search {
     private String currentQuery;
@@ -46,19 +47,29 @@ public class Search {
         String nameFilter = activeFilters[SearchBy.COURSE_NAME.ordinal()];
         String professorFilter = activeFilters[SearchBy.PROFESSOR.ordinal()];
 
-        for (int i = 0; i < results.size(); i++) {
-            Course c = results.get(i);
+        Iterator<Course> it = results.iterator();
+        while (it.hasNext()) {
+            Course c = it.next();
             if (!codeFilter.isEmpty()) {
-                if (!c.getCode().contains(codeFilter)) results.remove(c);
+                if (!c.getCode().contains(codeFilter)) {
+                    it.remove();
+                    System.out.println("Removing " + c.getCode());
+                    continue;
+                }
             }
             if (!nameFilter.isEmpty()) {
-                if (!c.getName().contains(nameFilter)) results.remove(c);
+                if (!c.getName().contains(nameFilter)) {
+                    it.remove();
+                    continue;
+                }
             }
             if (!professorFilter.isEmpty()) {
-                if (!c.getProfessor().contains(professorFilter)) results.remove(c);
+                if (!c.getProfessor().contains(professorFilter)) {
+                    it.remove();
+                }
             }
-            // TODO: date/time
         }
+        // TODO: date/time
     }
 
     public ArrayList<Course> getResults() {

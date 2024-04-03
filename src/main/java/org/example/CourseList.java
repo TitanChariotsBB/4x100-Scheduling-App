@@ -20,7 +20,7 @@ public class CourseList {
 
     public void addCourse(Course course) throws IllegalArgumentException {
         if(totalCredits+course.getCredits() > 19) {
-            throw new IllegalArgumentException("org.example.Too many credits");
+            System.out.println("org.example.Too many credits");
         }
         courses.add(course);
         totalCredits += course.getCredits();
@@ -37,7 +37,7 @@ public class CourseList {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Course course : courses) {
-            sb.append(course.getName());
+            sb.append(course.getName() + "\n");
         }
         return sb.toString();
     }

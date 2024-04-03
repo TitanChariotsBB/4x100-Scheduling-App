@@ -103,7 +103,7 @@ public class FXMLController {
         String dpt = dptComboBox.getSelectionModel().getSelectedItem();
         String courseCode;
         if (dpt != null) {
-            courseCode = dpt + " " + courseNumberTF.getText();
+            courseCode = dpt + courseNumberTF.getText();
         } else {
             courseCode = "";
         }
