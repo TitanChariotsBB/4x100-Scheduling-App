@@ -116,8 +116,10 @@ public class FXMLController {
     protected void onApplyFiltersButtonClicked() {
         String courseName = courseNameTF.getText();
         String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText();
+                courseNumberTF.getText(); // This line right here is a problem; it makes
+        // courseCode null if the user doesn't select anything from the dropdown menu
         String professor = professorTF.getText();
+        //System.out.println(professor); - testing thingy
         // TODO: format date
 
         if (!courseName.isEmpty())
@@ -127,6 +129,12 @@ public class FXMLController {
         if (!professor.isEmpty())
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
         // TODO: add date filter
+
+        // Alex code
+//        for (Filter filter : search.activeFilters) {
+//            System.out.println(filter.sb);
+//            System.out.println(filter.filter);
+//        }
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {

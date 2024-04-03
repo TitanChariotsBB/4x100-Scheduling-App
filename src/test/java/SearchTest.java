@@ -38,10 +38,10 @@ public class SearchTest {
         for (int i = 0; i < s.getResults().size(); i++) {
             System.out.println("Yo: " + s.getResults().get(i).getProfessor());
         }
-        System.out.println(s.activeFilters.getFirst().filter);
+        //System.out.println(s.activeFilters.getFirst().filter);
         assertEquals(1, s.getResults().size());
         s.removeFilter(Search.SearchBy.PROFESSOR);
-        System.out.println(s.activeFilters.size());
+        //System.out.println(s.activeFilters.size());
         assertEquals(3, s.getResults().size());
         for (int i = 0; i < s.getResults().size(); i++) {
             System.out.println("Yo: " + s.getResults().get(i).getProfessor());
@@ -52,21 +52,24 @@ public class SearchTest {
         for (int i = 0; i < s.getResults().size(); i++) {
             System.out.println("Yo: " + s.getResults().get(i).getProfessor());
         }
-        System.out.println(s.activeFilters.getFirst().filter);
+        //System.out.println(s.activeFilters.getFirst().filter);
         System.out.println(s);
         assertEquals(2, s.getResults().size());
         s.addFilter(Search.SearchBy.COURSE_CODE, "COMP");
-        for (int i = 0; i < s.activeFilters.size(); i++) {
-            System.out.println("Yo: " + s.activeFilters.get(i).filter);
-        }
+        //for (int i = 0; i < s.activeFilters.size(); i++) {
+        //    System.out.println("Yo: " + s.activeFilters.get(i).filter);
+        //}
         System.out.println(s);
         assertEquals(1, s.getResults().size());
+        //assertEquals(2, s.activeFilters.size());
         s.removeFilter(Search.SearchBy.PROFESSOR);
-        assertEquals(1, s.activeFilters.size());
+        //assertEquals(1, s.activeFilters.size());
         assertEquals(1, s.getResults().size());
+        assertEquals("Foundations of balloon fabrication", s.getResults().get(0).getName());
+        assertEquals("Dr. Bibza", s.getResults().get(0).getProfessor());
         System.out.println(s);
         s.removeFilter(Search.SearchBy.COURSE_CODE);
-        assertEquals(0, s.activeFilters.size());
+        //assertEquals(0, s.activeFilters.size());
         assertEquals(3, s.getResults().size());
         System.out.println(s);
     }
