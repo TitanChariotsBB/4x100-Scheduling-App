@@ -59,9 +59,9 @@ public class Search {
             }
             else {
                 for (Course unfilteredResult : unfilteredResults) {
-                    if ((unfilteredResult.getName().contains(currentQuery) ||
-                            unfilteredResult.getCode().contains(currentQuery) ||
-                            unfilteredResult.getProfessor().contains(currentQuery)) &&
+                    if ((unfilteredResult.getName().toLowerCase().contains(currentQuery.toLowerCase()) ||
+                            unfilteredResult.getCode().toLowerCase().contains(currentQuery.toLowerCase()) ||
+                            unfilteredResult.getProfessor().toLowerCase().contains(currentQuery.toLowerCase())) &&
                             !results.contains(unfilteredResult)) {
                         results.add(unfilteredResult);
                     }
@@ -96,11 +96,11 @@ public class Search {
 
         }
         else if (sb.equals(SearchBy.COURSE_NAME)) { // If filtering by course_name
-            results.removeIf(result -> !result.getName().contains(filter));
+            results.removeIf(result -> !result.getName().toLowerCase().contains(filter.toLowerCase()));
 
         }
         else if (sb.equals(SearchBy.PROFESSOR)) { // If filtering by professor name
-            results.removeIf(result -> !result.getProfessor().contains(filter));
+            results.removeIf(result -> !result.getProfessor().toLowerCase().contains(filter.toLowerCase()));
         }
     }
 
@@ -153,6 +153,10 @@ public class Search {
         activeFilters.removeIf(result -> result.sb == sb);
         results.clear();
         populateResults();
+    }
+
+    public void removeAllFilters() {
+        activeFilters.clear();
     }
 
     public String toString() {

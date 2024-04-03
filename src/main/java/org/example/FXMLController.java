@@ -86,23 +86,7 @@ public class FXMLController {
 
     @FXML
     protected void onClearFiltersButtonClicked() {
-        // THIS COULD ALL BE REPLACED BY search.removeAllFilters(),
-        // if such a method were implemented
-        String courseName = courseNameTF.getText();
-        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText();
-        String professor = professorTF.getText();
-        String date = "";
-        // TODO: format date
-
-        if (!courseName.isEmpty())
-            search.removeFilter(Search.SearchBy.COURSE_NAME);
-        if (!courseCode.equals(" "))
-            search.removeFilter(Search.SearchBy.COURSE_CODE);
-        if (!professor.isEmpty())
-            search.removeFilter(Search.SearchBy.PROFESSOR);
-        if (!date.isEmpty())
-            search.removeFilter(Search.SearchBy.TIME);
+        search.removeAllFilters();
 
         courseNumberTF.setText("");
         courseNameTF.setText("");
@@ -115,16 +99,22 @@ public class FXMLController {
     @FXML
     protected void onApplyFiltersButtonClicked() {
         String courseName = courseNameTF.getText();
-        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText(); // This line right here is a problem; it makes
-        // courseCode null if the user doesn't select anything from the dropdown menu
+
+        String dpt = dptComboBox.getSelectionModel().getSelectedItem();
+        String courseCode;
+        if (dpt != null) {
+            courseCode = dpt + courseNumberTF.getText();
+        } else {
+            courseCode = "";
+        }
+
         String professor = professorTF.getText();
         //System.out.println(professor); - testing thingy
         // TODO: format date
 
         if (!courseName.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_NAME, courseName);
-        if (!courseCode.equals(" "))
+        if (!courseCode.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_CODE, courseCode);
         if (!professor.isEmpty())
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
@@ -139,7 +129,7 @@ public class FXMLController {
     public void displaySearchResults(ArrayList<Course> courses) {
         ArrayList<HBox> topCourses = new ArrayList<>();
         int i = 0;
-        int max = 5;
+        int max = 60;
         while (i < max && i < courses.size()) {
             Course c = courses.get(i);
             String code = c.getCode();
@@ -156,7 +146,9 @@ public class FXMLController {
         ArrayList<HBox> courses = new ArrayList<>();
         for (Course c : courseList.getCourses()) {
             String code = c.getCode();
-            Label label = new Label(code);
+            String name = c.getName();
+            Label codeLabel = new Label(code);
+            Label nameLabel = new Label(name);
             Button removeButton = new Button("Remove");
             removeButton.setOnMouseClicked(event -> {
                 try {
@@ -165,7 +157,7 @@ public class FXMLController {
                     throw new RuntimeException(e);
                 }
             });
-            HBox courseHBox = new HBox(20, label, removeButton);
+            HBox courseHBox = new HBox(20, codeLabel, nameLabel, removeButton);
             //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
             courses.add(courseHBox);
         }
