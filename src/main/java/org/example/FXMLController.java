@@ -130,7 +130,7 @@ public class FXMLController {
 
         if (!courseName.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_NAME, courseName);
-        if (!courseCode.equals(" "))
+        if (!courseCode.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_CODE, courseCode);
         if (!professor.isEmpty())
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
