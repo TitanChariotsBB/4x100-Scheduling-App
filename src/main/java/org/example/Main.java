@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 
 public class Main {
@@ -39,4 +40,41 @@ public class Main {
         MainApp.launchGUI();
     }
 
+    public static void autoSave(){
+        String saveFolder = FileHandler.getDefaultPath(""); //ends with \
+
+        FileHandler.saveList(springSemester,saveFolder+"default-spring.json",true);
+        FileHandler.saveList(fallSemester,saveFolder+"default-fall.json",true);
+        FileHandler.saveList(past,saveFolder+"default-past.json",true);
+        FileHandler.saveList(future,saveFolder+"default-future.json",true);
+    }
+
+    public static void autoLoad(){
+        String saveFolder = FileHandler.getDefaultPath(""); //ends with \
+
+        try {
+            springSemester = FileHandler.loadList(saveFolder + "default-spring.json");
+        }
+        catch(FileNotFoundException fnfe){
+            System.out.println("Error: Spring File Not Found");
+        }
+        try {
+            fallSemester = FileHandler.loadList(saveFolder + "default-fall.json");
+        }
+        catch(FileNotFoundException fnfe){
+            System.out.println("Error: Fall File Not Found");
+        }
+        try {
+            past = FileHandler.loadList(saveFolder + "default-past.json");
+        }
+        catch(FileNotFoundException fnfe){
+            System.out.println("Error: Past File Not Found");
+        }
+        try {
+            future = FileHandler.loadList(saveFolder + "default-future.json");
+        }
+        catch(FileNotFoundException fnfe){
+            System.out.println("Error: Future File Not Found");
+        }
+    }
 }

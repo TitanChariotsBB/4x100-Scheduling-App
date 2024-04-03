@@ -246,7 +246,6 @@ public class FileHandler {
         return true;
     }
 
-    //TODO any and all testing
     public static ArrayList<CourseList> loadFutureList(String filePath) throws FileNotFoundException{
         ArrayList<CourseList> result = new ArrayList<>();
 
