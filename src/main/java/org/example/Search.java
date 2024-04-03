@@ -155,6 +155,10 @@ public class Search {
         populateResults();
     }
 
+    public void removeAllFilters() {
+        activeFilters.clear();
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Course result : results) {

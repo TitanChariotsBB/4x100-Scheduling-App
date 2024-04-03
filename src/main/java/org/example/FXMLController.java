@@ -86,23 +86,7 @@ public class FXMLController {
 
     @FXML
     protected void onClearFiltersButtonClicked() {
-        // THIS COULD ALL BE REPLACED BY search.removeAllFilters(),
-        // if such a method were implemented
-        String courseName = courseNameTF.getText();
-        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText();
-        String professor = professorTF.getText();
-        String date = "";
-        // TODO: format date
-
-        if (!courseName.isEmpty())
-            search.removeFilter(Search.SearchBy.COURSE_NAME);
-        if (!courseCode.equals(" "))
-            search.removeFilter(Search.SearchBy.COURSE_CODE);
-        if (!professor.isEmpty())
-            search.removeFilter(Search.SearchBy.PROFESSOR);
-        if (!date.isEmpty())
-            search.removeFilter(Search.SearchBy.TIME);
+        search.removeAllFilters();
 
         courseNumberTF.setText("");
         courseNameTF.setText("");
