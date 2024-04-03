@@ -19,9 +19,6 @@ public class CourseList {
     public int getTotalCredits(){return totalCredits;}
 
     public void addCourse(Course course) throws IllegalArgumentException {
-        if(totalCredits+course.getCredits() > 19) {
-            throw new IllegalArgumentException("org.example.Too many credits");
-        }
         courses.add(course);
         totalCredits += course.getCredits();
     }
