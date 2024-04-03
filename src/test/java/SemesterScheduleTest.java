@@ -22,7 +22,7 @@ class SemesterScheduleTest {
         LocalDateTime[][] meetings2 = {null, {time2, time2}, null, {time2, time2}, null};
         Course course2 = new Course("Foundations of balloon fabrication", "HUMA 301", meetings2,true, "A better class", "HAL 116", "Dr. Bibza", 3, null);
 
-        SemesterSchedule ss = new SemesterSchedule();
+        SemesterSchedule ss = new SemesterSchedule(true);
         ss.addCourse(course1);
         ss.addCourse(course2);
         System.out.println(ss);

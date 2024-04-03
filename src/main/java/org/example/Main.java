@@ -44,8 +44,10 @@ public class Main {
     public static void autoLoad() throws FileNotFoundException{
         String saveFolder = FileHandler.getDefaultPath(""); //ends with \
 
-        springSemester = FileHandler.loadList(saveFolder + "default-spring.json");
-        fallSemester = FileHandler.loadList(saveFolder + "default-fall.json");
+        CourseList springList = FileHandler.loadList(saveFolder + "default-spring.json");
+        springSemester = new SemesterSchedule(springList, false);
+        CourseList fallList = FileHandler.loadList(saveFolder + "default-fall.json");
+        fallSemester = new SemesterSchedule(fallList, true);
         past = FileHandler.loadList(saveFolder + "default-past.json");
         future = FileHandler.loadList(saveFolder + "default-future.json");
     }
