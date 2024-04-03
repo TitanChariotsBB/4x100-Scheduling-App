@@ -42,18 +42,20 @@ public class Search {
             }
         }
 
-        for (Course c : results) {
-            String codeFilter = activeFilters[SearchBy.COURSE_CODE.ordinal()];
+        String codeFilter = activeFilters[SearchBy.COURSE_CODE.ordinal()];
+        String nameFilter = activeFilters[SearchBy.COURSE_NAME.ordinal()];
+        String professorFilter = activeFilters[SearchBy.PROFESSOR.ordinal()];
+
+        for (int i = 0; i < results.size(); i++) {
+            Course c = results.get(i);
             if (!codeFilter.isEmpty()) {
-                if (c.getCode().contains(codeFilter)) results.remove(c);
+                if (!c.getCode().contains(codeFilter)) results.remove(c);
             }
-            String nameFilter = activeFilters[SearchBy.COURSE_NAME.ordinal()];
             if (!nameFilter.isEmpty()) {
-                if (c.getName().contains(nameFilter)) results.remove(c);
+                if (!c.getName().contains(nameFilter)) results.remove(c);
             }
-            String professorFilter = activeFilters[SearchBy.PROFESSOR.ordinal()];
             if (!professorFilter.isEmpty()) {
-                if (c.getProfessor().contains(professorFilter)) results.remove(c);
+                if (!c.getProfessor().contains(professorFilter)) results.remove(c);
             }
             // TODO: date/time
         }
@@ -69,5 +71,13 @@ public class Search {
 
     public void removeFilter(SearchBy sb) {
         activeFilters[sb.ordinal()] = "";
+    }
+
+    public void removeAllFilters() {
+        activeFilters = new String[]{"", "", "", "", ""};
+    }
+
+    public String[] getActiveFilters() {
+        return activeFilters;
     }
 }
