@@ -46,6 +46,10 @@ public class FXMLController {
     private VBox completedCoursesVBox;
     @FXML
     private VBox courseWishListVBox;
+    @FXML
+    private Label totalCreditsFall;
+    @FXML
+    private Label totalCreditsSpring;
 
     @FXML
     public void initialize() {
@@ -67,6 +71,8 @@ public class FXMLController {
         displaySchedule(springSemester, springSemesterVBox);
         displaySchedule(completedCourses, completedCoursesVBox);
         displaySchedule(courseWishList, courseWishListVBox);
+
+        updateTotalCredits();
     }
 
     @FXML
@@ -166,6 +172,7 @@ public class FXMLController {
 
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
+        updateTotalCredits();
         switch (selectedTabText) {
             case "Fall Semester":
                 fallSemester.addCourse(c);
@@ -181,8 +188,14 @@ public class FXMLController {
     }
 
     public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
+        updateTotalCredits();
         cl.removeCourse(c);
         displaySchedule(cl, vb);
+    }
+
+    public void updateTotalCredits() {
+        totalCreditsFall.setText("Total Credits: " + fallSemester.getTotalCredits());
+        totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
     }
 
 
