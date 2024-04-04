@@ -154,21 +154,7 @@ public class FXMLController {
     public void displaySchedule(CourseList courseList, VBox scheduleVBox) {
         ArrayList<HBox> courses = new ArrayList<>();
         for (Course c : courseList.getCourses()) {
-            String code = c.getCode();
-            String name = c.getName();
-            Label codeLabel = new Label(code);
-            Label nameLabel = new Label(name);
-            Button removeButton = new Button("Remove");
-            removeButton.setOnMouseClicked(event -> {
-                try {
-                    onRemoveButtonClicked(c, courseList, scheduleVBox);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            HBox courseHBox = new HBox(20, codeLabel, nameLabel, removeButton);
-            //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
-            courses.add(courseHBox);
+            courses.add(makeScheduleViewHBox(c, courseList, scheduleVBox));
         }
         scheduleVBox.getChildren().setAll(courses);
     }
@@ -232,6 +218,32 @@ public class FXMLController {
         HBox h = new HBox(10, courseInfo, addButton);
         h.setPadding(new Insets(5, 0, 5, 0));
         return h;
+    }
+
+    public HBox makeScheduleViewHBox(Course c, CourseList courseList, VBox scheduleVBox) {
+        String code = c.getCode();
+        String name = c.getName();
+        String meetingTime;
+        if (c.getMeetingTimes() != null) {
+            meetingTime = c.getMeetingTimeString();
+        } else {
+            meetingTime = "";
+        }
+        Label codeLabel = new Label(code + ": " + name);
+        Label time = new Label(meetingTime);
+        VBox courseInfo = new VBox(codeLabel, time);
+        Button removeButton = new Button("Remove");
+        removeButton.setOnMouseClicked(event -> {
+            try {
+                onRemoveButtonClicked(c, courseList, scheduleVBox);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        HBox courseHBox = new HBox(10, courseInfo, removeButton);
+        //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
+        courseHBox.setPadding(new Insets(10, 0, 10, 0));
+        return courseHBox;
     }
 
 }
