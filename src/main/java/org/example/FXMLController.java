@@ -109,8 +109,8 @@ public class FXMLController {
         }
 
         String professor = professorTF.getText();
-        //System.out.println(professor); - testing thingy
-        // TODO: format date
+        String mtgDays = mtgDaysComboBox.getSelectionModel().getSelectedItem();
+        String startTime = startTimeComboBox.getSelectionModel().getSelectedItem();
 
         if (!courseName.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_NAME, courseName);
@@ -118,9 +118,13 @@ public class FXMLController {
             search.addFilter(Search.SearchBy.COURSE_CODE, courseCode);
         if (!professor.isEmpty())
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
-        // TODO: add date filter
+        if (mtgDays != null)
+            search.addFilter(Search.SearchBy.DATE, mtgDays);
+        if (startTime != null)
+            search.addFilter(Search.SearchBy.TIME, startTime);
 
-        for (Filter filter : search.activeFilters) { // Testing thingy
+
+        for (Filter filter : search.activeFilters) { // Testing
             System.out.println(filter.sb);
             System.out.println(filter.filter);
         }
