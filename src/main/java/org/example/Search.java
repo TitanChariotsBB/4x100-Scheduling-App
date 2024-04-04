@@ -1,11 +1,9 @@
 package org.example;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Search {
     private String currentQuery;
-    private LocalDateTime[][] meetings;
     public enum SearchBy {
         ALL,
         COURSE_CODE,
@@ -22,30 +20,20 @@ public class Search {
         results = new ArrayList<>();
         activeFilters = new ArrayList<>();
         unfilteredResults.addAll(courseCatalog.getCourses());
-        setQueryString(null);
+        setQuery("");
     }
 
     public ArrayList<Course> getResults() {
-        if (results.isEmpty()) {
+        /*if (results.isEmpty()) {
             populateResults();
-        }
+        }*/
         return results;
     }
 
-    public void setQueryString(String currentQuery) {
+    public void setQuery(String currentQuery) {
         this.currentQuery = currentQuery;
-        if (results.isEmpty()) {
-            populateResults();
-        }
-    }
-
-
-    // Date filtering from the main search bar is unnecessary
-    public void setQueryDateTime(LocalDateTime[][] meetings) {
-        this.meetings = meetings;
-        if (results.isEmpty()) {
-            populateResults();
-        }
+        results.clear();
+        populateResults();
     }
 
     private void populateResults() {
@@ -54,7 +42,7 @@ public class Search {
         /*if (currentQuery == null) {
             results.addAll(unfilteredResults);
         }*/
-        if (activeFilters.isEmpty()) {
+        //if (activeFilters.isEmpty()) {
             /*for (Course unfilteredResult : unfilteredResults) {
                 if ((unfilteredResult.getName().contains(currentQuery) ||
                         unfilteredResult.getCode().contains(currentQuery) ||
@@ -63,33 +51,40 @@ public class Search {
                     results.add(unfilteredResult);
                 }
             }*/
-            results.addAll(unfilteredResults);
-        }
-        else {
-            results.addAll(unfilteredResults);
-            for (Filter filter: activeFilters) {
-                if (filter.sb != SearchBy.TIME) {
+            if (currentQuery.isEmpty()) {
+                results.addAll(unfilteredResults);
+                for (Filter filter: activeFilters) {
                     filterCourses(filter.sb, filter.filter);
                 }
-                else {
-                    filterCourses(filter.sb, filter.meetings);
+            }
+            else {
+                for (Course unfilteredResult : unfilteredResults) {
+                    if ((unfilteredResult.getName().toLowerCase().contains(currentQuery.toLowerCase()) ||
+                            unfilteredResult.getCode().toLowerCase().contains(currentQuery.toLowerCase()) ||
+                            unfilteredResult.getProfessor().toLowerCase().contains(currentQuery.toLowerCase())) &&
+                            !results.contains(unfilteredResult)) {
+                        results.add(unfilteredResult);
+                    }
+                }
+                for (Filter filter: activeFilters) {
+                    filterCourses(filter.sb, filter.filter);
                 }
             }
-        }
+        //}
+        /*else {
+            results.addAll(unfilteredResults);
+            for (Filter filter: activeFilters) {
+                filterCourses(filter.sb, filter.filter);
+            }
+        }*/
 
     }
 
 
     public void addFilter(SearchBy sb, String filter) {
         activeFilters.add(new Filter(sb, filter));
-        setQueryString(filter);
+        //setQuery(filter);
         filterCourses(sb, filter);
-    }
-
-    public void addFilter(SearchBy sb, LocalDateTime[][] meetings) {
-        activeFilters.add(new Filter(sb, meetings));
-        setQueryDateTime(meetings);
-        filterCourses(sb, meetings);
     }
 
     private void filterCourses(SearchBy sb, String filter) {
@@ -101,16 +96,12 @@ public class Search {
 
         }
         else if (sb.equals(SearchBy.COURSE_NAME)) { // If filtering by course_name
-            results.removeIf(result -> !result.getName().contains(filter));
+            results.removeIf(result -> !result.getName().toLowerCase().contains(filter.toLowerCase()));
 
         }
         else if (sb.equals(SearchBy.PROFESSOR)) { // If filtering by professor name
-            results.removeIf(result -> !result.getProfessor().contains(filter));
+            results.removeIf(result -> !result.getProfessor().toLowerCase().contains(filter.toLowerCase()));
         }
-    }
-
-    private void filterCourses(SearchBy sb, LocalDateTime[][] meetings) {
-        results.removeIf(result -> !(result.getMeetingTimes() == meetings));
     }
 
     public void removeFilter(SearchBy sb) {
@@ -164,8 +155,10 @@ public class Search {
         populateResults();
     }
 
+    public void removeAllFilters() {
+        activeFilters.clear();
+    }
 
-    // This was for testing purposes
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Course result : results) {
