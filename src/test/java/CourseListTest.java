@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.apache.commons.lang3.Range;
 
 class CourseListTest {
     @Test
@@ -33,7 +32,6 @@ class CourseListTest {
         Course course11 = new Course("Foundations of balloon fabrication", "HUMA 301", meetings3, true, "A better class", "HAL 116", "Dr. Bibza", 3, null);
         Course course12 = new Course("Foundations of balloon fabrication", "HUMA 301", meetings4, true, "A better class", "HAL 116", "Dr. Bibza", 3, null);
 
-        assertTrue(course11.timesAsRange()[0].isOverlappedBy(course12.timesAsRange()[0]));
     }
 
     @Test

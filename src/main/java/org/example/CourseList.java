@@ -2,8 +2,6 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Scanner;
-import org.apache.commons.lang3.Range;
 
 public class CourseList {
     private ArrayList<Course> courses;
@@ -20,6 +18,11 @@ public class CourseList {
     public int getTotalCredits(){return totalCredits;}
 
     public void addCourse(Course course) throws IllegalArgumentException {
+        for (int i = 0; i < course.getPrerequisites().size(); i++) {
+            if(!pastCourses().contains(course.getPrerequisites().get(i))) {
+                System.out.println("Hey, you need the prerequisites to take this!!");
+            }
+        }
         courses.add(course);
         totalCredits += course.getCredits();
     }
@@ -29,6 +32,14 @@ public class CourseList {
             throw new Exception("org.example.Course not found!");
         }
         totalCredits -= course.getCredits();
+    }
+
+    public ArrayList<String> pastCourses() {
+        ArrayList<String> out = new ArrayList<>();
+        for (int i = 0; i < Main.past.getCourses().size(); i++) {
+            out.add(Main.past.getCourses().get(i).getCode());
+        }
+        return out;
     }
 
     @Override

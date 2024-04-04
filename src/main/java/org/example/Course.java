@@ -52,4 +52,8 @@ public class Course {
     public String getProfessor() {
         return professor;
     }
+
+    public ArrayList getPrerequisites() {
+        return prerequisites;
+    }
 }
