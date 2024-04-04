@@ -205,10 +205,12 @@ public class FXMLController {
         totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
     }
 
+    @FXML
     public void openStatusSheet() throws URISyntaxException, IOException {
         Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Utility/Offices/Registrar/Program-Guides"));
     }
 
+    @FXML
     public void openCourseCatalog() throws URISyntaxException, IOException {
         Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Home/Academics/Majors-Departments/College-Catalog"));
     }
