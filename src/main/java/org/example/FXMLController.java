@@ -2,10 +2,17 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class FXMLController {
@@ -46,6 +53,10 @@ public class FXMLController {
     private VBox completedCoursesVBox;
     @FXML
     private VBox courseWishListVBox;
+    @FXML
+    private Label totalCreditsFall;
+    @FXML
+    private Label totalCreditsSpring;
 
     @FXML
     public void initialize() {
@@ -67,6 +78,8 @@ public class FXMLController {
         displaySchedule(springSemester, springSemesterVBox);
         displaySchedule(completedCourses, completedCoursesVBox);
         displaySchedule(courseWishList, courseWishListVBox);
+
+        updateTotalCredits();
     }
 
     @FXML
@@ -182,12 +195,28 @@ public class FXMLController {
             default:
                 break;
         }
+        updateTotalCredits();
     }
 
     public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
+        updateTotalCredits();
     }
 
+    public void updateTotalCredits() {
+        totalCreditsFall.setText("Total Credits: " + fallSemester.getTotalCredits());
+        totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
+    }
+
+    @FXML
+    public void openStatusSheet() throws URISyntaxException, IOException {
+        Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Utility/Offices/Registrar/Program-Guides"));
+    }
+
+    @FXML
+    public void openCourseCatalog() throws URISyntaxException, IOException {
+        Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Home/Academics/Majors-Departments/College-Catalog"));
+    }
 
 }
