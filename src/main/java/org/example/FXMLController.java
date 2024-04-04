@@ -145,7 +145,7 @@ public class FXMLController {
         int max = 60;
         while (i < max && i < courses.size()) {
             Course c = courses.get(i);
-            topCourses.add(makeSearchResult(c));
+            topCourses.add(makeSearchResultHBox(c));
             i++;
         }
         searchResults.getChildren().setAll(topCourses);
@@ -211,7 +211,7 @@ public class FXMLController {
         Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Home/Academics/Majors-Departments/College-Catalog"));
     }
 
-    public HBox makeSearchResult(Course c) {
+    public HBox makeSearchResultHBox(Course c) {
         String code = c.getCode();
         String name = c.getName();
         if (name.length() > 15) {
