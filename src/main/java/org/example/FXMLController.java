@@ -120,7 +120,7 @@ public class FXMLController {
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
         // TODO: add date filter
 
-        for (Filter filter : search.activeFilters) {
+        for (Filter filter : search.activeFilters) { // Testing thingy
             System.out.println(filter.sb);
             System.out.println(filter.filter);
         }

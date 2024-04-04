@@ -1,5 +1,6 @@
 package org.example;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Search {
@@ -9,7 +10,8 @@ public class Search {
         COURSE_CODE,
         COURSE_NAME,
         PROFESSOR,
-        TIME
+        TIME,
+        DATE
     }
     private ArrayList<Course> unfilteredResults;
     private ArrayList<Course> results;
@@ -87,6 +89,10 @@ public class Search {
         filterCourses(sb, filter);
     }
 
+    /*public void addFilter(SearchBy sb, LocalDateTime[][] ld) {
+        activeFilters.add(new Filter(sb, ld));
+    }*/
+
     private void filterCourses(SearchBy sb, String filter) {
         if (sb.equals(SearchBy.ALL)) { // Returns results with no filter
             return;
@@ -102,7 +108,64 @@ public class Search {
         else if (sb.equals(SearchBy.PROFESSOR)) { // If filtering by professor name
             results.removeIf(result -> !result.getProfessor().toLowerCase().contains(filter.toLowerCase()));
         }
+        else if (sb.equals(SearchBy.DATE)) { // If filtering by date
+            if (filter.equals("Any")) {
+                return;
+            }
+            else if (filter.equals("MWF")) {
+                results.removeIf(result -> result.getMeetingTimes()[0] == null ||
+                        result.getMeetingTimes()[1] != null ||
+                        result.getMeetingTimes()[2] == null ||
+                        result.getMeetingTimes()[3] != null ||
+                        result.getMeetingTimes()[4] == null);
+            }
+            else if (filter.equals("TR")) {
+                results.removeIf(result -> result.getMeetingTimes()[0] != null ||
+                        result.getMeetingTimes()[1] == null ||
+                        result.getMeetingTimes()[2] != null ||
+                        result.getMeetingTimes()[3] == null ||
+                        result.getMeetingTimes()[4] != null);
+            }
+            else if (filter.equals("Other")) {
+                return; // Not sure how to do this one
+            }
+        }
+        else if (sb.equals(SearchBy.TIME)) { // If filtering by time
+            if (filter.charAt(filter.length() - 2) == 'A') { // If AM
+                String temp = filter.substring(0, filter.length() - 6); // Store just the number
+                int myTime = Integer.parseInt(temp); // Convert the number from String to int
+                for (int i = 0; i < results.size(); i++) { // Runs through all classes
+                    for (int j = 0; j < 5; j++) { // Runs through each weekday
+                        if (results.get(i).getMeetingTimes()[j]!=null) { // Check if day is null
+                            int finalJ = j;
+                            results.removeIf(result -> result.getMeetingTimes()[finalJ][0].getHour() != myTime);
+                        }
+                    }
+                }
+            }
+            else if (filter.charAt(filter.length() - 2) == 'P') { // If PM
+                String temp = filter.substring(0, filter.length() - 6); // Store just the number
+                int myTime = Integer.parseInt(temp) + 12; // Convert the number from String to int + 12 for PM
+                for (int i = 0; i < results.size(); i++) { // Runs through all classes
+                    for (int j = 0; j < 5; j++) { // Runs through each weekday
+                        if (results.get(i).getMeetingTimes()[j]!=null) { // Check if day is null
+                            int finalJ = j;
+                            results.removeIf(result -> result.getMeetingTimes()[finalJ][0].getHour() != myTime);
+                        }
+                    }
+                }
+            }
+        }
     }
+
+    /*private void filterCourses(SearchBy sb, LocalDateTime ld) {
+        if (sb.equals(SearchBy.DATE)) {
+
+        }
+        else if (sb.equals(SearchBy.TIME)) {
+
+        }
+    }*/
 
     public void removeFilter(SearchBy sb) {
         /*if (sb.toString().equals("ALL")) { // Returns results with no filter
