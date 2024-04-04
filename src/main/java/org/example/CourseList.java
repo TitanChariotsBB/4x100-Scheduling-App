@@ -23,6 +23,7 @@ public class CourseList {
                 System.out.println("Hey, you need the prerequisites to take this!!");
             }
         }
+
         courses.add(course);
         totalCredits += course.getCredits();
     }
