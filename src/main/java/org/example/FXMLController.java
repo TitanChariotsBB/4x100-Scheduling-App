@@ -1,6 +1,7 @@
 package org.example;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,7 +10,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -86,7 +87,6 @@ public class FXMLController {
     protected void onSearchButtonClick() {
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
-        //System.out.println(searchQuery + "What the heck man"); -- Testing thingy
         search.setQuery(searchQuery);
         displaySearchResults(search.getResults());
     }
@@ -149,11 +149,7 @@ public class FXMLController {
         int max = 60;
         while (i < max && i < courses.size()) {
             Course c = courses.get(i);
-            String code = c.getCode();
-            Label label = new Label(code);
-            Button addButton = new Button("Add");
-            addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
-            topCourses.add(new HBox(20, label, addButton));
+            topCourses.add(makeSearchResultHBox(c));
             i++;
         }
         searchResults.getChildren().setAll(topCourses);
@@ -162,21 +158,7 @@ public class FXMLController {
     public void displaySchedule(CourseList courseList, VBox scheduleVBox) {
         ArrayList<HBox> courses = new ArrayList<>();
         for (Course c : courseList.getCourses()) {
-            String code = c.getCode();
-            String name = c.getName();
-            Label codeLabel = new Label(code);
-            Label nameLabel = new Label(name);
-            Button removeButton = new Button("Remove");
-            removeButton.setOnMouseClicked(event -> {
-                try {
-                    onRemoveButtonClicked(c, courseList, scheduleVBox);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            HBox courseHBox = new HBox(20, codeLabel, nameLabel, removeButton);
-            //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
-            courses.add(courseHBox);
+            courses.add(makeScheduleViewHBox(c, courseList, scheduleVBox));
         }
         scheduleVBox.getChildren().setAll(courses);
     }
@@ -217,6 +199,55 @@ public class FXMLController {
     @FXML
     public void openCourseCatalog() throws URISyntaxException, IOException {
         Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Home/Academics/Majors-Departments/College-Catalog"));
+    }
+
+    public HBox makeSearchResultHBox(Course c) {
+        String code = c.getCode();
+        String name = c.getName();
+        if (name.length() > 15) {
+            name = name.substring(0,15);
+            name += "...";
+        }
+        String meetingTime;
+        if (c.getMeetingTimes() != null) {
+            meetingTime = c.getMeetingTimeString();
+        } else {
+            meetingTime = "";
+        }
+        Label codeLabel = new Label(code + ": " + name);
+        Label mtgLabel = new Label(meetingTime);
+        VBox courseInfo = new VBox(codeLabel, mtgLabel);
+        Button addButton = new Button("Add");
+        addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
+        HBox h = new HBox(10, courseInfo, addButton);
+        h.setPadding(new Insets(5, 0, 5, 0));
+        return h;
+    }
+
+    public HBox makeScheduleViewHBox(Course c, CourseList courseList, VBox scheduleVBox) {
+        String code = c.getCode();
+        String name = c.getName();
+        String meetingTime;
+        if (c.getMeetingTimes() != null) {
+            meetingTime = c.getMeetingTimeString();
+        } else {
+            meetingTime = "";
+        }
+        Label codeLabel = new Label(code + ": " + name);
+        Label time = new Label(meetingTime);
+        VBox courseInfo = new VBox(codeLabel, time);
+        Button removeButton = new Button("Remove");
+        removeButton.setOnMouseClicked(event -> {
+            try {
+                onRemoveButtonClicked(c, courseList, scheduleVBox);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        HBox courseHBox = new HBox(10, courseInfo, removeButton);
+        //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
+        courseHBox.setPadding(new Insets(10, 0, 10, 0));
+        return courseHBox;
     }
 
 }
