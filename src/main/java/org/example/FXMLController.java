@@ -2,10 +2,17 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class FXMLController {
@@ -172,7 +179,6 @@ public class FXMLController {
 
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
-        updateTotalCredits();
         switch (selectedTabText) {
             case "Fall Semester":
                 fallSemester.addCourse(c);
@@ -185,12 +191,13 @@ public class FXMLController {
             default:
                 break;
         }
+        updateTotalCredits();
     }
 
     public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
-        updateTotalCredits();
         cl.removeCourse(c);
         displaySchedule(cl, vb);
+        updateTotalCredits();
     }
 
     public void updateTotalCredits() {
@@ -198,5 +205,12 @@ public class FXMLController {
         totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
     }
 
+    public void openStatusSheet() throws URISyntaxException, IOException {
+        Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Utility/Offices/Registrar/Program-Guides"));
+    }
+
+    public void openCourseCatalog() throws URISyntaxException, IOException {
+        Desktop.getDesktop().browse(new URI("https://www.gcc.edu/Home/Academics/Majors-Departments/College-Catalog"));
+    }
 
 }
