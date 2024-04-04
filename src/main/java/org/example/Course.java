@@ -64,4 +64,33 @@ public class Course {
     public String getProfessor() {
         return professor;
     }
+
+    public String getMeetingTimeString() {
+        String day = "";
+        String time = "";
+        int hour = 0;
+        int minute = 0;
+
+        if (meetingTimes[0] != null) {
+            day += "M";
+            hour = meetingTimes[0][0].getHour();
+            minute = meetingTimes[0][0].getMinute();
+        }
+        if (meetingTimes[1] != null) {
+            day += "T";
+            hour = meetingTimes[1][0].getHour();
+            minute = meetingTimes[1][0].getMinute();
+        }
+        if (meetingTimes[2] != null)
+            day += "W";
+        if (meetingTimes[3] != null)
+            day += "R";
+        if (meetingTimes[4] != null)
+            day += "F";
+
+        time = " " + hour + ":" + minute;
+        if (minute == 0) time += "0";
+
+        return day + time;
+    }
 }
