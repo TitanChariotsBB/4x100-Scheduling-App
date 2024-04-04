@@ -13,12 +13,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class FileHandler {
-    private static String createPath(String nameAndExt){
+    public static String getDefaultPath(String nameAndExt){
         Path currentPath = FileSystems.getDefault().getPath("");
         String currentName = currentPath.toAbsolutePath().toString();
         String filePath = currentName + "\\src\\CourseLists\\";
@@ -26,11 +24,13 @@ public class FileHandler {
     }
 
     /**
-     * @return true if the file was saved with no problems,
-     *      false if the named already exists and it has not been told to overwrite
+     * @param courses is the list of courses to be saved
+     * @param filePath the absolute path to the file where the list is to be saved
+     * @param overWrite if true, an existing file with that specified path can be deleted and replaced
+     *                  if false, finding an existing file with that name results in returning false
+     * @return true if the file was successfully saved
      */
-    public static boolean saveList(CourseList courses, String fileName, boolean overWrite){
-        String filePath = createPath(fileName + ".json");
+    public static boolean saveList(CourseList courses, String filePath, boolean overWrite){
         File outFile = new File(filePath);
 
         if(outFile.exists() && !overWrite){
@@ -51,8 +51,12 @@ public class FileHandler {
         return true;
     }
 
-    public static CourseList loadList(String fileName) throws FileNotFoundException {
-        String filePath = createPath(fileName + ".json");
+    /**
+     * @param filePath the absolute path to the file to be loaded
+     * @return the list of courses found in the specified json file
+     * @throws FileNotFoundException
+     */
+    public static CourseList loadList(String filePath) throws FileNotFoundException {
         FileInputStream inStream = null;
         inStream = new FileInputStream(filePath);
 
@@ -73,7 +77,7 @@ public class FileHandler {
 
             workingStr += scan.next();
             if(scan.hasNext()){
-                workingStr += ','; //add a comma every time except the last time
+                workingStr += ','; //add a comma every time except the last time to preserve indexing
             }
 
             for(; currentIndex < workingStr.length(); currentIndex++){
@@ -85,21 +89,23 @@ public class FileHandler {
                 }
 
 
-                if(openBrackets == 0){//we've reached the end of an object
+                if(openBrackets == 0){//currentIndex is the end of an object
                     String objectString = workingStr.substring(0,currentIndex+1);
                     loadedCourse = (Course) JsonReader.jsonToJava(objectString);
+                    loadedList.addCourse(loadedCourse);
+
                     workingStr = workingStr.substring(currentIndex+1);
                     currentIndex = -1; //the for statement will set it back to 0
                 }
             }
-            loadedList.addCourse(loadedCourse);
+
         }
 
         return loadedList;
     }
 
     public static CourseList loadCatalog(){
-        String catalogFilePath = createPath("catalog.xlsx");
+        String catalogFilePath = getDefaultPath("catalog.xlsx");
         CourseList catalog = new CourseList();
 
         try {
@@ -208,6 +214,54 @@ public class FileHandler {
             e.printStackTrace();
         }
         return catalog;
+    }
+
+    public static boolean saveFutureList(ArrayList<CourseList> futureLists, String filename, boolean overWrite){
+        //algorithm: make a new directory based on filename, and save each courselist inside that directory with the existing
+
+        String filePath = getDefaultPath(filename);
+        File directory = new File(filePath);
+
+        if(directory.exists()) {
+            if(!overWrite){
+                return false;
+            }else {
+                File[] dirContents = directory.listFiles();
+                for(File f : dirContents){
+                    f.delete();
+                }
+                directory.delete();//can only delete an empty directory
+            }
+        }
+        if(!directory.mkdir()){//the directory should exist now
+            return false;
+        }
+
+        for(int x = 0; x < futureLists.size(); x++){
+            String thisPath = filePath + "\\" + filename + "-" + x + ".json";
+            if(!saveList(futureLists.get(x),thisPath,overWrite)){//this is fine. It will work once my last pull request is approved
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static ArrayList<CourseList> loadFutureList(String filePath) throws FileNotFoundException{
+        ArrayList<CourseList> result = new ArrayList<>();
+
+        File directory = new File(filePath);
+        if(!directory.exists()){
+            throw new FileNotFoundException("We could not find the file: " + filePath);
+        }
+
+        File[] courseLists = directory.listFiles();
+        for(int x = 0; x < courseLists.length; x++){
+            String thisPath = courseLists[x].getPath();
+            CourseList thisList = loadList(thisPath);
+            result.add(thisList);
+        }
+
+        return result;
     }
 
     /*

@@ -19,14 +19,6 @@ public class CourseList {
     public int getTotalCredits(){return totalCredits;}
 
     public void addCourse(Course course) throws IllegalArgumentException {
-        if(totalCredits+course.getCredits() > 19) {
-            throw new IllegalArgumentException("org.example.Too many credits");
-        }
-        for (int i = 0; i < courses.size(); i++) {
-            if (course.overlapsWith(courses.get(i))) {
-                throw new IllegalArgumentException("org.example.Overlaps with another course");
-            }
-        }
         courses.add(course);
         totalCredits += course.getCredits();
     }
@@ -42,7 +34,7 @@ public class CourseList {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Course course : courses) {
-            sb.append(course.getName());
+            sb.append(course.getName() + "\n");
         }
         return sb.toString();
     }

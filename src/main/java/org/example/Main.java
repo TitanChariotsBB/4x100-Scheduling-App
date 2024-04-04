@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 
 public class Main {
@@ -12,26 +13,42 @@ public class Main {
 
     public static void run() {
         catalog = FileHandler.loadCatalog();
-        // run
+        System.out.println(catalog);
+        search = new Search(catalog);
+
+        try {
+            autoLoad();
+        }catch(FileNotFoundException fnfe){
+            springSemester = new CourseList();
+            fallSemester = new CourseList();
+            past = new CourseList();
+            future = new CourseList();
+        }
+        MainApp.launchGUI();
+        autoSave();
     }
 
     public static void main(String[] args) {
-        // I am aware most of this stuff should go in run eventually. This is just for testing
-        System.out.println("Hello!");
-        search = new Search();
-
-        LocalDateTime time1 = LocalDateTime.of(2024, 1, 1, 9, 0);
-        LocalDateTime[][] meetings1 = {{time1, time1}, null, {time1, time1}, null, {time1, time1}};
-        Course course1 = new Course("Underwater basket weaving", "HUMA 201", meetings1,true, "A good class", "STEM 376", "Dr. Bibza", 3, null);
-        LocalDateTime time2 = LocalDateTime.of(2024, 1, 1, 14, 0);
-        LocalDateTime[][] meetings2 = {null, {time2, time2}, null, {time2, time2}, null};
-        Course course2 = new Course("Foundations of balloon fabrication", "HUMA 301", meetings2,true, "A better class", "HAL 116", "Dr. Bibza", 3, null);
-        fallSemester = new CourseList();
-        fallSemester.addCourse(course1);
-        fallSemester.addCourse(course2);
-        springSemester = new CourseList();
-
-        MainApp.launchGUI();
+        run();
     }
 
+    public static void autoSave(){
+        String saveFolder = FileHandler.getDefaultPath(""); //ends with \
+
+        FileHandler.saveList(springSemester,saveFolder+"default-spring.json",true);
+        FileHandler.saveList(fallSemester,saveFolder+"default-fall.json",true);
+        FileHandler.saveList(past,saveFolder+"default-past.json",true);
+        FileHandler.saveList(future,saveFolder+"default-future.json",true);
+    }
+
+    public static void autoLoad() throws FileNotFoundException{
+        String saveFolder = FileHandler.getDefaultPath(""); //ends with \
+
+        CourseList springList = FileHandler.loadList(saveFolder + "default-spring.json");
+        springSemester = new SemesterSchedule(springList, false);
+        CourseList fallList = FileHandler.loadList(saveFolder + "default-fall.json");
+        fallSemester = new SemesterSchedule(fallList, true);
+        past = FileHandler.loadList(saveFolder + "default-past.json");
+        future = FileHandler.loadList(saveFolder + "default-future.json");
+    }
 }

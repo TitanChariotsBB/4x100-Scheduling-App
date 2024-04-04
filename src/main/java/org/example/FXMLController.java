@@ -3,12 +3,8 @@ package org.example;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 
@@ -50,30 +46,35 @@ public class FXMLController {
     private VBox completedCoursesVBox;
     @FXML
     private VBox courseWishListVBox;
-    @FXML
-    private Label totalCreditsFall;
-    @FXML
-    private Label totalCreditsSpring;
 
     @FXML
     public void initialize() {
+        // Get references to Search and CourseList objects
         search = Main.search;
         fallSemester = Main.fallSemester;
         springSemester = Main.springSemester;
+        completedCourses = Main.past;
+        courseWishList = Main.future;
+
+        // Fill combo box options
         ControllerHelper ch = new ControllerHelper();
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
-        displaySemesterSchedule(fallSemester, fallSemesterVBox);
-        displaySemesterSchedule(springSemester, springSemesterVBox);
+
+        // Display schedules
+        displaySchedule(fallSemester, fallSemesterVBox);
+        displaySchedule(springSemester, springSemesterVBox);
+        displaySchedule(completedCourses, completedCoursesVBox);
+        displaySchedule(courseWishList, courseWishListVBox);
     }
 
     @FXML
     protected void onSearchButtonClick() {
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
-        search.setCurrentQuery(searchQuery);
-        search.populateResults();
+        //System.out.println(searchQuery + "What the heck man"); -- Testing thingy
+        search.setQuery(searchQuery);
         displaySearchResults(search.getResults());
     }
 
@@ -85,23 +86,7 @@ public class FXMLController {
 
     @FXML
     protected void onClearFiltersButtonClicked() {
-        // THIS COULD ALL BE REPLACED BY search.removeAllFilters(),
-        // if such a method were implemented
-        String courseName = courseNameTF.getText();
-        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText();
-        String professor = professorTF.getText();
-        String date = "";
-        // TODO: format date
-
-        if (!courseName.isEmpty())
-            search.removeFilter(Search.SearchBy.COURSE_NAME);
-        if (!courseCode.equals(" "))
-            search.removeFilter(Search.SearchBy.COURSE_CODE);
-        if (!professor.isEmpty())
-            search.removeFilter(Search.SearchBy.PROFESSOR);
-        if (!date.isEmpty())
-            search.removeFilter(Search.SearchBy.TIME);
+        search.removeAllFilters();
 
         courseNumberTF.setText("");
         courseNameTF.setText("");
@@ -114,48 +99,65 @@ public class FXMLController {
     @FXML
     protected void onApplyFiltersButtonClicked() {
         String courseName = courseNameTF.getText();
-        String courseCode = dptComboBox.getSelectionModel().getSelectedItem() + " " +
-                courseNumberTF.getText();
+
+        String dpt = dptComboBox.getSelectionModel().getSelectedItem();
+        String courseCode;
+        if (dpt != null) {
+            courseCode = dpt + courseNumberTF.getText();
+        } else {
+            courseCode = "";
+        }
+
         String professor = professorTF.getText();
+        //System.out.println(professor); - testing thingy
         // TODO: format date
 
         if (!courseName.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_NAME, courseName);
-        if (!courseCode.equals(" "))
+        if (!courseCode.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_CODE, courseCode);
         if (!professor.isEmpty())
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
         // TODO: add date filter
+
+        for (Filter filter : search.activeFilters) {
+            System.out.println(filter.sb);
+            System.out.println(filter.filter);
+        }
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
-        // TODO: test this! (also figure out a way to display more than 5 courses)
         ArrayList<HBox> topCourses = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        int i = 0;
+        int max = 60;
+        while (i < max && i < courses.size()) {
             Course c = courses.get(i);
             String code = c.getCode();
             Label label = new Label(code);
             Button addButton = new Button("Add");
-            addButton.setOnMouseClicked(event -> {onAddButtonClicked(c);});
+            addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
             topCourses.add(new HBox(20, label, addButton));
+            i++;
         }
         searchResults.getChildren().setAll(topCourses);
     }
 
-    public void displaySemesterSchedule(CourseList courseList, VBox scheduleVBox) {
+    public void displaySchedule(CourseList courseList, VBox scheduleVBox) {
         ArrayList<HBox> courses = new ArrayList<>();
         for (Course c : courseList.getCourses()) {
             String code = c.getCode();
-            Label label = new Label(code);
+            String name = c.getName();
+            Label codeLabel = new Label(code);
+            Label nameLabel = new Label(name);
             Button removeButton = new Button("Remove");
             removeButton.setOnMouseClicked(event -> {
                 try {
-                    onRemoveButtonClicked(c);
+                    onRemoveButtonClicked(c, courseList, scheduleVBox);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             });
-            HBox courseHBox = new HBox(20, label, removeButton);
+            HBox courseHBox = new HBox(20, codeLabel, nameLabel, removeButton);
             //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
             courses.add(courseHBox);
         }
@@ -166,37 +168,21 @@ public class FXMLController {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         switch (selectedTabText) {
             case "Fall Semester":
-                fallSemester.addCourse(c, this);
-                displaySemesterSchedule(fallSemester, fallSemesterVBox);
+                fallSemester.addCourse(c);
+                displaySchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
-                springSemester.addCourse(c, this);
-                displaySemesterSchedule(springSemester, springSemesterVBox);
+                springSemester.addCourse(c);
+                displaySchedule(springSemester, springSemesterVBox);
                 break;
             default:
                 break;
         }
     }
 
-    public void onRemoveButtonClicked(Course c) throws Exception {
-        String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
-        switch (selectedTabText) {
-            case "Fall Semester":
-                fallSemester.removeCourse(c, this);
-                displaySemesterSchedule(fallSemester, fallSemesterVBox);
-                break;
-            case "Spring Semester":
-                springSemester.removeCourse(c, this);
-                displaySemesterSchedule(springSemester, springSemesterVBox);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void updateCredits() {
-        totalCreditsFall.setText("Total Credits: " + fallSemester.getTotalCredits());
-        totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
+    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
+        cl.removeCourse(c);
+        displaySchedule(cl, vb);
     }
 
 
