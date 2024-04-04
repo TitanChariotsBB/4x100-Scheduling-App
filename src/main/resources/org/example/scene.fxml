@@ -23,7 +23,7 @@
                         <Button fx:id="searchButton" layoutX="212.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#onSearchButtonClick" text="Go" />
                         <TextField fx:id="searchBar" layoutX="14.0" layoutY="14.0" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="187.0" promptText="Search" />
                         <Label layoutX="14.0" layoutY="50.0" text="Search by:" />
-                        <Accordion fx:id="filterAccordion" layoutX="14.0" layoutY="50.0" prefHeight="300.0" prefWidth="230.0">
+                        <Accordion fx:id="filterAccordion" layoutX="14.0" layoutY="48.0" prefHeight="300.0" prefWidth="230.0">
                             <panes>
                                 <TitledPane animated="false" prefHeight="180.0" prefWidth="230.0" text="Filter by">
                                     <content>
@@ -49,9 +49,9 @@
                                 </TitledPane>
                             </panes>
                         </Accordion>
-                  <ScrollPane hbarPolicy="NEVER" layoutX="29.0" layoutY="370.0" prefHeight="200.0" prefWidth="200.0">
+                  <ScrollPane hbarPolicy="NEVER" layoutX="3.0" layoutY="350.0" prefHeight="240.0" prefWidth="260.0">
                      <content>
-                        <VBox fx:id="searchResults" prefHeight="1600.0" prefWidth="200.0" />
+                        <VBox fx:id="searchResults" prefHeight="1600.0" prefWidth="260.0" />
                      </content>
                   </ScrollPane>
                     </children>
