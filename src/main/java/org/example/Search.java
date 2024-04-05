@@ -131,11 +131,13 @@ public class Search {
                         result.getMeetingTimes()[4] != null);
             }
             else if (filter.equals("Other")) {
-                return; // Not sure how to do this one
+                results.removeIf(result -> result.getMeetingTimes() == null ||
+                        !result.getMeetingDateString().equals("Other"));
             }
         }
         else if (sb.equals(SearchBy.TIME)) { // If filtering by time
-            results.removeIf(result -> !result.getMeetingTimeStringAlex().equals(filter));
+            results.removeIf(result -> result.getMeetingTimes() == null ||
+                    !result.getMeetingTimeStringAlex().equals(filter));
 
             /*if (filter.charAt(filter.length() - 2) == 'A') { // If AM
                 String temp = filter.substring(0, filter.length() - 6); // Store just the number

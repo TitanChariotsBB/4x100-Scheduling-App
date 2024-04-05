@@ -108,6 +108,10 @@ public class Course {
         if (meetingTimes[4] != null)
             day += "F";
 
+        if (!day.equals("MWF") && !day.equals("TR")) {
+            return "Other";
+        }
+
         return day;
     }
 
