@@ -7,8 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.awt.Desktop;
@@ -265,26 +265,22 @@ public class FXMLController {
         });
         HBox courseHBox = new HBox(10, courseInfo, removeButton);
         //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
-        courseHBox.setPadding(new Insets(10, 0, 10, 0));
+        courseHBox.setPadding(new Insets(10, 0, 10, 5));
         return courseHBox;
     }
 
     @FXML
     public void onCompletedCoursesClick(){
         past = true;
-        Font bigFont = new Font(20);
-        Font smallFont = new Font(12);
-        completedCoursesLabel.setFont(bigFont);
-        courseWishlistLabel.setFont(smallFont);
+        completedCoursesVBox.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, null, null)));
+        courseWishListVBox.setBorder(null);
     }
 
     @FXML
     public void onCourseWishlistClick(){
         past = false;
-        Font bigFont = new Font(20);
-        Font smallFont = new Font(12);
-        completedCoursesLabel.setFont(smallFont);
-        courseWishlistLabel.setFont(bigFont);
+        courseWishListVBox.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, null, null)));
+        completedCoursesVBox.setBorder(null);
     }
 
     public void onTabSwitch() {
