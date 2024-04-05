@@ -63,6 +63,10 @@ public class Course {
         return professor;
     }
 
+    public ArrayList<String> getPrerequisites() {
+        return prerequisites;
+    }
+
     public String getMeetingTimeString() {
         String day = "";
         String time = "";

@@ -29,6 +29,14 @@ public class CourseList {
         totalCredits -= course.getCredits();
     }
 
+    public ArrayList<String> pastCourses() {
+        ArrayList<String> out = new ArrayList<>();
+        for (int i = 0; i < Main.past.getCourses().size(); i++) {
+            out.add(Main.past.getCourses().get(i).getCode());
+        }
+        return out;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

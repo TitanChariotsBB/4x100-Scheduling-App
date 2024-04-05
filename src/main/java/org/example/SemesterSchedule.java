@@ -31,6 +31,13 @@ public class SemesterSchedule extends CourseList {
         if(super.getTotalCredits() + course.getCredits() > 19) {
             throw new IllegalArgumentException("Attempted to add too many credits");
         }
+        if (course.getPrerequisites() != null) {
+            for (int i = 0; i < course.getPrerequisites().size(); i++) {
+                if (!pastCourses().contains(course.getPrerequisites().get(i))) {
+                    throw new IllegalArgumentException("Unmet prerequisites");
+                }
+            }
+        }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
     }
 
