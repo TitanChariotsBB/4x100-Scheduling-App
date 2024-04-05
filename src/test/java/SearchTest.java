@@ -72,5 +72,21 @@ public class SearchTest {
         assertEquals(0, s.activeFilters.size());
         assertEquals(3, s.getResults().size());
         System.out.println(s);
+        s.addFilter(Search.SearchBy.TIME, "2:00 PM");
+        assertEquals(1, s.getResults().size());
+        System.out.println(s);
+        s.removeFilter(Search.SearchBy.TIME);
+        assertEquals(3, s.getResults().size());
+        System.out.println(s);
+        s.addFilter(Search.SearchBy.TIME, "9:00 AM");
+        assertEquals(1, s.getResults().size());
+        assertEquals("Underwater basket weaving", s.getResults().get(0).getName());
+        System.out.println(s);
+        s.removeFilter(Search.SearchBy.TIME);
+        assertEquals(3, s.getResults().size());
+        System.out.println(s);
+        s.addFilter(Search.SearchBy.DATE, "MWF");
+        assertEquals(1, s.getResults().size());
+        System.out.println(s);
     }
 }
