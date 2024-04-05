@@ -7,3 +7,11 @@
 [Hours log](https://grovecitycollege-my.sharepoint.com/:x:/g/personal/abbottcm21_gcc_edu/EUk1wXccwPpKoWNu43gSV1cB4Ofe_uT17aIhK_wpxXE29A?e=6UfEzi&nav=MTVfezU0MEIxMUI5LTE5RTctNDFEMS1CM0EwLTYwQkEwM0VDNjQzQ30)
 
 [Jira backlog](https://4x100-gcc.atlassian.net/jira/software/projects/X4100/boards/2/backlog)
+
+### To run:
+
+Clone the git repository, open in IntelliJ, then go to the Main class and hit the run button on the Main method.
+
+### Features we didn't get to
+
+We did not get to the weekly schedule view, preferences, and prerequisits checking.
