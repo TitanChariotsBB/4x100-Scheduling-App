@@ -22,25 +22,25 @@ public class SemesterSchedule extends CourseList {
     }
 
     @Override
-    public int addCourse(Course course) {
-        int errno = 0;
+    public String addCourse(Course course) {
+        String err = "";
+        if(super.getTotalCredits() + course.getCredits() > 19) {
+            err += "Over 19 credit hour limit ";
+        }
         for (Course existingCourse : super.getCourses()) {
             if (course.overlapsWith(existingCourse)) {
-                errno = 1;
+                err += "Time conflict with " + existingCourse;
             }
-        }
-        if(super.getTotalCredits() + course.getCredits() > 19) {
-            errno = 2;
         }
         if (course.getPrerequisites() != null) {
             for (int i = 0; i < course.getPrerequisites().size(); i++) {
                 if (!pastCourses().contains(course.getPrerequisites().get(i))) {
-                    errno = 3;
+                    err += "Unmet prerequisites ";
                 }
             }
         }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
-        return errno;
+        return err;
     }
 
     @Override

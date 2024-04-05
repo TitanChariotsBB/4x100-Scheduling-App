@@ -17,10 +17,10 @@ public class CourseList {
 
     public int getTotalCredits(){return totalCredits;}
 
-    public int addCourse(Course course) {
+    public String addCourse(Course course) {
         courses.add(course);
         totalCredits += course.getCredits();
-        return 0;
+        return "";
     }
 
     public void removeCourse(Course course) throws Exception {
