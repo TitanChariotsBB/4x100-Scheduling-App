@@ -7,11 +7,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class FXMLController {
     private CourseList springSemester;
     private CourseList completedCourses;
     private CourseList courseWishList;
+    private boolean past; //if past is true, past is selected. If past is false, wishList is selected
+    private String currentTab = "";
 
     @FXML
     private Label debugLabel;
@@ -58,6 +62,10 @@ public class FXMLController {
     private Label totalCreditsFall;
     @FXML
     private Label totalCreditsSpring;
+    @FXML
+    private Label completedCoursesLabel;
+    @FXML
+    private Label courseWishlistLabel;
 
     @FXML
     public void initialize() {
@@ -67,6 +75,7 @@ public class FXMLController {
         springSemester = Main.springSemester;
         completedCourses = Main.past;
         courseWishList = Main.future;
+        currentTab = tabPane.getSelectionModel().getSelectedItem().getText();
 
         // Fill combo box options
         ControllerHelper ch = new ControllerHelper();
@@ -80,6 +89,8 @@ public class FXMLController {
         displaySchedule(completedCourses, completedCoursesVBox);
         displaySchedule(courseWishList, courseWishListVBox);
 
+        past = true;
+
         updateTotalCredits();
     }
 
@@ -88,7 +99,7 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
         search.setQuery(searchQuery);
-        displaySearchResults(search.getResults());
+        displaySearchResults(filterBySemester(search.getResults(), currentTab));
     }
 
     @FXML
@@ -163,6 +174,7 @@ public class FXMLController {
         scheduleVBox.getChildren().setAll(courses);
     }
 
+    @FXML
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         switch (selectedTabText) {
@@ -174,12 +186,22 @@ public class FXMLController {
                 springSemester.addCourse(c);
                 displaySchedule(springSemester, springSemesterVBox);
                 break;
+            case "College Career":
+                if(past){
+                    completedCourses.addCourse(c);
+                    displaySchedule(completedCourses, completedCoursesVBox);
+                }
+                else{
+                    courseWishList.addCourse(c);
+                    displaySchedule(courseWishList, courseWishListVBox);
+                }
             default:
                 break;
         }
         updateTotalCredits();
     }
 
+    @FXML
     public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
@@ -237,6 +259,7 @@ public class FXMLController {
         Label time = new Label(meetingTime);
         VBox courseInfo = new VBox(codeLabel, time);
         Button removeButton = new Button("Remove");
+        removeButton.setMinWidth(60);
         removeButton.setOnMouseClicked(event -> {
             try {
                 onRemoveButtonClicked(c, courseList, scheduleVBox);
@@ -246,8 +269,45 @@ public class FXMLController {
         });
         HBox courseHBox = new HBox(10, courseInfo, removeButton);
         //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
-        courseHBox.setPadding(new Insets(10, 0, 10, 0));
+        courseHBox.setPadding(new Insets(10, 0, 10, 5));
         return courseHBox;
+    }
+
+    @FXML
+    public void onCompletedCoursesClick(){
+        past = true;
+        completedCoursesVBox.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, null, null)));
+        courseWishListVBox.setBorder(null);
+    }
+
+    @FXML
+    public void onCourseWishlistClick(){
+        past = false;
+        courseWishListVBox.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, null, null)));
+        completedCoursesVBox.setBorder(null);
+    }
+
+    public void onTabSwitch() {
+        if (currentTab.equals("")) return;
+        if (currentTab.equals(tabPane.getSelectionModel().getSelectedItem().getText())) return;
+        currentTab = tabPane.getSelectionModel().getSelectedItem().getText();
+        clearSearchResults();
+    }
+
+    public void clearSearchResults() {
+        ArrayList<HBox> empty = new ArrayList<>();
+        searchResults.getChildren().setAll(empty);
+        onClearFiltersButtonClicked();
+    }
+
+    public ArrayList<Course> filterBySemester(ArrayList<Course> searchResults, String semester) {
+        ArrayList<Course> semesterResults = new ArrayList<>();
+        for (Course c : searchResults) {
+            if (c.getIsFall() == (semester.equals("Fall Semester"))) {
+                semesterResults.add(c);
+            }
+        }
+        return semesterResults;
     }
 
 }

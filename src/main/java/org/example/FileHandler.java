@@ -165,15 +165,22 @@ public class FileHandler {
                     LocalDateTime sTime = sTimeCell.getLocalDateTimeCellValue();
                     LocalDateTime eTime = eTimeCell.getLocalDateTimeCellValue();
                     LocalDateTime timeRange[] = {sTime, eTime};
+
                     boolean[] days = new boolean[5];
+                    String[] correctDays = {"M", "T", "W", "R", "F"};
+                    String[] dayStrs = new String[5];
                     for (int y = 9; y < 14; y++) {
                         Cell dayCell = thisRow.getCell(y);
+                        String dayVal;
                         if(dayCell != null) {
-                            days[y - 9] = ((thisRow.getCell(y).getCellType() != CellType.BLANK));
-                        }else{
-                            days[y-9] = false;
+                            dayVal = dayCell.getStringCellValue();
                         }
+                        else{
+                            dayVal = null;
+                        }
+                        days[y-9] = correctDays[y-9].equals(dayVal);
                     }
+
                     meetTimes = new LocalDateTime[5][];
                     for (int y = 0; y < 5; y++) {
                         if (days[y]) {
@@ -290,81 +297,9 @@ public class FileHandler {
                 return result;
             }
             else{return null;}
-            /*
-            ArrayList<String> pieces = new ArrayList<>();
-            Scanner scan = new Scanner(reqsFromFile);
-            while(scan.hasNext()){
-                pieces.add(scan.next());
-            }
-
-            Map<String, String> abbrs = new HashMap<String, String>();
-            abbrs.put("AS","ASTR");
-            abbrs.put("PH","PHYS");
-            abbrs.put("CHM","CHEM");
-            abbrs.put("CM","COMM");
-            abbrs.put("CP","COMP");
-            abbrs.put("MT","Math");
-            abbrs.put("EN","ENGR");
-            abbrs.put("ENG","ENGR");
-            abbrs.put("CH","CHEM");
-            abbrs.put("ME","MECE");
-            abbrs.put("FN","FNCE");
-            abbrs.put("IN","INBS");
-            abbrs.put("M","MATH");
-            abbrs.put("MA","MATH");
-
-            //replace abbreviations with actual department codes
-            for(int x = 0; x < pieces.size(); x++){
-                String thisPiece = pieces.get(x);
-                if(abbrs.containsKey(thisPiece)){
-                    pieces.set(x,abbrs.get(thisPiece));//replace the abbreviation with the full code
-                    continue;
-                }
-            }
-
-            //add course codes to result as appropriate
-            for(int x = 0; x < pieces.size(); x++) {
-                String thisPiece = pieces.get(x);
-                if(thisPiece.length() >= 3){
-                    boolean isNumCode = true;
-                    for(int i = 0; i < 3; i++){
-                        if(!((int)thisPiece.charAt(i) >= 48 && (int)thisPiece.charAt(i) <= 57)){//one of the first 3 chars is non-numeric
-                            isNumCode = false;
-                        }
-                    }
-                    if(isNumCode && x > 0) {
-                        result.add(pieces.get(x - 1) + thisPiece.substring(0, 3));
-                    }
-                }
-
-
-                for(int y = 0; y < pieces.get(x).length(); y++){
-
-                }
-            }
-            */
-        }catch(Exception e){
+    }catch(Exception e){
             e.printStackTrace();
             return null;
         }
     }
-    /*
-     *unusual department codes:
-     * ART is only 3 letters
-     * AS is short for ASTR
-     * PH is short for PHYS
-     * CHM is short for CHEM
-     * CM is short for COMM
-     * CP is short for COMP
-     * MT is short for MATH
-     * ENG is short for ENGR
-     * EN is short for ENGR
-     * CH is short for CHEM
-     * ME is short for MECE
-     * FN is short for FNCE
-     * IN is short for INBS
-     * MA is short for MATH
-     * M is short for MATH
-     */
-
 }
