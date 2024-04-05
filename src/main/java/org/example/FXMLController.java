@@ -208,6 +208,7 @@ public class FXMLController {
                 break;
         }
         updateTotalCredits();
+        printScheduleToConsole();
     }
 
     @FXML
@@ -216,6 +217,7 @@ public class FXMLController {
         displaySchedule(cl, vb);
         updateTotalCredits();
         hideConflictMessage();
+        printScheduleToConsole();
     }
 
     public void updateTotalCredits() {
@@ -331,6 +333,13 @@ public class FXMLController {
     public void hideConflictMessage() {
         fallConflictLabel.setText("");
         springConflictLabel.setText("");
+    }
+
+    private void printScheduleToConsole() {
+        System.out.println("Fall Semester:\n");
+        System.out.println(fallSemester.getFormattedSchedule());
+        System.out.println("Spring Semester:\n");
+        System.out.println(springSemester.getFormattedSchedule());
     }
 
 }
