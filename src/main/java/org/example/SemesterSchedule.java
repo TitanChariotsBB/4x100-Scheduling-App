@@ -25,7 +25,7 @@ public class SemesterSchedule extends CourseList {
     public void addCourse(Course course) throws IllegalArgumentException {
         for (Course existingCourse : super.getCourses()) {
             if (course.overlapsWith(existingCourse)) {
-                throw new IllegalArgumentException("Attempted to add a course overlapping with " + existingCourse);
+                throw new IllegalArgumentException("Conflict with " + existingCourse.getCode());
             }
         }
         if(super.getTotalCredits() + course.getCredits() > 19) {

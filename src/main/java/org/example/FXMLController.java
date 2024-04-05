@@ -62,6 +62,10 @@ public class FXMLController {
     private Label completedCoursesLabel;
     @FXML
     private Label courseWishlistLabel;
+    @FXML
+    private Label fallConflictLabel;
+    @FXML
+    private Label springConflictLabel;
 
     @FXML
     public void initialize() {
@@ -95,6 +99,7 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
+        hideConflictMessage();
     }
 
     @FXML
@@ -174,19 +179,28 @@ public class FXMLController {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         switch (selectedTabText) {
             case "Fall Semester":
-                fallSemester.addCourse(c);
+                try {
+                    fallSemester.addCourse(c);
+                    hideConflictMessage();
+                } catch (Exception e) {
+                    showConflictMessage(selectedTabText, e.getMessage());
+                }
                 displaySchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
-                springSemester.addCourse(c);
+                try {
+                    springSemester.addCourse(c);
+                    hideConflictMessage();
+                } catch (Exception e) {
+                    showConflictMessage(selectedTabText, e.getMessage());
+                }
                 displaySchedule(springSemester, springSemesterVBox);
                 break;
             case "College Career":
-                if(past){
+                if (past) {
                     completedCourses.addCourse(c);
                     displaySchedule(completedCourses, completedCoursesVBox);
-                }
-                else{
+                } else {
                     courseWishList.addCourse(c);
                     displaySchedule(courseWishList, courseWishListVBox);
                 }
@@ -201,6 +215,7 @@ public class FXMLController {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
         updateTotalCredits();
+        hideConflictMessage();
     }
 
     public void updateTotalCredits() {
@@ -303,6 +318,19 @@ public class FXMLController {
             }
         }
         return semesterResults;
+    }
+
+    public void showConflictMessage(String semester, String msg) {
+        if (semester.equals("Fall Semester")) {
+            fallConflictLabel.setText(msg);
+        } else {
+            springConflictLabel.setText(msg);
+        }
+    }
+
+    public void hideConflictMessage() {
+        fallConflictLabel.setText("");
+        springConflictLabel.setText("");
     }
 
 }
