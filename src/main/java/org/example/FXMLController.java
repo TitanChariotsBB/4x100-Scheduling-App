@@ -181,26 +181,26 @@ public class FXMLController {
         switch (selectedTabText) {
             case "Fall Semester":
                 err = fallSemester.addCourse(c);
-                if (err.endsWith("ㅤ")) {
+                if (fallSemester.getTotalCredits() > 19) {
                     updateFallCredits("Over the limit");
                 } else {
                     updateFallCredits("");
                 }
                 if (err.length() > 2) {
-                    err = "Added " + c + "\n" + err;
+                    err = "Added " + c.getCode() + "\n" + err;
                     setMessageFall(err);
                 }
                 displaySchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
                 err = springSemester.addCourse(c);
-                if (err.endsWith("ㅤ")) {
+                if (springSemester.getTotalCredits()>19) {
                     updateSpringCredits("Over the limit");
                 } else {
                     updateSpringCredits("");
                 }
                 if (err.length() > 2) {
-                    err = "Added " + c + "\n" + err;
+                    err = "Added " + c.getCode() + "\n" + err;
                     setMessageFall(err);
                 }
                 displaySchedule(springSemester, springSemesterVBox);
@@ -217,7 +217,6 @@ public class FXMLController {
             default:
                 break;
         }
-        updateTotalCredits();
     }
 
     @FXML

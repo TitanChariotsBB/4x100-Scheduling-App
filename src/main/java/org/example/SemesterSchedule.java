@@ -26,19 +26,19 @@ public class SemesterSchedule extends CourseList {
         String err = "";
         for (Course existingCourse : super.getCourses()) {
             if (course.overlapsWith(existingCourse)) {
-                err += "Time conflict with\n" + existingCourse;
+                err += "Time conflict with: " + existingCourse.getCode() + "\n";
             }
         }
         if (course.getPrerequisites() != null) {
             for (int i = 0; i < course.getPrerequisites().size(); i++) {
                 if (!pastCourses().contains(course.getPrerequisites().get(i))) {
-                    err += "Unmet prerequisites";
+                    err += "Unmet prerequisite: " + course.getPrerequisites().get(i);
                 }
             }
         }
-        if(super.getTotalCredits() + course.getCredits() > 19) {
-            err += "ㅤ";
-        }
+//        if(super.getTotalCredits() + course.getCredits() > 19) {
+//            err += "0";
+//        }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
         return err;
     }
