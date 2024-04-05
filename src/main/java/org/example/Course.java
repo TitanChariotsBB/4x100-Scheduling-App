@@ -93,4 +93,55 @@ public class Course {
 
         return day + time;
     }
+
+    public String getMeetingDateString() {
+        String day = "";
+
+        if (meetingTimes[0] != null) {
+            day += "M";
+        }
+        if (meetingTimes[1] != null) {
+            day += "T";
+        }
+        if (meetingTimes[2] != null)
+            day += "W";
+        if (meetingTimes[3] != null)
+            day += "R";
+        if (meetingTimes[4] != null)
+            day += "F";
+
+        return day;
+    }
+
+    public String getMeetingTimeStringAlex() {
+        String time = "";
+        int hour = 0;
+        int minute = 0;
+
+        if (meetingTimes[0] != null) {
+            hour = meetingTimes[0][0].getHour();
+            minute = meetingTimes[0][0].getMinute();
+        }
+        if (meetingTimes[1] != null) {
+            hour = meetingTimes[1][0].getHour();
+            minute = meetingTimes[1][0].getMinute();
+        }
+        if (hour < 12) {
+            time = hour + ":" + minute;
+            if (minute == 0) time += "0";
+            time+=" AM";
+        }
+        else if (hour == 12) {
+            time = hour + ":" + minute;
+            if (minute == 0) time += "0";
+            time+=" PM";
+        }
+        else {
+            time = (hour - 12) + ":" + minute;
+            if (minute == 0) time += "0";
+            time+=" PM";
+        }
+
+        return time;
+    }
 }

@@ -131,30 +131,34 @@ public class Search {
             }
         }
         else if (sb.equals(SearchBy.TIME)) { // If filtering by time
-            if (filter.charAt(filter.length() - 2) == 'A') { // If AM
+            results.removeIf(result -> !result.getMeetingTimeStringAlex().equals(filter));
+
+            /*if (filter.charAt(filter.length() - 2) == 'A') { // If AM
                 String temp = filter.substring(0, filter.length() - 6); // Store just the number
                 int myTime = Integer.parseInt(temp); // Convert the number from String to int
-                for (int i = 0; i < results.size(); i++) { // Runs through all classes
-                    for (int j = 0; j < 5; j++) { // Runs through each weekday
-                        if (results.get(i).getMeetingTimes()[j]!=null) { // Check if day is null
-                            int finalJ = j;
-                            results.removeIf(result -> result.getMeetingTimes()[finalJ][0].getHour() != myTime);
-                        }
-                    }
-                }
+                results.removeIf(result -> Integer.parseInt(result.getMeetingTimeString()) != myTime);
+
+//                for (int i = 0; i < results.size(); i++) { // Runs through all classes
+//                    for (int j = 0; j < 5; j++) { // Runs through each weekday
+//                        if (results.get(i).getMeetingTimes()[j]!=null) { // Check if day is null
+//                            int finalJ = j;
+//                        }
+//                    }
+//                }
             }
             else if (filter.charAt(filter.length() - 2) == 'P') { // If PM
                 String temp = filter.substring(0, filter.length() - 6); // Store just the number
                 int myTime = Integer.parseInt(temp) + 12; // Convert the number from String to int + 12 for PM
-                for (int i = 0; i < results.size(); i++) { // Runs through all classes
-                    for (int j = 0; j < 5; j++) { // Runs through each weekday
-                        if (results.get(i).getMeetingTimes()[j]!=null) { // Check if day is null
-                            int finalJ = j;
-                            results.removeIf(result -> result.getMeetingTimes()[finalJ][0].getHour() != myTime);
-                        }
-                    }
-                }
-            }
+                results.removeIf(result -> Integer.parseInt(result.getMeetingTimeString()) != myTime);
+//                for (int i = 0; i < results.size(); i++) { // Runs through all classes
+//                    for (int j = 0; j < 5; j++) { // Runs through each weekday
+//                        if (results.get(i).getMeetingTimes()[j]!=null) { // Check if day is null
+//                            int finalJ = j;
+//                            results.removeIf(result -> result.getMeetingTimes()[finalJ][0].getHour() != myTime);
+//                        }
+//                    }
+//                }
+            }*/
         }
     }
 
