@@ -227,7 +227,6 @@ public class FXMLController {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
         updateTotalCredits();
-        hideConflictMessage();
     }
 
     public void updateTotalCredits() {
