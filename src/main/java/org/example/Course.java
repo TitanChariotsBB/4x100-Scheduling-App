@@ -31,16 +31,14 @@ public class Course {
 
     public boolean overlapsWith(Course toCompare) {
         for (int i = 0; i < 5; i++) {
-            if(meetingTimes[i] != null && toCompare.meetingTimes[i] != null) {
-                if (
-                        (meetingTimes[i][0].isAfter(toCompare.meetingTimes[i][0])) && (meetingTimes[i][0].isBefore(toCompare.meetingTimes[i][1])) ||
-                                (meetingTimes[i][1].isAfter(toCompare.meetingTimes[i][0])) && (meetingTimes[i][0].isBefore(toCompare.meetingTimes[i][1])) ||
-                                (toCompare.meetingTimes[i][0].isAfter(meetingTimes[i][0])) && (toCompare.meetingTimes[i][0].isBefore(meetingTimes[i][1])) ||
-                                (toCompare.meetingTimes[i][1].isAfter(meetingTimes[i][0])) && (toCompare.meetingTimes[i][0].isBefore(meetingTimes[i][1]))
-                ) {
-                    return true;
-                }
-            }
+            if (meetingTimes[i] == null || toCompare.meetingTimes[i] == null) continue;
+
+            String startTimeA = "" + meetingTimes[i][0].getHour() +
+                    meetingTimes[i][0].getMinute();
+            String startTimeB = "" + toCompare.meetingTimes[i][0].getHour() +
+                    toCompare.meetingTimes[i][0].getMinute();
+
+            if (startTimeA.equals(startTimeB)) return true;
         }
         return false;
     }
@@ -92,5 +90,9 @@ public class Course {
         if (minute == 0) time += "0";
 
         return day + time;
+    }
+
+    public boolean getIsFall() {
+        return isFall;
     }
 }

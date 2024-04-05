@@ -13,6 +13,7 @@ import javafx.scene.text.Font;
 
 import java.awt.Desktop;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class FXMLController {
     private CourseList completedCourses;
     private CourseList courseWishList;
     private boolean past; //if past is true, past is selected. If past is false, wishList is selected
+    private String currentTab = "";
 
     @FXML
     private Label debugLabel;
@@ -73,6 +75,7 @@ public class FXMLController {
         springSemester = Main.springSemester;
         completedCourses = Main.past;
         courseWishList = Main.future;
+        currentTab = tabPane.getSelectionModel().getSelectedItem().getText();
 
         // Fill combo box options
         ControllerHelper ch = new ControllerHelper();
@@ -96,7 +99,7 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         debugLabel.setText("Searching for: " + searchQuery);
         search.setQuery(searchQuery);
-        displaySearchResults(search.getResults());
+        displaySearchResults(filterBySemester(search.getResults(), currentTab));
     }
 
     @FXML
@@ -167,6 +170,7 @@ public class FXMLController {
         scheduleVBox.getChildren().setAll(courses);
     }
 
+    @FXML
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
         switch (selectedTabText) {
@@ -193,6 +197,7 @@ public class FXMLController {
         updateTotalCredits();
     }
 
+    @FXML
     public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
@@ -280,4 +285,28 @@ public class FXMLController {
         completedCoursesLabel.setFont(smallFont);
         courseWishlistLabel.setFont(bigFont);
     }
+
+    public void onTabSwitch() {
+        if (currentTab.equals("")) return;
+        if (currentTab.equals(tabPane.getSelectionModel().getSelectedItem().getText())) return;
+        currentTab = tabPane.getSelectionModel().getSelectedItem().getText();
+        clearSearchResults();
+    }
+
+    public void clearSearchResults() {
+        ArrayList<HBox> empty = new ArrayList<>();
+        searchResults.getChildren().setAll(empty);
+        onClearFiltersButtonClicked();
+    }
+
+    public ArrayList<Course> filterBySemester(ArrayList<Course> searchResults, String semester) {
+        ArrayList<Course> semesterResults = new ArrayList<>();
+        for (Course c : searchResults) {
+            if (c.getIsFall() == (semester.equals("Fall Semester"))) {
+                semesterResults.add(c);
+            }
+        }
+        return semesterResults;
+    }
+
 }
