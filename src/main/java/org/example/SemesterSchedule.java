@@ -22,16 +22,25 @@ public class SemesterSchedule extends CourseList {
     }
 
     @Override
-    public void addCourse(Course course) throws IllegalArgumentException {
+    public int addCourse(Course course) {
+        int errno = 0;
         for (Course existingCourse : super.getCourses()) {
             if (course.overlapsWith(existingCourse)) {
-                throw new IllegalArgumentException("Attempted to add a course overlapping with " + existingCourse);
+                errno = 1;
             }
         }
         if(super.getTotalCredits() + course.getCredits() > 19) {
-            throw new IllegalArgumentException("Attempted to add too many credits");
+            errno = 2;
+        }
+        if (course.getPrerequisites() != null) {
+            for (int i = 0; i < course.getPrerequisites().size(); i++) {
+                if (!pastCourses().contains(course.getPrerequisites().get(i))) {
+                    errno = 3;
+                }
+            }
         }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
+        return errno;
     }
 
     @Override

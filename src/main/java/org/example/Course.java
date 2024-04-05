@@ -3,6 +3,7 @@ package org.example;
 import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Course {
     private String name;
@@ -94,5 +95,9 @@ public class Course {
 
     public boolean getIsFall() {
         return isFall;
+    }
+
+    public ArrayList<String> getPrerequisites() {
+        return prerequisites;
     }
 }

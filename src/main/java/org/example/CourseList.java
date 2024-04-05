@@ -17,9 +17,10 @@ public class CourseList {
 
     public int getTotalCredits(){return totalCredits;}
 
-    public void addCourse(Course course) throws IllegalArgumentException {
+    public int addCourse(Course course) throws IllegalArgumentException {
         courses.add(course);
         totalCredits += course.getCredits();
+        return 0;
     }
 
     public void removeCourse(Course course) throws Exception {
