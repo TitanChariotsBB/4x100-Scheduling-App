@@ -14,4 +14,4 @@ Clone the git repository, open in IntelliJ, then go to the Main class and hit th
 
 ### Features we didn't get to
 
-We did not get to the weekly schedule view, preferences, and prerequisits checking.
+We did not get to the weekly schedule view (it does print to the console though), preferences, and prerequisits checking.
