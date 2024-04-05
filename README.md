@@ -1,5 +1,10 @@
 # 4x100 Scheduling App
 
+### The program includes everything you need for it to run properly.
+### All files are included in the project and saving and loading are automatically handled.
+### All you should need to do is run main and the MVP GUI
+### Thanks for checking this out!!!
+
 ### Links:
 
 [Bug tracking](https://grovecitycollege-my.sharepoint.com/:x:/g/personal/abbottcm21_gcc_edu/EUk1wXccwPpKoWNu43gSV1cB4Ofe_uT17aIhK_wpxXE29A?e=66fi91&nav=MTVfezUyNUFCMjQ5LTMxQ0QtNEExMS04NTE1LTY0MkQyODM3ODZFNH0)
