@@ -255,6 +255,7 @@ public class FXMLController {
         Label time = new Label(meetingTime);
         VBox courseInfo = new VBox(codeLabel, time);
         Button removeButton = new Button("Remove");
+        removeButton.setMinWidth(60);
         removeButton.setOnMouseClicked(event -> {
             try {
                 onRemoveButtonClicked(c, courseList, scheduleVBox);
