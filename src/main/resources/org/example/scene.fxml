@@ -87,10 +87,10 @@
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <VBox fx:id="completedCoursesVBox" layoutX="78.0" layoutY="85.0" prefHeight="400.0" prefWidth="200.0" />
-                                    <VBox fx:id="courseWishListVBox" layoutX="346.0" layoutY="85.0" prefHeight="400.0" prefWidth="200.0" />
-                                    <Label layoutX="78.0" layoutY="68.0" text="Completed courses" />
-                                    <Label layoutX="346.0" layoutY="68.0" text="Course wishlist" />
+                                    <VBox fx:id="completedCoursesVBox" onMouseClicked="#onCompletedCoursesClick" layoutX="78.0" layoutY="85.0" prefHeight="400.0" prefWidth="200.0" />
+                                    <VBox fx:id="courseWishListVBox" onMouseClicked="#onCourseWishlistClick" layoutX="346.0" layoutY="85.0" prefHeight="400.0" prefWidth="200.0" />
+                                    <Label fx:id="completedCoursesLabel" onMouseClicked="#onCompletedCoursesClick" layoutX="78.0" layoutY="68.0" text="Completed courses" />
+                                    <Label fx:id="courseWishlistLabel" onMouseClicked="#onCourseWishlistClick" layoutX="346.0" layoutY="68.0" text="Course wishlist" />
                                  </children></AnchorPane>
                                     </content>
                                 </Tab>

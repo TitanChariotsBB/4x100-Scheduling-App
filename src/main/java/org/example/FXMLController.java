@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class FXMLController {
     private CourseList springSemester;
     private CourseList completedCourses;
     private CourseList courseWishList;
+    private boolean past; //if past is true, past is selected. If past is false, wishList is selected
 
     @FXML
     private Label debugLabel;
@@ -58,6 +60,10 @@ public class FXMLController {
     private Label totalCreditsFall;
     @FXML
     private Label totalCreditsSpring;
+    @FXML
+    private Label completedCoursesLabel;
+    @FXML
+    private Label courseWishlistLabel;
 
     @FXML
     public void initialize() {
@@ -79,6 +85,8 @@ public class FXMLController {
         displaySchedule(springSemester, springSemesterVBox);
         displaySchedule(completedCourses, completedCoursesVBox);
         displaySchedule(courseWishList, courseWishListVBox);
+
+        past = true;
 
         updateTotalCredits();
     }
@@ -170,6 +178,15 @@ public class FXMLController {
                 springSemester.addCourse(c);
                 displaySchedule(springSemester, springSemesterVBox);
                 break;
+            case "College Career":
+                if(past){
+                    completedCourses.addCourse(c);
+                    displaySchedule(completedCourses, completedCoursesVBox);
+                }
+                else{
+                    courseWishList.addCourse(c);
+                    displaySchedule(courseWishList, courseWishListVBox);
+                }
             default:
                 break;
         }
@@ -246,4 +263,21 @@ public class FXMLController {
         return courseHBox;
     }
 
+    @FXML
+    public void onCompletedCoursesClick(){
+        past = true;
+        Font bigFont = new Font(20);
+        Font smallFont = new Font(12);
+        completedCoursesLabel.setFont(bigFont);
+        courseWishlistLabel.setFont(smallFont);
+    }
+
+    @FXML
+    public void onCourseWishlistClick(){
+        past = false;
+        Font bigFont = new Font(20);
+        Font smallFont = new Font(12);
+        completedCoursesLabel.setFont(smallFont);
+        courseWishlistLabel.setFont(bigFont);
+    }
 }
