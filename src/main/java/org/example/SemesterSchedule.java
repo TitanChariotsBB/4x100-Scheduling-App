@@ -24,20 +24,20 @@ public class SemesterSchedule extends CourseList {
     @Override
     public String addCourse(Course course) {
         String err = "";
-        if(super.getTotalCredits() + course.getCredits() > 19) {
-            err += "Over 19 credit hour limit ";
-        }
         for (Course existingCourse : super.getCourses()) {
             if (course.overlapsWith(existingCourse)) {
-                err += "Time conflict with " + existingCourse;
+                err += "Time conflict with\n" + existingCourse;
             }
         }
         if (course.getPrerequisites() != null) {
             for (int i = 0; i < course.getPrerequisites().size(); i++) {
                 if (!pastCourses().contains(course.getPrerequisites().get(i))) {
-                    err += "Unmet prerequisites ";
+                    err += "Unmet prerequisites";
                 }
             }
+        }
+        if(super.getTotalCredits() + course.getCredits() > 19) {
+            err += "ㅤ";
         }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
         return err;

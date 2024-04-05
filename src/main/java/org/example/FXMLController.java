@@ -66,6 +66,10 @@ public class FXMLController {
     private Label completedCoursesLabel;
     @FXML
     private Label courseWishlistLabel;
+    @FXML
+    private Label courseErrorMessageFall;
+    @FXML
+    private Label courseErrorMessageSpring;
 
     @FXML
     public void initialize() {
@@ -177,10 +181,28 @@ public class FXMLController {
         switch (selectedTabText) {
             case "Fall Semester":
                 err = fallSemester.addCourse(c);
+                if (err.endsWith("ㅤ")) {
+                    updateFallCredits("Over the limit");
+                } else {
+                    updateFallCredits("");
+                }
+                if (err.length() > 2) {
+                    err = "Added " + c + "\n" + err;
+                    setMessageFall(err);
+                }
                 displaySchedule(fallSemester, fallSemesterVBox);
                 break;
             case "Spring Semester":
                 err = springSemester.addCourse(c);
+                if (err.endsWith("ㅤ")) {
+                    updateSpringCredits("Over the limit");
+                } else {
+                    updateSpringCredits("");
+                }
+                if (err.length() > 2) {
+                    err = "Added " + c + "\n" + err;
+                    setMessageFall(err);
+                }
                 displaySchedule(springSemester, springSemesterVBox);
                 break;
             case "College Career":
@@ -313,6 +335,14 @@ public class FXMLController {
             }
         }
         return semesterResults;
+    }
+
+    public void setMessageFall(String s) {
+        courseErrorMessageFall.setText(s);
+    }
+
+    public void setMessageSpring(String s) {
+        courseErrorMessageSpring.setText(s);
     }
 
 }
