@@ -113,14 +113,18 @@ public class Search {
                 return;
             }
             else if (filter.equals("MWF")) {
-                results.removeIf(result -> result.getMeetingTimes()[0] == null ||
+                results.removeIf(result ->
+                        result.getMeetingTimes() == null ||
+                        result.getMeetingTimes()[0] == null ||
                         result.getMeetingTimes()[1] != null ||
                         result.getMeetingTimes()[2] == null ||
                         result.getMeetingTimes()[3] != null ||
                         result.getMeetingTimes()[4] == null);
             }
             else if (filter.equals("TR")) {
-                results.removeIf(result -> result.getMeetingTimes()[0] != null ||
+                results.removeIf(result ->
+                        result.getMeetingTimes() == null ||
+                        result.getMeetingTimes()[0] != null ||
                         result.getMeetingTimes()[1] == null ||
                         result.getMeetingTimes()[2] != null ||
                         result.getMeetingTimes()[3] == null ||
