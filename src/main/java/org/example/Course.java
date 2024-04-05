@@ -93,4 +93,8 @@ public class Course {
 
         return day + time;
     }
+
+    public boolean getIsFall() {
+        return isFall;
+    }
 }

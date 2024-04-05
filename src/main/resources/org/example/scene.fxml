@@ -60,7 +60,7 @@
                     <children>
                         <TabPane fx:id="tabPane" prefHeight="600.0" prefWidth="625.0" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
-                                <Tab text="Fall Semester">
+                                <Tab onSelectionChanged="#onTabSwitch" text="Fall Semester">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                             <children>
@@ -72,7 +72,7 @@
                                             </children></AnchorPane>
                                     </content>
                                 </Tab>
-                                <Tab text="Spring Semester">
+                                <Tab onSelectionChanged="#onTabSwitch" text="Spring Semester">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
@@ -83,7 +83,7 @@
                                  </children></AnchorPane>
                                     </content>
                                 </Tab>
-                                <Tab text="College Career">
+                                <Tab onSelectionChanged="#onTabSwitch" text="College Career">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
