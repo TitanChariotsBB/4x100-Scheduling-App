@@ -173,14 +173,25 @@ public class FXMLController {
     @FXML
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
+        int err;
         switch (selectedTabText) {
             case "Fall Semester":
-                fallSemester.addCourse(c);
+                err = fallSemester.addCourse(c);
                 displaySchedule(fallSemester, fallSemesterVBox);
+                if (err == 2) {
+                    updateFallCredits("Too many credits");
+                } else {
+                    updateFallCredits("");
+                }
                 break;
             case "Spring Semester":
-                springSemester.addCourse(c);
+                err = springSemester.addCourse(c);
                 displaySchedule(springSemester, springSemesterVBox);
+                if (err == 2) {
+                    updateSpringCredits("Too many credits");
+                } else {
+                    updateSpringCredits("");
+                }
                 break;
             case "College Career":
                 if(past){
@@ -194,7 +205,6 @@ public class FXMLController {
             default:
                 break;
         }
-        updateTotalCredits();
     }
 
     @FXML
@@ -207,6 +217,14 @@ public class FXMLController {
     public void updateTotalCredits() {
         totalCreditsFall.setText("Total Credits: " + fallSemester.getTotalCredits());
         totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
+    }
+
+    public void updateFallCredits(String message) {
+        totalCreditsFall.setText("Total Credits: " + fallSemester.getTotalCredits() + " " + message);
+    }
+
+    public void updateSpringCredits(String message) {
+        totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits() + " " + message);
     }
 
     @FXML
