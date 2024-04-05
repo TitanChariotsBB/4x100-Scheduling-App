@@ -165,15 +165,22 @@ public class FileHandler {
                     LocalDateTime sTime = sTimeCell.getLocalDateTimeCellValue();
                     LocalDateTime eTime = eTimeCell.getLocalDateTimeCellValue();
                     LocalDateTime timeRange[] = {sTime, eTime};
+
                     boolean[] days = new boolean[5];
+                    String[] correctDays = {"M", "T", "W", "R", "F"};
+                    String[] dayStrs = new String[5];
                     for (int y = 9; y < 14; y++) {
                         Cell dayCell = thisRow.getCell(y);
+                        String dayVal;
                         if(dayCell != null) {
-                            days[y - 9] = ((thisRow.getCell(y).getCellType() != CellType.BLANK));
-                        }else{
-                            days[y-9] = false;
+                            dayVal = dayCell.getStringCellValue();
                         }
+                        else{
+                            dayVal = null;
+                        }
+                        days[y-9] = correctDays[y-9].equals(dayVal);
                     }
+
                     meetTimes = new LocalDateTime[5][];
                     for (int y = 0; y < 5; y++) {
                         if (days[y]) {
