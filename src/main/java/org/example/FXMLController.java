@@ -9,11 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import java.awt.Desktop;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -27,8 +25,6 @@ public class FXMLController {
     private boolean past; //if past is true, past is selected. If past is false, wishList is selected
     private String currentTab = "";
 
-    @FXML
-    private Label debugLabel;
     @FXML
     private TabPane tabPane;
     @FXML
@@ -97,7 +93,6 @@ public class FXMLController {
     @FXML
     protected void onSearchButtonClick() {
         String searchQuery = searchBar.getText();
-        debugLabel.setText("Searching for: " + searchQuery);
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
     }
