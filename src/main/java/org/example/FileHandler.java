@@ -275,29 +275,33 @@ public class FileHandler {
      *  Dr. Hutchins told me to focus on a simple proof of concept, then move on to something else,
      *  so this method only works for a single prereq class, and it must be a course code that takes up the first eight chars of the string
      */
-    private static ArrayList<String> parsePrereqs(String reqsFromFile){
-        try {
-            ArrayList<String> result = new ArrayList<>();
+        private static ArrayList<String> parsePrereqs (String reqsFromFile){
+            if (reqsFromFile.length() < 8){
+                return null;
+            }
 
-            boolean validCode = true;
-            for(int x = 0; x < 8 && x < reqsFromFile.length() && validCode; x++){
-                char thisChar = reqsFromFile.charAt(x);
-                if(x < 4 && !((thisChar >= 'a' && thisChar <= 'z') || (thisChar >= 'A' && thisChar <= 'Z'))){
-                    validCode = false; //if any of the first four characters is not a letter, it's no good
+            try {
+                ArrayList<String> result = new ArrayList<>();
+
+                boolean validCode = true;
+                for(int x = 0; x < 8 && x < reqsFromFile.length() && validCode; x++){
+                    char thisChar = reqsFromFile.charAt(x);
+                    if(x < 4 && !((thisChar >= 'a' && thisChar <= 'z') || (thisChar >= 'A' && thisChar <= 'Z'))){
+                        validCode = false; //if any of the first four characters is not a letter, it's no good
+                    }
+                    if(x == 4 && reqsFromFile.charAt(x) != ' '){
+                        validCode = false;
+                    }
+                    if(x > 4 && !(thisChar >= '0' && thisChar <= '9')){
+                        validCode = false;
+                    }
                 }
-                if(x == 4 && reqsFromFile.charAt(x) != ' '){
-                    validCode = false;
+                if(validCode) {
+                    result.add(reqsFromFile.substring(0, 4) + reqsFromFile.substring(5, 8));
+                    return result;
                 }
-                if(x > 4 && !(thisChar >= '0' && thisChar <= '9')){
-                    validCode = false;
-                }
-            }
-            if(validCode) {
-                result.add(reqsFromFile.substring(0, 4) + reqsFromFile.substring(5, 8));
-                return result;
-            }
-            else{return null;}
-    }catch(Exception e){
+                else{return null;}
+        }catch(Exception e){
             e.printStackTrace();
             return null;
         }
