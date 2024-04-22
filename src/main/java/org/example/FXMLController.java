@@ -2,6 +2,7 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,11 +10,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class FXMLController {
@@ -46,6 +49,10 @@ public class FXMLController {
     @FXML
     private TextField professorTF;
 
+    @FXML
+    private Pane fallSemesterPane;
+    @FXML
+    private Pane springSemesterPane;
     @FXML
     private VBox fallSemesterVBox;
     @FXML
@@ -83,9 +90,13 @@ public class FXMLController {
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
 
+        fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
+
         // Display schedules
-        displaySchedule(fallSemester, fallSemesterVBox);
-        displaySchedule(springSemester, springSemesterVBox);
+//        displaySchedule(fallSemester, fallSemesterVBox);
+//        displaySchedule(springSemester, springSemesterVBox);
+        displayCalendarSchedule(fallSemester, fallSemesterPane);
+        displayCalendarSchedule(springSemester, springSemesterPane);
         displaySchedule(completedCourses, completedCoursesVBox);
         displaySchedule(courseWishList, courseWishListVBox);
 
@@ -174,6 +185,70 @@ public class FXMLController {
         scheduleVBox.getChildren().setAll(courses);
     }
 
+    public void displayCalendarSchedule(CourseList courseList, Pane schedulePane) {
+        int y_idx;
+        int height;
+        HBox currentHBox;
+
+        for (Course c : courseList.getCourses()) {
+            // If meetingTimes is null, just add a course without formatting size and position
+            if (c.getMeetingTimes() == null) {
+                currentHBox = makeCalendarScheduleViewHBox(c, courseList, schedulePane);
+                schedulePane.getChildren().add(currentHBox);
+                return;
+            }
+
+            int x_idx = 0;
+            for (LocalDateTime[] meetingTime : c.getMeetingTimes()) {
+                if (meetingTime == null) { x_idx += 100; continue; }
+
+                y_idx = dateTimeToLayoutPos(meetingTime[0]);
+                height = dateTimeToLayoutPos(meetingTime[1]) - y_idx;
+                currentHBox = makeCalendarScheduleViewHBox(c, courseList, schedulePane);
+                currentHBox.setPrefSize(100, height);
+                currentHBox.setLayoutX(x_idx);
+                currentHBox.setLayoutY(y_idx);
+                currentHBox.setBackground(Background.fill(Paint.valueOf("DDDDDD")));
+                schedulePane.getChildren().add(currentHBox);
+
+                x_idx += 100;
+            }
+        }
+        for (Node n : schedulePane.getChildren()) {
+            System.out.println("x: " + n.getLayoutX() + " y: " + n.getLayoutY());
+        }
+    }
+
+    private int dateTimeToLayoutPos(LocalDateTime time) {
+        return (time.getHour() - 8) * 40 + (time.getMinute() / 30) * 20;
+    }
+
+    private HBox makeCalendarScheduleViewHBox(Course c, CourseList courseList, Pane schedulePane) {
+        String code = c.getCode();
+        String name = c.getName();
+        String meetingTime;
+        if (c.getMeetingTimes() != null) {
+            meetingTime = c.getMeetingTimeString();
+        } else {
+            meetingTime = "";
+        }
+        Label codeLabel = new Label(code + ": " + name);
+        Label time = new Label(meetingTime);
+        VBox courseInfo = new VBox(codeLabel, time);
+        Button removeButton = new Button("x");
+        removeButton.setOnMouseClicked(event -> {
+            try {
+                onRemoveButtonClicked(c, courseList, schedulePane);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        HBox courseHBox = new HBox(10, courseInfo, removeButton);
+        //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
+        courseHBox.setPadding(new Insets(10, 0, 10, 5));
+        return courseHBox;
+    }
+
     @FXML
     public void onAddButtonClicked(Course c) {
         String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
@@ -185,7 +260,8 @@ public class FXMLController {
                 } catch (Exception e) {
                     showConflictMessage(selectedTabText, e.getMessage());
                 }
-                displaySchedule(fallSemester, fallSemesterVBox);
+                //displaySchedule(fallSemester, fallSemesterVBox);
+                displayCalendarSchedule(fallSemester, fallSemesterPane);
                 break;
             case "Spring Semester":
                 try {
@@ -194,7 +270,8 @@ public class FXMLController {
                 } catch (Exception e) {
                     showConflictMessage(selectedTabText, e.getMessage());
                 }
-                displaySchedule(springSemester, springSemesterVBox);
+                //displaySchedule(springSemester, springSemesterVBox);
+                displayCalendarSchedule(springSemester, springSemesterPane);
                 break;
             case "College Career":
                 if (past) {
@@ -215,6 +292,15 @@ public class FXMLController {
     public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
+        updateTotalCredits();
+        hideConflictMessage();
+        printScheduleToConsole();
+    }
+
+    @FXML
+    public void onRemoveButtonClicked(Course c, CourseList cl, Pane p) throws Exception {
+        cl.removeCourse(c);
+        displayCalendarSchedule(cl, p);
         updateTotalCredits();
         hideConflictMessage();
         printScheduleToConsole();
