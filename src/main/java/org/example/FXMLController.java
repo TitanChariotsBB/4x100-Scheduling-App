@@ -218,6 +218,8 @@ public class FXMLController {
         Label time = new Label(meetingTime);
         VBox courseInfo = new VBox(codeLabel, time);
         Button removeButton = new Button("x");
+        Tooltip rmtt = new Tooltip("Remove class from schedule");
+        removeButton.setTooltip(rmtt);
         removeButton.setOnMouseClicked(event -> {
             try {
                 onRemoveButtonClicked(c, courseList, schedulePane);
