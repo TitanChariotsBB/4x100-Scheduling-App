@@ -168,7 +168,6 @@ public class FXMLController {
     }
 
     public void displayCalendarSchedule(CourseList courseList, Pane schedulePane) {
-        System.out.println("Displaying Calendar Schedule!!");
         schedulePane.getChildren().clear();
 
         double y_idx;
