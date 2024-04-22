@@ -2,7 +2,6 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -200,9 +199,6 @@ public class FXMLController {
 
                 x_idx += 100;
             }
-        }
-        for (Node n : schedulePane.getChildren()) {
-            System.out.println("x: " + n.getLayoutX() + " y: " + n.getLayoutY());
         }
     }
 
