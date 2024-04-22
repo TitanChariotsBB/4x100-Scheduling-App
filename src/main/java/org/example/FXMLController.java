@@ -35,8 +35,6 @@ public class FXMLController {
     @FXML
     private TextField searchBar;
     @FXML
-    private Accordion filterAccordion;
-    @FXML
     private ComboBox<String> dptComboBox;
     @FXML
     private ComboBox<String> mtgDaysComboBox;
@@ -54,10 +52,6 @@ public class FXMLController {
     @FXML
     private Pane springSemesterPane;
     @FXML
-    private VBox fallSemesterVBox;
-    @FXML
-    private VBox springSemesterVBox;
-    @FXML
     private VBox completedCoursesVBox;
     @FXML
     private VBox courseWishListVBox;
@@ -65,10 +59,6 @@ public class FXMLController {
     private Label totalCreditsFall;
     @FXML
     private Label totalCreditsSpring;
-    @FXML
-    private Label completedCoursesLabel;
-    @FXML
-    private Label courseWishlistLabel;
     @FXML
     private Label fallConflictLabel;
     @FXML
@@ -94,8 +84,6 @@ public class FXMLController {
         springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
 
         // Display schedules
-//        displaySchedule(fallSemester, fallSemesterVBox);
-//        displaySchedule(springSemester, springSemesterVBox);
         displayCalendarSchedule(fallSemester, fallSemesterPane);
         displayCalendarSchedule(springSemester, springSemesterPane);
         displaySchedule(completedCourses, completedCoursesVBox);
@@ -112,12 +100,6 @@ public class FXMLController {
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
         hideConflictMessage();
-    }
-
-    @FXML
-    protected void onKeyPressed(KeyEvent ke) {
-//        if (ke.getCode() == KeyCode.ENTER)
-//            onSearchButtonClick();
     }
 
     @FXML
@@ -248,24 +230,19 @@ public class FXMLController {
                 throw new RuntimeException(e);
             }
         });
-        HBox courseHBox = new HBox(5, courseInfo, removeButton);
-        //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
-        //courseHBox.setPadding(new Insets(10, 0, 10, 5));
-        return courseHBox;
+        return new HBox(5, courseInfo, removeButton);
     }
 
     @FXML
     public void onAddButtonClicked(Course c) {
-        String selectedTabText = tabPane.getSelectionModel().getSelectedItem().getText();
-        switch (selectedTabText) {
+        switch (currentTab) {
             case "Fall Semester":
                 try {
                     fallSemester.addCourse(c);
                     hideConflictMessage();
                 } catch (Exception e) {
-                    showConflictMessage(selectedTabText, e.getMessage());
+                    showConflictMessage(currentTab, e.getMessage());
                 }
-                //displaySchedule(fallSemester, fallSemesterVBox);
                 displayCalendarSchedule(fallSemester, fallSemesterPane);
                 break;
             case "Spring Semester":
@@ -273,9 +250,8 @@ public class FXMLController {
                     springSemester.addCourse(c);
                     hideConflictMessage();
                 } catch (Exception e) {
-                    showConflictMessage(selectedTabText, e.getMessage());
+                    showConflictMessage(currentTab, e.getMessage());
                 }
-                //displaySchedule(springSemester, springSemesterVBox);
                 displayCalendarSchedule(springSemester, springSemesterPane);
                 break;
             case "College Career":
@@ -291,14 +267,6 @@ public class FXMLController {
         }
         updateTotalCredits();
     }
-    //@FXML
-//    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
-//        cl.removeCourse(c);
-//        displaySchedule(cl, vb);
-//        updateTotalCredits();
-//        hideConflictMessage();
-//        printScheduleToConsole();
-//    }
 
     @FXML
     public void onRemoveButtonClicked(Course c, CourseList cl, Pane p) throws Exception {
@@ -388,7 +356,7 @@ public class FXMLController {
     }
 
     public void onTabSwitch() {
-        if (currentTab.equals("")) return;
+        if (currentTab.isEmpty()) return;
         if (currentTab.equals(tabPane.getSelectionModel().getSelectedItem().getText())) return;
         currentTab = tabPane.getSelectionModel().getSelectedItem().getText();
         clearSearchResults();
@@ -421,5 +389,11 @@ public class FXMLController {
     public void hideConflictMessage() {
         fallConflictLabel.setText("");
         springConflictLabel.setText("");
+    }
+
+    @FXML
+    protected void onKeyPressed(KeyEvent ke) {
+//        if (ke.getCode() == KeyCode.ENTER)
+//            onSearchButtonClick();
     }
 }
