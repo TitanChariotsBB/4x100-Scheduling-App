@@ -91,6 +91,7 @@ public class FXMLController {
         startTimeComboBox.getItems().setAll(ch.timeOptions);
 
         fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
+        springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
 
         // Display schedules
 //        displaySchedule(fallSemester, fallSemesterVBox);
@@ -186,8 +187,11 @@ public class FXMLController {
     }
 
     public void displayCalendarSchedule(CourseList courseList, Pane schedulePane) {
-        int y_idx;
-        int height;
+        System.out.println("Displaying Calendar Schedule!!");
+        schedulePane.getChildren().clear();
+
+        double y_idx;
+        double height;
         HBox currentHBox;
 
         for (Course c : courseList.getCourses()) {
@@ -206,6 +210,7 @@ public class FXMLController {
                 height = dateTimeToLayoutPos(meetingTime[1]) - y_idx;
                 currentHBox = makeCalendarScheduleViewHBox(c, courseList, schedulePane);
                 currentHBox.setPrefSize(100, height);
+                currentHBox.setMinHeight(height);
                 currentHBox.setLayoutX(x_idx);
                 currentHBox.setLayoutY(y_idx);
                 currentHBox.setBackground(Background.fill(Paint.valueOf("DDDDDD")));
@@ -219,8 +224,8 @@ public class FXMLController {
         }
     }
 
-    private int dateTimeToLayoutPos(LocalDateTime time) {
-        return (time.getHour() - 8) * 40 + (time.getMinute() / 30) * 20;
+    private double dateTimeToLayoutPos(LocalDateTime time) {
+        return (time.getHour() - 8.0) * 40.0 + (time.getMinute() / 30.0) * 20.0;
     }
 
     private HBox makeCalendarScheduleViewHBox(Course c, CourseList courseList, Pane schedulePane) {
@@ -243,9 +248,9 @@ public class FXMLController {
                 throw new RuntimeException(e);
             }
         });
-        HBox courseHBox = new HBox(10, courseInfo, removeButton);
+        HBox courseHBox = new HBox(5, courseInfo, removeButton);
         //courseHBox.setBackground(Background.fill(Color.rgb(208,208,208)));
-        courseHBox.setPadding(new Insets(10, 0, 10, 5));
+        //courseHBox.setPadding(new Insets(10, 0, 10, 5));
         return courseHBox;
     }
 
@@ -285,17 +290,15 @@ public class FXMLController {
                 break;
         }
         updateTotalCredits();
-        printScheduleToConsole();
     }
-
-    @FXML
-    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
-        cl.removeCourse(c);
-        displaySchedule(cl, vb);
-        updateTotalCredits();
-        hideConflictMessage();
-        printScheduleToConsole();
-    }
+    //@FXML
+//    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
+//        cl.removeCourse(c);
+//        displaySchedule(cl, vb);
+//        updateTotalCredits();
+//        hideConflictMessage();
+//        printScheduleToConsole();
+//    }
 
     @FXML
     public void onRemoveButtonClicked(Course c, CourseList cl, Pane p) throws Exception {
@@ -303,7 +306,6 @@ public class FXMLController {
         displayCalendarSchedule(cl, p);
         updateTotalCredits();
         hideConflictMessage();
-        printScheduleToConsole();
     }
 
     public void updateTotalCredits() {
@@ -420,12 +422,4 @@ public class FXMLController {
         fallConflictLabel.setText("");
         springConflictLabel.setText("");
     }
-
-    private void printScheduleToConsole() {
-        System.out.println("Fall Semester:\n");
-        System.out.println(fallSemester.getFormattedSchedule());
-        System.out.println("Spring Semester:\n");
-        System.out.println(springSemester.getFormattedSchedule());
-    }
-
 }
