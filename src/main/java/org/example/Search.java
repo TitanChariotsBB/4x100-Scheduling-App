@@ -136,6 +136,9 @@ public class Search {
             }
         }
         else if (sb.equals(SearchBy.TIME)) { // If filtering by time
+            if (filter.equals("Any")) {
+                return;
+            }
             results.removeIf(result -> result.getMeetingTimes() == null ||
                     !result.getMeetingTimeStringAlex().equals(filter));
 
