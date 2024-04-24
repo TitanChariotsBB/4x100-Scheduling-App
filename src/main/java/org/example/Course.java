@@ -1,6 +1,5 @@
 package org.example;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -65,7 +64,6 @@ public class Course {
 
     public String getMeetingTimeString() {
         String day = "";
-        String time = "";
         int hour = 0;
         int minute = 0;
 
@@ -90,7 +88,7 @@ public class Course {
         if (minute < 10) minuteString = "0" + minute;
         else minuteString = "" + minute;
 
-        time = " " + hour + ":" + minuteString;
+        String time = " " + hour + ":" + minuteString;
 
         return day + time;
     }
@@ -119,7 +117,7 @@ public class Course {
     }
 
     public String getMeetingTimeStringAlex() {
-        String time = "";
+        String time;
         int hour = 0;
         int minute = 0;
 

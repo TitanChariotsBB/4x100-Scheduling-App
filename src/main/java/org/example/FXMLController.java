@@ -2,7 +2,6 @@ package org.example;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -172,7 +171,6 @@ public class FXMLController {
     }
 
     public void displayCalendarSchedule(CourseList courseList, Pane schedulePane) {
-        System.out.println("Displaying Calendar Schedule!!");
         schedulePane.getChildren().clear();
 
         double y_idx;
@@ -204,9 +202,6 @@ public class FXMLController {
                 x_idx += 100;
             }
         }
-        for (Node n : schedulePane.getChildren()) {
-            System.out.println("x: " + n.getLayoutX() + " y: " + n.getLayoutY());
-        }
     }
 
     private double dateTimeToLayoutPos(LocalDateTime time) {
@@ -226,6 +221,8 @@ public class FXMLController {
         Label time = new Label(meetingTime);
         VBox courseInfo = new VBox(codeLabel, time);
         Button removeButton = new Button("x");
+        Tooltip rmtt = new Tooltip("Remove class from schedule");
+        removeButton.setTooltip(rmtt);
         removeButton.setOnMouseClicked(event -> {
             try {
                 onRemoveButtonClicked(c, courseList, schedulePane);
@@ -399,4 +396,5 @@ public class FXMLController {
 //        if (ke.getCode() == KeyCode.ENTER)
 //            onSearchButtonClick();
     }
+
 }
