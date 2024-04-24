@@ -129,6 +129,9 @@ public class FXMLController {
         String mtgDays = mtgDaysComboBox.getSelectionModel().getSelectedItem();
         String startTime = startTimeComboBox.getSelectionModel().getSelectedItem();
 
+        search.removeAllFilters(); // Clear filters for each application of new filters.
+        // Only whatever is currently filled out should be filtered.
+
         if (!courseName.isEmpty())
             search.addFilter(Search.SearchBy.COURSE_NAME, courseName);
         if (!courseCode.isEmpty())

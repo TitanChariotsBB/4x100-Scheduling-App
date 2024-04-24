@@ -16,7 +16,7 @@ public class Search {
     private ArrayList<Course> results;
     public ArrayList<Filter> activeFilters;
 
-    public Search(CourseList courseCatalog) {
+    public Search(CourseList courseCatalog) { // Constructor
         unfilteredResults = new ArrayList<>();
         results = new ArrayList<>();
         activeFilters = new ArrayList<>();
@@ -24,14 +24,14 @@ public class Search {
         setQuery("");
     }
 
-    public ArrayList<Course> getResults() {
+    public ArrayList<Course> getResults() { // Returns ArrayList of courses matching search
         /*if (results.isEmpty()) {
             populateResults();
         }*/
         return results;
     }
 
-    public void setQuery(String currentQuery) {
+    public void setQuery(String currentQuery) { // Sets search query to the given parameter
         this.currentQuery = currentQuery;
         results.clear();
         populateResults();
@@ -82,7 +82,7 @@ public class Search {
     }
 
 
-    public void addFilter(SearchBy sb, String filter) {
+    public void addFilter(SearchBy sb, String filter) { // Adds filter
         activeFilters.add(new Filter(sb, filter));
         //setQuery(filter);
         filterCourses(sb, filter);
@@ -92,7 +92,7 @@ public class Search {
         activeFilters.add(new Filter(sb, ld));
     }*/
 
-    private void filterCourses(SearchBy sb, String filter) {
+    private void filterCourses(SearchBy sb, String filter) { // Eliminates classes that don't match the filter
         if (sb.equals(SearchBy.ALL)) { // Returns results with no filter
             return;
         }
@@ -108,10 +108,10 @@ public class Search {
             results.removeIf(result -> !result.getProfessor().toLowerCase().contains(filter.toLowerCase()));
         }
         else if (sb.equals(SearchBy.DATE)) { // If filtering by date
-            if (filter.equals("Any")) {
+            if (filter.equals("Any")) { // Return all courses
                 return;
             }
-            else if (filter.equals("MWF")) {
+            else if (filter.equals("MWF")) { // Return only the courses that meet MWF
                 results.removeIf(result ->
                         result.getMeetingTimes() == null ||
                         result.getMeetingTimes()[0] == null ||
@@ -120,7 +120,7 @@ public class Search {
                         result.getMeetingTimes()[3] != null ||
                         result.getMeetingTimes()[4] == null);
             }
-            else if (filter.equals("TR")) {
+            else if (filter.equals("TR")) { // Return only the courses that meet TR
                 results.removeIf(result ->
                         result.getMeetingTimes() == null ||
                         result.getMeetingTimes()[0] != null ||
@@ -129,12 +129,15 @@ public class Search {
                         result.getMeetingTimes()[3] == null ||
                         result.getMeetingTimes()[4] != null);
             }
-            else if (filter.equals("Other")) {
+            else if (filter.equals("Other")) { // Return any classes that meet on days other than MWF or TR
                 results.removeIf(result -> result.getMeetingTimes() == null ||
                         !result.getMeetingDateString().equals("Other"));
             }
         }
         else if (sb.equals(SearchBy.TIME)) { // If filtering by time
+            if (filter.equals("Any")) {
+                return;
+            }
             results.removeIf(result -> result.getMeetingTimes() == null ||
                     !result.getMeetingTimeStringAlex().equals(filter));
 
@@ -176,7 +179,7 @@ public class Search {
         }
     }*/
 
-    public void removeFilter(SearchBy sb) {
+    public void removeFilter(SearchBy sb) { // Removes filter
         /*if (sb.toString().equals("ALL")) { // Returns results with no filter
             populateResults();
         }*/
@@ -222,16 +225,16 @@ public class Search {
                 }
             }
         }*/
-        activeFilters.removeIf(result -> result.sb == sb);
-        results.clear();
-        populateResults();
+        activeFilters.removeIf(result -> result.sb == sb); // Removes filter from activeFilters list
+        results.clear(); // Clears classes
+        populateResults(); // Adds back the classes that match the new filters
     }
 
     public void removeAllFilters() {
         activeFilters.clear();
-    }
+    } // Clears all filters
 
-    public String toString() {
+    public String toString() { // For testing purposes
         StringBuilder sb = new StringBuilder();
         for (Course result : results) {
             sb.append(result.getName() + " ");
