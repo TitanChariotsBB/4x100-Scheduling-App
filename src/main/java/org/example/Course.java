@@ -86,8 +86,11 @@ public class Course {
         if (meetingTimes[4] != null)
             day += "F";
 
-        time = " " + hour + ":" + minute;
-        if (minute == 0) time += "0";
+        String minuteString;
+        if (minute < 10) minuteString = "0" + minute;
+        else minuteString = "" + minute;
+
+        time = " " + hour + ":" + minuteString;
 
         return day + time;
     }
