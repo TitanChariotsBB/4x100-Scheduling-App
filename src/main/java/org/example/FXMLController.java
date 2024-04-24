@@ -236,21 +236,12 @@ public class FXMLController {
 
     @FXML
     public void onAddButtonClicked(Course c) {
-        Course existingCourse;
         switch (currentTab) {
             case "Fall Semester":
-                existingCourse = fallSemester.addCourse(c);
-                if (existingCourse != null) {
-                    launchConflictDialog(c, existingCourse, fallSemester);
-                }
-                displayCalendarSchedule(fallSemester, fallSemesterPane);
+                addCourseToSemesterSchedule(c, fallSemester, fallSemesterPane);
                 break;
             case "Spring Semester":
-                existingCourse = springSemester.addCourse(c);
-                if (existingCourse != null) {
-                    launchConflictDialog(c, existingCourse, springSemester);
-                }
-                displayCalendarSchedule(springSemester, springSemesterPane);
+                addCourseToSemesterSchedule(c, springSemester, springSemesterPane);
                 break;
             case "College Career":
                 if (past) {
@@ -264,6 +255,40 @@ public class FXMLController {
                 break;
         }
         updateTotalCredits();
+    }
+
+    private void addCourseToSemesterSchedule(Course toAdd, CourseList semester, Pane semesterPane) {
+        Course existingCourse = semester.addCourse(toAdd);
+        if (semester.getTotalCredits() > 21) {
+            launchCreditWarning();
+            try { semester.removeCourse(toAdd); } catch (Exception e) {}
+        } else if (existingCourse != null) {
+            launchConflictDialog(toAdd, existingCourse, semester);
+        } else if (semester.getTotalCredits() > 18) {
+            launchCreditDialog(toAdd, semester);
+        }
+        displayCalendarSchedule(semester, semesterPane);
+    }
+
+    private void launchCreditDialog(Course toAdd, CourseList semester) {
+        Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conflictAlert.setTitle("Credit warning");
+        conflictAlert.setContentText("If you add this class, your tuition may increase.");
+
+        Optional<ButtonType> result = conflictAlert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.CANCEL)) {
+            try {
+                semester.removeCourse(toAdd);
+            } catch (Exception e) {}
+        }
+    }
+
+    private void launchCreditWarning() {
+        Alert creditAlert = new Alert(Alert.AlertType.WARNING);
+        creditAlert.setTitle("Credit limit reached!");
+        creditAlert.setContentText("Your schedule cannot exceed 21 credits.");
+
+        creditAlert.show();
     }
 
     private void launchConflictDialog(Course conflictingCourse, Course existingCourse, CourseList semester) {

@@ -25,9 +25,6 @@ public class SemesterSchedule extends CourseList {
                 return existingCourse;
             }
         }
-        if(super.getTotalCredits() + course.getCredits() > 19) {
-            throw new IllegalArgumentException("Attempted to add too many credits");
-        }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
         return null;
     }
