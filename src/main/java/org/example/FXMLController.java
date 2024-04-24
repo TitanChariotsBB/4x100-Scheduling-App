@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class FXMLController {
     private Search search;
@@ -235,22 +236,19 @@ public class FXMLController {
 
     @FXML
     public void onAddButtonClicked(Course c) {
+        Course existingCourse;
         switch (currentTab) {
             case "Fall Semester":
-                try {
-                    fallSemester.addCourse(c);
-                    hideConflictMessage();
-                } catch (Exception e) {
-                    showConflictMessage(currentTab, e.getMessage());
+                existingCourse = fallSemester.addCourse(c);
+                if (existingCourse != null) {
+                    launchConflictDialog(c, existingCourse, fallSemester);
                 }
                 displayCalendarSchedule(fallSemester, fallSemesterPane);
                 break;
             case "Spring Semester":
-                try {
-                    springSemester.addCourse(c);
-                    hideConflictMessage();
-                } catch (Exception e) {
-                    showConflictMessage(currentTab, e.getMessage());
+                existingCourse = springSemester.addCourse(c);
+                if (existingCourse != null) {
+                    launchConflictDialog(c, existingCourse, springSemester);
                 }
                 displayCalendarSchedule(springSemester, springSemesterPane);
                 break;
@@ -266,6 +264,23 @@ public class FXMLController {
                 break;
         }
         updateTotalCredits();
+    }
+
+    private void launchConflictDialog(Course conflictingCourse, Course existingCourse, CourseList semester) {
+        Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conflictAlert.setTitle("Conflicting course!");
+        conflictAlert.setContentText("Do you want to replace " + existingCourse.getCode() +
+                " with " + conflictingCourse.getCode() + "?");
+
+        Optional<ButtonType> result = conflictAlert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.OK)) {
+            try {
+                semester.removeCourse(existingCourse);
+            } catch (Exception e) {
+                return;
+            }
+            semester.addCourse(conflictingCourse);
+        }
     }
 
     @FXML
