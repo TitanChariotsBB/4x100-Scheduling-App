@@ -69,7 +69,6 @@
                                     <Label fx:id="totalCreditsFall" layoutX="49.0" layoutY="515.0" text="Total Credits" />
                                     <Hyperlink fx:id="statusSheetLink" layoutX="504.0" layoutY="499.0" onMouseClicked="#openStatusSheet" text="View status sheets" />
                                     <Hyperlink fx:id="courseCatalogLink" layoutX="504.0" layoutY="520.0" onMouseClicked="#openCourseCatalog" text="View course catalog" />
-                                    <Label fx:id="fallConflictLabel" layoutX="285.0" layoutY="515.0" />
                                     <Pane layoutX="60.0" layoutY="45.0" prefHeight="440.0" prefWidth="500.0">
                                        <children>
                                           <Line endX="400.0" layoutX="100.0" layoutY="40.0" startX="-100.0" />
@@ -113,7 +112,6 @@
                                     <Label fx:id="totalCreditsSpring" layoutX="49.0" layoutY="515.0" text="Total Credits" />
                                     <Hyperlink layoutX="504.0" layoutY="499.0" onAction="#openStatusSheet" onMouseClicked="#openStatusSheet" text="View status sheets" />
                                     <Hyperlink layoutX="504.0" layoutY="520.0" onAction="#openCourseCatalog" onMouseClicked="#openCourseCatalog" text="View course catalog" />
-                                    <Label fx:id="springConflictLabel" layoutX="282.0" layoutY="515.0" />
                                     <Pane layoutX="60.0" layoutY="45.0" prefHeight="440.0" prefWidth="500.0">
                                        <children>
                                           <Line endX="400.0" layoutX="100.0" layoutY="40.0" startX="-100.0" />

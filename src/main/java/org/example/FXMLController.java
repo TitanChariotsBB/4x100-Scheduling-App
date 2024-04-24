@@ -59,10 +59,6 @@ public class FXMLController {
     private Label totalCreditsFall;
     @FXML
     private Label totalCreditsSpring;
-    @FXML
-    private Label fallConflictLabel;
-    @FXML
-    private Label springConflictLabel;
 
     @FXML
     public void initialize() {
@@ -99,7 +95,6 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
-        hideConflictMessage();
     }
 
     @FXML
@@ -309,7 +304,6 @@ public class FXMLController {
         cl.removeCourse(c);
         displayCalendarSchedule(cl, p);
         updateTotalCredits();
-        hideConflictMessage();
     }
 
     public void updateTotalCredits() {
@@ -412,19 +406,6 @@ public class FXMLController {
             }
         }
         return semesterResults;
-    }
-
-    public void showConflictMessage(String semester, String msg) {
-        if (semester.equals("Fall Semester")) {
-            fallConflictLabel.setText(msg);
-        } else {
-            springConflictLabel.setText(msg);
-        }
-    }
-
-    public void hideConflictMessage() {
-        fallConflictLabel.setText("");
-        springConflictLabel.setText("");
     }
 
     @FXML
