@@ -6,7 +6,7 @@
         </Console>
         <RollingFile name="fileAppender" filePattern="Logs\session_%i-${date:MM-dd-yyyy}.log.txt">
             <OnStartupTriggeringPolicy />
-            <PatternLayout pattern="{time} %m%n" />
+            <PatternLayout pattern="${date:kk:mm:ss.SSSS} %m%n" />
         </RollingFile>
     </Appenders>
     <Loggers>
