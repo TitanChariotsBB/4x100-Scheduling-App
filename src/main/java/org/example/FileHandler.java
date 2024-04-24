@@ -148,8 +148,10 @@ public class FileHandler {
                 String code = null;
                 Cell deptCell = thisRow.getCell(2);
                 Cell numCell = thisRow.getCell(3);
+                Cell sectionCell = thisRow.getCell(4);
                 if(deptCell != null && numCell != null) {
-                    code = deptCell.getStringCellValue() + numCell.getStringCellValue();
+                    code = deptCell.getStringCellValue() + numCell.getStringCellValue()
+                            + sectionCell.getStringCellValue();
                 }
 
                 Boolean isFall = null;
