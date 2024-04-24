@@ -80,8 +80,8 @@ public class FXMLController {
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
 
-        fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
-        springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
+//        fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
+//        springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
 
         // Display schedules
         displayCalendarSchedule(fallSemester, fallSemesterPane);
@@ -197,7 +197,6 @@ public class FXMLController {
                 currentHBox.setMinHeight(height);
                 currentHBox.setLayoutX(x_idx);
                 currentHBox.setLayoutY(y_idx);
-                currentHBox.setBackground(Background.fill(Paint.valueOf("DDDDDD")));
                 schedulePane.getChildren().add(currentHBox);
 
                 x_idx += 100;
@@ -212,15 +211,9 @@ public class FXMLController {
     private HBox makeCalendarScheduleViewHBox(Course c, CourseList courseList, Pane schedulePane) {
         String code = c.getCode();
         String name = c.getName();
-        String meetingTime;
-        if (c.getMeetingTimes() != null) {
-            meetingTime = c.getMeetingTimeString();
-        } else {
-            meetingTime = "";
-        }
-        Label codeLabel = new Label(code + ": " + name);
-        Label time = new Label(meetingTime);
-        VBox courseInfo = new VBox(codeLabel, time);
+        Label codeLabel = new Label(code);
+        Label nameLabel = new Label(name);
+        VBox courseInfo = new VBox(codeLabel, nameLabel);
         Button removeButton = new Button("x");
         Tooltip rmtt = new Tooltip("Remove class from schedule");
         removeButton.setTooltip(rmtt);
@@ -231,7 +224,10 @@ public class FXMLController {
                 throw new RuntimeException(e);
             }
         });
-        return new HBox(5, courseInfo, removeButton);
+        HBox box = new HBox(2, courseInfo, removeButton);
+        box.setBackground(Background.fill(Paint.valueOf("A0E0FFC0")));
+        box.setPadding(new Insets(0, 0, 0, 2));
+        return box;
     }
 
     @FXML
