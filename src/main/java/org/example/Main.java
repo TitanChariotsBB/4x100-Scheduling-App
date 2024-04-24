@@ -1,9 +1,15 @@
 package org.example;
 
+
+
+
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 
 public class Main {
+    protected static Logger log = LogHelper.initLogger();
     private static CourseList catalog;
     public static Search search;
     public static CourseList fallSemester;

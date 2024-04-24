@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout pattern="message: %msg%n" />
+        </Console>
+        <RollingFile name="fileAppender" filePattern="Logs\session_%i-${date:MM-dd-yyyy}.log.txt">
+            <OnStartupTriggeringPolicy />
+            <PatternLayout pattern="{time} %m%n" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="fileLog" level="debug">
+                <AppenderRef ref="fileAppender"/>
+        </Logger>
+    </Loggers>
+</Configuration>
