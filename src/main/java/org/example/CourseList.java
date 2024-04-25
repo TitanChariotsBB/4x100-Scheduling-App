@@ -44,30 +44,4 @@ public class CourseList {
         return sb.toString();
     }
 
-    public String getFormattedSchedule() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\tMonday   \tTuesday  \tWednesday\tThursday \tFriday\n");
-
-        String[] rows = {"\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n", "\n"};
-
-        for (Course course : courses) {
-            String code = course.getCode();
-            int timeSliceIdx = 0;
-            String timeSlice = "";
-            for (int i = 0; i < 5; i++) {
-                LocalDateTime[] day = course.getMeetingTimes()[i];
-                if (day != null) {
-                    timeSliceIdx = day[0].getHour() - 8;
-                    timeSlice += "\t" + code + " ";
-                } else {
-                    timeSlice += "\t         ";
-                }
-            }
-            rows[timeSliceIdx] = timeSlice;
-        }
-        for (String row : rows) {
-            sb.append(row);
-        }
-        return sb.toString();
-    }
 }

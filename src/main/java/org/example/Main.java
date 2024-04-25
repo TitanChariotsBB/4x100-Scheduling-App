@@ -6,10 +6,8 @@ package org.example;
 import org.apache.logging.log4j.Logger;
 
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
 
 public class Main {
-    private static CourseList catalog;
     public static Search search;
     public static CourseList fallSemester;
     public static CourseList springSemester;
@@ -17,7 +15,7 @@ public class Main {
     public static CourseList future;
 
     public static void run() {
-        catalog = FileHandler.loadCatalog();
+        CourseList catalog = FileHandler.loadCatalog();
         System.out.println(catalog);
         search = new Search(catalog);
 
