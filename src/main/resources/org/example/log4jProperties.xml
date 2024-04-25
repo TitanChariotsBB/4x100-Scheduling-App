@@ -2,19 +2,20 @@
 <Configuration>
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="message: %msg%n" />
+            <PatternLayout pattern="[%level] %m%n" />
         </Console>
-        <RollingFile name="fileAppender" filePattern="Logs\session_%i-${date:MM-dd-yyyy}.log.txt">
+        <RollingFile name="fileAppender" filePattern="Logs\session_%i-${date:dd-MM-yyyy}.log.txt">
             <OnStartupTriggeringPolicy />
-            <PatternLayout pattern="${date:kk:mm:ss.SSSS} %m%n" />
+            <PatternLayout pattern="${date:kk:mm:ss.SSS} %m%n" />
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="error">
+        <Logger name="fileLogger" level="DEBUG">
+            <AppenderRef ref="fileAppender"/>
+        </Logger>
+        <Root>
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
             <AppenderRef ref="Console"/>
         </Root>
-        <Logger name="fileLog" level="debug">
-                <AppenderRef ref="fileAppender"/>
-        </Logger>
     </Loggers>
 </Configuration>

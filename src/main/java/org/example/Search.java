@@ -37,6 +37,9 @@ public class Search {
         results.clear();
         populateResults();
     }
+    public String getCurrentQuery(){
+        return currentQuery;
+    }
 
     private void populateResults() {
         // Will use currentQuery and filters array to populate results list

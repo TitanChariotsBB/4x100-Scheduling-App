@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 
 public class Main {
-    protected static Logger log = LogHelper.initLogger();
     private static CourseList catalog;
     public static Search search;
     public static CourseList fallSemester;
@@ -25,6 +24,7 @@ public class Main {
         try {
             autoLoad();
         }catch(FileNotFoundException fnfe){
+            LogHelper.logError("One or more autosaved lists were not found");
             springSemester = new CourseList();
             fallSemester = new CourseList();
             past = new CourseList();
