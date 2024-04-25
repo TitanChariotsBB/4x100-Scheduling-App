@@ -3,6 +3,7 @@ package org.example;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
+import java.time.LocalDateTime;
 import java.util.Stack;
 
 public class LogHelper {
@@ -22,7 +23,10 @@ public class LogHelper {
     }
 
     public static void logUserAction(UserAction ua){
-        actionStack.push(ua);
         logger.info(ua);
+    }
+
+    public static void logProgressMessage(String s){
+        logger.info(s);
     }
 }

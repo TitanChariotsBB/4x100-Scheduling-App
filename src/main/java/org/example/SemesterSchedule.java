@@ -31,4 +31,11 @@ public class SemesterSchedule extends CourseList {
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
     }
 
+    @Override
+    public String toString(){
+        if(isFall){
+            return "fallSchedule";
+        }
+        return "springSchedule";
+    }
 }

@@ -2,11 +2,11 @@
 <Configuration>
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="[%level] %m%n" />
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level: %m%n" />
         </Console>
         <RollingFile name="fileAppender" filePattern="Logs\session_%i-${date:dd-MM-yyyy}.log.txt">
             <OnStartupTriggeringPolicy />
-            <PatternLayout pattern="${date:kk:mm:ss.SSS} %m%n" />
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level: %m%n" />
         </RollingFile>
     </Appenders>
     <Loggers>

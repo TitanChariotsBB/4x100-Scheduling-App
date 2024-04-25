@@ -16,13 +16,16 @@ public class Main {
 
     public static void run() {
         CourseList catalog = FileHandler.loadCatalog();
-        System.out.println(catalog);
+        LogHelper.logProgressMessage("Catalog loading complete");
+
         search = new Search(catalog);
+        LogHelper.logProgressMessage("Search initialization complete");
 
         try {
             autoLoad();
+            LogHelper.logProgressMessage("Previously autosaved courseLists were successfully loaded");
         }catch(FileNotFoundException fnfe){
-            LogHelper.logError("One or more autosaved lists were not found");
+            LogHelper.logError("One or more autosaved courseLists could not be found");
             springSemester = new CourseList();
             fallSemester = new CourseList();
             past = new CourseList();
@@ -30,9 +33,11 @@ public class Main {
         }
         MainApp.launchGUI();
         autoSave();
+        LogHelper.logProgressMessage("autoSave complete. Program terminating.");
     }
 
     public static void main(String[] args) {
+        //LogHelper.logProgressMessage("aaaaaa");
         run();
     }
 

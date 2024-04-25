@@ -220,6 +220,7 @@ public class FileHandler {
                 catalog.addCourse(thisCourse);
             }
         }catch(Exception e){
+            LogHelper.logError(e.getMessage());
             e.printStackTrace();
         }
         return catalog;
