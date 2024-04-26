@@ -1,6 +1,11 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
+import org.apache.commons.text.similarity.*;
 
 public class Search {
     private String currentQuery;
@@ -240,5 +245,26 @@ public class Search {
             sb.append(result.getName() + " ");
         }
         return sb.toString();
+    }
+
+    // Performs fuzzy search on specified text
+    public void FuzzySearch(String fuzzyQuery, CourseList courseCatalog) {
+        ArrayList<String> words = new ArrayList<>(List.of(courseCatalog.toString().split(" ")));
+        LevenshteinDistance l = new LevenshteinDistance();
+        ArrayList<Integer> distances = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        for (String word : words) {
+            distances.add(l.apply(word, fuzzyQuery));
+            names.add(word);
+        }
+        Integer maxDist = 0;
+        String closeMatch = "";
+        for (int i = 0; i < distances.size(); i++) {
+            if (distances.get(i) > maxDist) {
+                maxDist = i;
+                closeMatch = names.get(i);
+            }
+        }
+        System.out.println("Did you mean: " + closeMatch); // Helper print statment
     }
 }
