@@ -248,21 +248,28 @@ public class Search {
     }
 
     // Performs fuzzy search on specified text
-    public void FuzzySearch(String fuzzyQuery, CourseList courseCatalog) {
+    public void fuzzySearch(String fuzzyQuery, CourseList courseCatalog) {
         ArrayList<String> words = new ArrayList<>(List.of(courseCatalog.toString().split(" ")));
         LevenshteinDistance l = new LevenshteinDistance();
         ArrayList<Integer> distances = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
         for (String word : words) {
+            System.out.println("Loop check");
+            System.out.println("Current word: " + word);
+
             distances.add(l.apply(word, fuzzyQuery));
             names.add(word);
         }
-        Integer maxDist = 0;
+        Integer maxDist = distances.getFirst();
         String closeMatch = "";
         for (int i = 0; i < distances.size(); i++) {
-            if (distances.get(i) > maxDist) {
-                maxDist = i;
+            System.out.println("Max distance: " + maxDist);
+            System.out.println("Current distance: " + distances.get(i));
+
+            if (distances.get(i) < maxDist) {
+                maxDist = distances.get(i);
                 closeMatch = names.get(i);
+                System.out.println("Current match: " + names.get(i));
             }
         }
         System.out.println("Did you mean: " + closeMatch); // Helper print statment

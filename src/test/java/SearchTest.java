@@ -88,5 +88,12 @@ public class SearchTest {
         s.addFilter(Search.SearchBy.DATE, "MWF");
         assertEquals(1, s.getResults().size());
         System.out.println(s);
+
+
+        s.fuzzySearch("bisual", cs);
+        System.out.println("Why do they exist, Matt?\n");
+        s.fuzzySearch("bovel", cs);
+        System.out.println("Why do they exist, Matt?\n");
+        s.fuzzySearch("zalloon", cs);
     }
 }
