@@ -17,6 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class FXMLController {
     private Search search;
@@ -58,10 +59,6 @@ public class FXMLController {
     private Label totalCreditsFall;
     @FXML
     private Label totalCreditsSpring;
-    @FXML
-    private Label fallConflictLabel;
-    @FXML
-    private Label springConflictLabel;
 
     @FXML
     public void initialize() {
@@ -79,8 +76,8 @@ public class FXMLController {
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
         startTimeComboBox.getItems().setAll(ch.timeOptions);
 
-        fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
-        springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
+//        fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
+//        springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
 
         // Display schedules
         displayCalendarSchedule(fallSemester, fallSemesterPane);
@@ -98,7 +95,6 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
-        hideConflictMessage();
         LogHelper.logUserAction(new UserAction(null,null,search, UserAction.actionType.SEARCH));
     }
 
@@ -201,7 +197,6 @@ public class FXMLController {
                 currentHBox.setMinHeight(height);
                 currentHBox.setLayoutX(x_idx);
                 currentHBox.setLayoutY(y_idx);
-                currentHBox.setBackground(Background.fill(Paint.valueOf("DDDDDD")));
                 schedulePane.getChildren().add(currentHBox);
 
                 x_idx += 100;
@@ -216,15 +211,9 @@ public class FXMLController {
     private HBox makeCalendarScheduleViewHBox(Course c, CourseList courseList, Pane schedulePane) {
         String code = c.getCode();
         String name = c.getName();
-        String meetingTime;
-        if (c.getMeetingTimes() != null) {
-            meetingTime = c.getMeetingTimeString();
-        } else {
-            meetingTime = "";
-        }
-        Label codeLabel = new Label(code + ": " + name);
-        Label time = new Label(meetingTime);
-        VBox courseInfo = new VBox(codeLabel, time);
+        Label codeLabel = new Label(code);
+        Label nameLabel = new Label(name);
+        VBox courseInfo = new VBox(codeLabel, nameLabel);
         Button removeButton = new Button("x");
         Tooltip rmtt = new Tooltip("Remove class from schedule");
         removeButton.setTooltip(rmtt);
@@ -236,31 +225,22 @@ public class FXMLController {
                 throw new RuntimeException(e);
             }
         });
-        return new HBox(5, courseInfo, removeButton);
+        HBox box = new HBox(2, courseInfo, removeButton);
+        box.setBackground(Background.fill(Paint.valueOf("A0E0FFC0")));
+        box.setPadding(new Insets(0, 0, 0, 2));
+        return box;
     }
 
     @FXML
     public void onAddButtonClicked(Course c) {
         switch (currentTab) {
             case "Fall Semester":
-                try {
-                    fallSemester.addCourse(c);
-                    hideConflictMessage();
-                    LogHelper.logUserAction(new UserAction(fallSemester,c,null, UserAction.actionType.ADD_COURSE));
-                } catch (Exception e) {
-                    showConflictMessage(currentTab, e.getMessage());
-                }
-                displayCalendarSchedule(fallSemester, fallSemesterPane);
+                addCourseToSemesterSchedule(c, fallSemester, fallSemesterPane);
+                LogHelper.logUserAction(new UserAction(fallSemester,c,null, UserAction.actionType.ADD_COURSE));
                 break;
             case "Spring Semester":
-                try {
-                    springSemester.addCourse(c);
-                    hideConflictMessage();
-                    LogHelper.logUserAction(new UserAction(fallSemester,c,null, UserAction.actionType.ADD_COURSE));
-                } catch (Exception e) {
-                    showConflictMessage(currentTab, e.getMessage());
-                }
-                displayCalendarSchedule(springSemester, springSemesterPane);
+                addCourseToSemesterSchedule(c, springSemester, springSemesterPane);
+                LogHelper.logUserAction(new UserAction(springSemester,c,null, UserAction.actionType.ADD_COURSE));
                 break;
             case "College Career":
                 if (pastSelected) {
@@ -278,12 +258,62 @@ public class FXMLController {
         updateTotalCredits();
     }
 
+    private void addCourseToSemesterSchedule(Course toAdd, CourseList semester, Pane semesterPane) {
+        Course existingCourse = semester.addCourse(toAdd);
+        if (semester.getTotalCredits() > 21) {
+            launchCreditWarning();
+            try { semester.removeCourse(toAdd); } catch (Exception e) {}
+        } else if (existingCourse != null) {
+            launchConflictDialog(toAdd, existingCourse, semester);
+        } else if (semester.getTotalCredits() > 18) {
+            launchCreditDialog(toAdd, semester);
+        }
+        displayCalendarSchedule(semester, semesterPane);
+    }
+
+    private void launchCreditDialog(Course toAdd, CourseList semester) {
+        Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conflictAlert.setTitle("Credit warning");
+        conflictAlert.setContentText("If you add this class, your tuition may increase.");
+
+        Optional<ButtonType> result = conflictAlert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.CANCEL)) {
+            try {
+                semester.removeCourse(toAdd);
+            } catch (Exception e) {}
+        }
+    }
+
+    private void launchCreditWarning() {
+        Alert creditAlert = new Alert(Alert.AlertType.WARNING);
+        creditAlert.setTitle("Credit limit reached!");
+        creditAlert.setContentText("Your schedule cannot exceed 21 credits.");
+
+        creditAlert.show();
+    }
+
+    private void launchConflictDialog(Course conflictingCourse, Course existingCourse, CourseList semester) {
+        Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conflictAlert.setTitle("Conflicting course!");
+        conflictAlert.setContentText("Do you want to replace " + existingCourse.getCode() +
+                " with " + conflictingCourse.getCode() + "?");
+
+        Optional<ButtonType> result = conflictAlert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.OK)) {
+            try {
+                semester.removeCourse(existingCourse);
+            } catch (Exception e) {
+                return;
+            }
+            semester.addCourse(conflictingCourse);
+        }
+    }
+
     @FXML
     public void onRemoveButtonClicked(Course c, CourseList cl, Pane p) throws Exception {
         cl.removeCourse(c);
         displayCalendarSchedule(cl, p);
         updateTotalCredits();
-        hideConflictMessage();
         LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
     }
 
@@ -388,19 +418,6 @@ public class FXMLController {
             }
         }
         return semesterResults;
-    }
-
-    public void showConflictMessage(String semester, String msg) {
-        if (semester.equals("Fall Semester")) {
-            fallConflictLabel.setText(msg);
-        } else {
-            springConflictLabel.setText(msg);
-        }
-    }
-
-    public void hideConflictMessage() {
-        fallConflictLabel.setText("");
-        springConflictLabel.setText("");
     }
 
     @FXML
