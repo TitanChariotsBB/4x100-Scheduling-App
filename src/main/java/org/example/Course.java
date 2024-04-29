@@ -29,15 +29,29 @@ public class Course {
     }
 
     public boolean overlapsWith(Course toCompare) {
+        double aStart;
+        double aEnd;
+        double bStart;
+        double bEnd;
+
         for (int i = 0; i < 5; i++) {
             if (meetingTimes[i] == null || toCompare.meetingTimes[i] == null) continue;
 
-            String startTimeA = "" + meetingTimes[i][0].getHour() +
-                    meetingTimes[i][0].getMinute();
-            String startTimeB = "" + toCompare.meetingTimes[i][0].getHour() +
-                    toCompare.meetingTimes[i][0].getMinute();
+            aStart = meetingTimes[i][0].getHour() + (meetingTimes[i][0].getMinute() / 30.0);
+            aEnd = meetingTimes[i][1].getHour() + (meetingTimes[i][1].getMinute() / 30.0);
+            bStart = toCompare.meetingTimes[i][0].getHour() +
+                    (toCompare.meetingTimes[i][0].getMinute() / 30.0);
+            bEnd = toCompare.meetingTimes[i][1].getHour() +
+                    (toCompare.meetingTimes[i][1].getMinute() / 30.0);
 
-            if (startTimeA.equals(startTimeB)) return true;
+            // If the classes start at the same time
+            if (aStart == bStart) return true;
+
+            // If the first class starts in the middle of the second class
+            if (aStart > bStart && aStart < bEnd) return true;
+
+            // If the first class ends in the middle of the second class
+            if (aEnd > bStart && aEnd < bEnd) return true;
         }
         return false;
     }
