@@ -4,7 +4,7 @@ public class UserAction {
     private CourseList affectedList;
     private Course affectedCourse;
     private Search search;
-    public enum actionType {ADD, REMOVE, SEARCH, UNDO}
+    public enum actionType {ADD_COURSE, REMOVE_COURSE, SEARCH, ADD_FILTER, CLEAR_FILTERS, UNDO}
     private actionType aType;
 
     public UserAction(CourseList affectedList, Course affectedCourse, Search search, actionType aType){
@@ -34,17 +34,26 @@ public class UserAction {
     public String toString(){
         String result = null;
 
-        if(aType == actionType.ADD){
-            result = "Added " + affectedCourse.getName() + " to " + affectedList;
-        }
-        else if(aType == actionType.REMOVE){
-            result = "Removed " + affectedCourse.getName() + " from " + affectedList;
-        }
-        else if(aType == actionType.SEARCH){
-            result = "Searched for " + search.getCurrentQuery();
-        }
-        else if(aType == actionType.UNDO){
-            result = "UNDO";
+        switch(aType) {
+            case actionType.ADD_COURSE:
+                result = "Added " + affectedCourse.getName() + " to " + affectedList;
+                break;
+            case actionType.REMOVE_COURSE:
+                result = "Removed " + affectedCourse.getName() + " from " + affectedList;
+                break;
+            case actionType.SEARCH:
+                result = "Searched for " + search.getCurrentQuery();
+                break;
+            case actionType.UNDO:
+                result = "UNDO";
+                break;
+            case actionType.CLEAR_FILTERS:
+                result = "Cleared Filters";
+                break;
+            case actionType.ADD_FILTER:
+                result = "Added Filter. New filters list: " + search.activeFilters.toString();
+                break;
+
         }
 
         return result;
