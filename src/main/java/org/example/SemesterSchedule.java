@@ -29,4 +29,11 @@ public class SemesterSchedule extends CourseList {
         return null;
     }
 
+    @Override
+    public String toString(){
+        if(isFall){
+            return "fallSchedule";
+        }
+        return "springSchedule";
+    }
 }

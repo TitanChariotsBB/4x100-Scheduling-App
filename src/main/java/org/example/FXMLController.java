@@ -25,7 +25,7 @@ public class FXMLController {
     private CourseList springSemester;
     private CourseList completedCourses;
     private CourseList courseWishList;
-    private boolean past; //if past is true, past is selected. If past is false, wishList is selected
+    private boolean pastSelected; //if past is true, past is selected. If past is false, wishList is selected
     private String currentTab = "";
 
     @FXML
@@ -85,7 +85,7 @@ public class FXMLController {
         displaySchedule(completedCourses, completedCoursesVBox);
         displaySchedule(courseWishList, courseWishListVBox);
 
-        past = true;
+        pastSelected = true;
 
         updateTotalCredits();
     }
@@ -95,6 +95,7 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
+        LogHelper.logUserAction(new UserAction(null,null,search, UserAction.actionType.SEARCH));
     }
 
     @FXML
@@ -107,6 +108,8 @@ public class FXMLController {
         dptComboBox.getSelectionModel().clearSelection();
         mtgDaysComboBox.getSelectionModel().clearSelection();
         startTimeComboBox.getSelectionModel().clearSelection();
+
+        LogHelper.logUserAction(new UserAction(null,null,search,UserAction.actionType.CLEAR_FILTERS));
     }
 
     @FXML
@@ -144,6 +147,8 @@ public class FXMLController {
             System.out.println(filter.sb);
             System.out.println(filter.filter);
         }
+
+        LogHelper.logUserAction(new UserAction(null,null,null, UserAction.actionType.ADD_FILTER));
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
@@ -216,6 +221,7 @@ public class FXMLController {
             try {
                 onRemoveButtonClicked(c, courseList, schedulePane);
             } catch (Exception e) {
+                LogHelper.logError("Clicking the remove button threw an exception");
                 throw new RuntimeException(e);
             }
         });
@@ -230,17 +236,21 @@ public class FXMLController {
         switch (currentTab) {
             case "Fall Semester":
                 addCourseToSemesterSchedule(c, fallSemester, fallSemesterPane);
+                LogHelper.logUserAction(new UserAction(fallSemester,c,null, UserAction.actionType.ADD_COURSE));
                 break;
             case "Spring Semester":
                 addCourseToSemesterSchedule(c, springSemester, springSemesterPane);
+                LogHelper.logUserAction(new UserAction(springSemester,c,null, UserAction.actionType.ADD_COURSE));
                 break;
             case "College Career":
-                if (past) {
+                if (pastSelected) {
                     completedCourses.addCourse(c);
                     displaySchedule(completedCourses, completedCoursesVBox);
+                    LogHelper.logUserAction(new UserAction(completedCourses,c,null, UserAction.actionType.ADD_COURSE));
                 } else {
                     courseWishList.addCourse(c);
                     displaySchedule(courseWishList, courseWishListVBox);
+                    LogHelper.logUserAction(new UserAction(courseWishList,c,null, UserAction.actionType.ADD_COURSE));
                 }
             default:
                 break;
@@ -304,6 +314,7 @@ public class FXMLController {
         cl.removeCourse(c);
         displayCalendarSchedule(cl, p);
         updateTotalCredits();
+        LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
     }
 
     public void updateTotalCredits() {
@@ -362,6 +373,7 @@ public class FXMLController {
             try {
                 onRemoveButtonClicked(c, courseList, scheduleVBox);
             } catch (Exception e) {
+                LogHelper.logError("Remove Button caused an error: " + e.getMessage());
                 throw new RuntimeException(e);
             }
         });
@@ -373,14 +385,14 @@ public class FXMLController {
 
     @FXML
     public void onCompletedCoursesClick(){
-        past = true;
+        pastSelected = true;
         completedCoursesVBox.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, null, null)));
         courseWishListVBox.setBorder(null);
     }
 
     @FXML
     public void onCourseWishlistClick(){
-        past = false;
+        pastSelected = false;
         courseWishListVBox.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, null, null)));
         completedCoursesVBox.setBorder(null);
     }

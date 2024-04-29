@@ -32,11 +32,12 @@ public class CourseList {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        /*StringBuilder sb = new StringBuilder();
         for (Course course : courses) {
             sb.append(course.getName() + "\n");
         }
         return sb.toString();
+         */
+        return "list of " + courses.size() + " courses stored at: " + super.toString();
     }
-
 }

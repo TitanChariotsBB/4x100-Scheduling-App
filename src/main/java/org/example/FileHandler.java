@@ -41,6 +41,7 @@ public class FileHandler {
         try{
             outStream = new FileOutputStream(outFile);
         }catch(FileNotFoundException e){
+            LogHelper.logError("could not save to file " + filePath);
             e.printStackTrace();
         }
         JsonWriter writer = new JsonWriter(outStream);
@@ -220,6 +221,7 @@ public class FileHandler {
                 catalog.addCourse(thisCourse);
             }
         }catch(Exception e){
+            LogHelper.logError("could not read catalog file: " + e.getMessage());
             e.printStackTrace();
         }
         return catalog;
@@ -303,8 +305,9 @@ public class FileHandler {
                     return result;
                 }
                 else{return null;}
-        }catch(Exception e){
-            e.printStackTrace();
+            }catch(Exception e){
+                LogHelper.logError("Unparsable prerequisite string: \""+reqsFromFile+"\"");
+                e.printStackTrace();
             return null;
         }
     }
