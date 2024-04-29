@@ -1,10 +1,5 @@
 package org.example;
 
-
-
-
-import org.apache.logging.log4j.Logger;
-
 import java.io.FileNotFoundException;
 
 public class Main {
@@ -15,6 +10,8 @@ public class Main {
     public static CourseList future;
 
     public static void run() {
+        LogHelper.initLogger();
+
         CourseList catalog = FileHandler.loadCatalog();
         LogHelper.logProgressMessage("Catalog loading complete");
 
@@ -37,7 +34,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //LogHelper.logProgressMessage("aaaaaa");
         run();
     }
 

@@ -227,6 +227,7 @@ public class FXMLController {
             try {
                 onRemoveButtonClicked(c, courseList, schedulePane);
             } catch (Exception e) {
+                LogHelper.logError("Clicking the remove button threw an exception");
                 throw new RuntimeException(e);
             }
         });
@@ -332,6 +333,7 @@ public class FXMLController {
             try {
                 onRemoveButtonClicked(c, courseList, scheduleVBox);
             } catch (Exception e) {
+                LogHelper.logError("Remove Button caused an error: " + e.getMessage());
                 throw new RuntimeException(e);
             }
         });

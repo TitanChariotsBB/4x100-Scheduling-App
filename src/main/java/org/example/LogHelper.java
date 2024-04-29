@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 import java.util.Stack;
 
 public class LogHelper {
-    protected static Logger logger = initLogger();
+    protected static Logger logger;
     private static Stack<UserAction> actionStack = new Stack<>();
 
-    public static Logger initLogger(){
+    public static void initLogger(){
         System.setProperty("log4j.configurationFile","src\\main\\resources\\org\\example\\log4jProperties.xml");
         org.apache.logging.log4j.Logger result1 = LogManager.getLogger("fileLogger");
-        Logger result = (Logger) result1;
+        logger = (Logger) result1;
 
-        return result;
+        logger.info("Logger successfully initialized");
     }
 
     public static void logError(String errorMessage){
