@@ -19,16 +19,14 @@ public class SemesterSchedule extends CourseList {
     }
 
     @Override
-    public void addCourse(Course course) throws IllegalArgumentException {
+    public Course addCourse(Course course) throws IllegalArgumentException {
         for (Course existingCourse : super.getCourses()) {
             if (course.overlapsWith(existingCourse)) {
-                throw new IllegalArgumentException("Conflict with " + existingCourse.getCode());
+                return existingCourse;
             }
         }
-        if(super.getTotalCredits() + course.getCredits() > 19) {
-            throw new IllegalArgumentException("Attempted to add too many credits");
-        }
         super.addCourse(course);//adds course to the arrayList and increments totalCredits
+        return null;
     }
 
 }
