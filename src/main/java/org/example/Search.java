@@ -21,10 +21,13 @@ public class Search {
     private ArrayList<Course> results;
     public ArrayList<Filter> activeFilters;
 
+    public CourseList courseCatalog;
+
     public Search(CourseList courseCatalog) { // Constructor
         unfilteredResults = new ArrayList<>();
         results = new ArrayList<>();
         activeFilters = new ArrayList<>();
+        this.courseCatalog = courseCatalog;
         unfilteredResults.addAll(courseCatalog.getCourses());
         setQuery("");
     }
@@ -37,7 +40,8 @@ public class Search {
     }
 
     public void setQuery(String currentQuery) { // Sets search query to the given parameter
-        this.currentQuery = currentQuery;
+        this.currentQuery = fuzzySearch(currentQuery, courseCatalog);
+        //this.currentQuery = currentQuery;
         results.clear();
         populateResults();
     }
@@ -248,8 +252,12 @@ public class Search {
     }
 
     // Performs fuzzy search on specified text
-    public void fuzzySearch(String fuzzyQuery, CourseList courseCatalog) {
-        ArrayList<String> words = new ArrayList<>(List.of(courseCatalog.toString().split(" ")));
+    public String fuzzySearch(String fuzzyQuery, CourseList courseCatalog) {
+        if (fuzzyQuery.isEmpty()) {
+            return "";
+        }
+
+        ArrayList<String> words = new ArrayList<>(List.of(courseCatalog.toString().toLowerCase().split(" ")));
         LevenshteinDistance l = new LevenshteinDistance();
         ArrayList<Integer> distances = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
@@ -273,5 +281,6 @@ public class Search {
             }
         }
         System.out.println("Did you mean: " + closeMatch); // Helper print statment
+        return closeMatch;
     }
 }

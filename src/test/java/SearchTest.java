@@ -91,8 +91,10 @@ public class SearchTest {
 
 
         s.fuzzySearch("bisual", cs);
+        s.fuzzySearch("visual", cs);
         System.out.println("Why do they exist, Matt?\n");
         s.fuzzySearch("bovel", cs);
+        s.fuzzySearch("foundations", cs);
         System.out.println("Why do they exist, Matt?\n");
         s.fuzzySearch("zalloon", cs);
     }
