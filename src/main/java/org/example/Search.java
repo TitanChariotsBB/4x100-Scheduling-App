@@ -1,6 +1,11 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.compress.archivers.ar.ArArchiveEntry;
+import org.apache.commons.text.similarity.*;
 
 public class Search {
     private String currentQuery;
@@ -16,10 +21,13 @@ public class Search {
     private ArrayList<Course> results;
     public ArrayList<Filter> activeFilters;
 
+    public CourseList courseCatalog;
+
     public Search(CourseList courseCatalog) { // Constructor
         unfilteredResults = new ArrayList<>();
         results = new ArrayList<>();
         activeFilters = new ArrayList<>();
+        this.courseCatalog = courseCatalog;
         unfilteredResults.addAll(courseCatalog.getCourses());
         setQuery("");
     }
@@ -32,7 +40,8 @@ public class Search {
     }
 
     public void setQuery(String currentQuery) { // Sets search query to the given parameter
-        this.currentQuery = currentQuery;
+        this.currentQuery = fuzzySearch(currentQuery, courseCatalog);
+        //this.currentQuery = currentQuery;
         results.clear();
         populateResults();
     }
@@ -243,5 +252,38 @@ public class Search {
             sb.append(result.getName() + " ");
         }
         return sb.toString();
+    }
+
+    // Performs fuzzy search on specified text
+    public String fuzzySearch(String fuzzyQuery, CourseList courseCatalog) {
+        if (fuzzyQuery.isEmpty()) {
+            return "";
+        }
+
+        ArrayList<String> words = new ArrayList<>(List.of(courseCatalog.toString().toLowerCase().split(" ")));
+        LevenshteinDistance l = new LevenshteinDistance();
+        ArrayList<Integer> distances = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        for (String word : words) {
+            System.out.println("Loop check");
+            System.out.println("Current word: " + word);
+
+            distances.add(l.apply(word, fuzzyQuery));
+            names.add(word);
+        }
+        Integer maxDist = distances.getFirst();
+        String closeMatch = "";
+        for (int i = 0; i < distances.size(); i++) {
+            System.out.println("Max distance: " + maxDist);
+            System.out.println("Current distance: " + distances.get(i));
+
+            if (distances.get(i) < maxDist) {
+                maxDist = distances.get(i);
+                closeMatch = names.get(i);
+                System.out.println("Current match: " + names.get(i));
+            }
+        }
+        System.out.println("Did you mean: " + closeMatch); // Helper print statment
+        return closeMatch;
     }
 }
