@@ -29,4 +29,8 @@ public class LogHelper {
     public static void logProgressMessage(String s){
         logger.info(s);
     }
+
+    public static void undoPreviousAction() {
+        // TODO
+    }
 }

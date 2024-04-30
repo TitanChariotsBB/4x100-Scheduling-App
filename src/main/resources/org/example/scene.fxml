@@ -102,6 +102,7 @@
                                     <Label layoutX="26.0" layoutY="356.0" text="4:00" />
                                     <Label layoutX="26.0" layoutY="396.0" text="5:00" />
                                     <Label layoutX="26.0" layoutY="436.0" text="6:00" />
+                                    <Button layoutX="572.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#onUndoButtonClicked" text="Undo" />
                                             </children></AnchorPane>
                                     </content>
                                 </Tab>
@@ -146,6 +147,7 @@
                                     <Label layoutX="26.0" layoutY="356.0" text="4:00" />
                                     <Label layoutX="26.0" layoutY="396.0" text="5:00" />
                                     <Label layoutX="26.0" layoutY="436.0" text="6:00" />
+                                    <Button layoutX="572.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#onUndoButtonClicked" text="Undo" />
                                  </children></AnchorPane>
                                     </content>
                                 </Tab>
@@ -157,6 +159,7 @@
                                     <VBox fx:id="courseWishListVBox" layoutX="316.0" layoutY="40.0" onMouseClicked="#onCourseWishlistClick" prefHeight="500.0" prefWidth="280.0" />
                                     <Label fx:id="completedCoursesLabel" layoutX="30.0" layoutY="22.0" onMouseClicked="#onCompletedCoursesClick" text="Completed courses" />
                                     <Label fx:id="courseWishlistLabel" layoutX="316.0" layoutY="22.0" onMouseClicked="#onCourseWishlistClick" text="Course wishlist" />
+                                    <Button layoutX="572.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#onUndoButtonClicked" text="Undo" />
                                  </children></AnchorPane>
                                     </content>
                                 </Tab>

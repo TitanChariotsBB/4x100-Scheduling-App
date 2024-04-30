@@ -397,6 +397,12 @@ public class FXMLController {
         completedCoursesVBox.setBorder(null);
     }
 
+    @FXML
+    public void onUndoButtonClicked() {
+        // calls the log helper undo method
+        LogHelper.undoPreviousAction();
+    }
+
     public void onTabSwitch() {
         if (currentTab.isEmpty()) return;
         if (currentTab.equals(tabPane.getSelectionModel().getSelectedItem().getText())) return;
