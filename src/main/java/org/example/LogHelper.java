@@ -25,7 +25,9 @@ public class LogHelper {
 
     public static void logUserAction(UserAction ua){
         logger.info(ua);
-        actionStack.push(ua);
+        if(ua.getaType() != actionType.UNDO) {
+            actionStack.push(ua);
+        }
     }
 
     public static void logProgressMessage(String s){

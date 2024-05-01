@@ -401,7 +401,7 @@ public class FXMLController {
     public void onUndoButtonClicked() {
         // calls the log helper undo method
         LogHelper.undo();
-
+        LogHelper.logUserAction(new UserAction(null, null, null, UserAction.actionType.UNDO));
     }
 
     public void onTabSwitch() {

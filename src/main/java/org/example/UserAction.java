@@ -45,7 +45,7 @@ public class UserAction {
                 result = "Searched for " + search.getCurrentQuery();
                 break;
             case actionType.UNDO:
-                result = "UNDO";
+                result = "UNDO last course added or removed";
                 break;
             case actionType.CLEAR_FILTERS:
                 result = "Cleared Filters";

@@ -4,7 +4,7 @@
         <Console name="Console">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level: %m%n" />
         </Console>
-        <RollingFile name="fileAppender" filePattern="Logs\session_%i-${date:dd-MM-yyyy}.log.txt">
+        <RollingFile name="fileAppender" filePattern="Logs\${date:MM-dd-yyyy}-session_%i.log.txt">
             <OnStartupTriggeringPolicy />
             <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level: %m%n" />
         </RollingFile>
