@@ -34,6 +34,10 @@ public class LogHelper {
     }
 
     public static void undo(){
+        if(actionStack.empty()){
+            return;
+        }
+
         UserAction action;
         actionType type;
         do {
