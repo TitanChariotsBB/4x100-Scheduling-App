@@ -320,7 +320,9 @@ public class FXMLController {
         if (result.isPresent() && (result.get() == ButtonType.OK)) {
             Main.past.addCourse(missing);
             semester.addCourse(toAdd);
+            displaySchedule(completedCourses, completedCoursesVBox);
         }
+
     }
 
     @FXML

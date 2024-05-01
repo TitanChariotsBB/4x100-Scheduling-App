@@ -15,14 +15,14 @@ public class Course {
     private ArrayList<String> prerequisites;
 
     public Course(String code) { //create a course with only a code
-        this.name = null;
+        this.name = "";
         this.code = code;
         isFall = null;
         meetingTimes = null;
-        description = null;
-        location = null;
-        professor = null;
-        credits = null;
+        description = "";
+        location = "";
+        professor = "";
+        credits = 0;
         prerequisites = null;
     }
 
