@@ -1,14 +1,14 @@
 package org.example;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+import org.example.UserAction.actionType;
 
-import java.time.LocalDateTime;
 import java.util.Stack;
 
 public class LogHelper {
     protected static Logger logger;
     private static Stack<UserAction> actionStack = new Stack<>();
+    private static Stack<UserAction> undoStack = new Stack<>();
 
     public static void initLogger(){
         System.setProperty("log4j.configurationFile","src\\main\\resources\\org\\example\\log4jProperties.xml");
@@ -24,9 +24,52 @@ public class LogHelper {
 
     public static void logUserAction(UserAction ua){
         logger.info(ua);
+        if(ua.getaType() != actionType.UNDO) {
+            actionStack.push(ua);
+        }
     }
 
-    public static void logProgressMessage(String s){
+    public static void logMessage(String s){
         logger.info(s);
+    }
+
+    public static void undo(){
+        if(actionStack.empty()){
+            return;
+        }
+
+        UserAction action;
+        actionType type;
+        do {
+            action = actionStack.pop();
+            CourseList list = action.getAffectedList();
+            Course c = action.getAffectedCourse();
+            type = action.getaType();
+            switch (type) {
+                case actionType.ADD_COURSE:
+                    try {
+                        list.removeCourse(c);
+                    } catch (Exception e) {
+                        logError("Could not undo adding course: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    break;
+                case actionType.REMOVE_COURSE:
+                    list.addCourse(c);
+                    break;
+                case actionType.ADD_IN_CONFLICT:
+                    try {
+                        list.removeCourse(c);
+                    } catch (Exception e) {
+                        logError("Could not undo adding course: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    UserAction associatedRemove = actionStack.pop();
+                    if(associatedRemove.getaType() != actionType.REMOVE_IN_CONFLICT){logError("conflict add and remove actions were not connected as expected.");}
+                    CourseList rList = associatedRemove.getAffectedList();
+                    Course rCourse = associatedRemove.getAffectedCourse();
+                    rList.addCourse(rCourse);
+            }
+        }while(type != actionType.ADD_COURSE && type != actionType.REMOVE_COURSE && type != actionType.ADD_IN_CONFLICT);
     }
 }
