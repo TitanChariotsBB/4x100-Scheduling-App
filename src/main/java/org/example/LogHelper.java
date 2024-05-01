@@ -3,7 +3,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.example.UserAction.actionType;
 
-import java.time.LocalDateTime;
 import java.util.Stack;
 
 public class LogHelper {
@@ -30,17 +29,19 @@ public class LogHelper {
         }
     }
 
-    public static void logProgressMessage(String s){
+    public static void logMessage(String s){
         logger.info(s);
     }
 
     public static void undo(){
         UserAction action;
+        actionType type;
         do {
             action = actionStack.pop();
             CourseList list = action.getAffectedList();
             Course c = action.getAffectedCourse();
-            switch (action.getaType()) {
+            type = action.getaType();
+            switch (type) {
                 case actionType.ADD_COURSE:
                     try {
                         list.removeCourse(c);
@@ -52,7 +53,19 @@ public class LogHelper {
                 case actionType.REMOVE_COURSE:
                     list.addCourse(c);
                     break;
+                case actionType.ADD_IN_CONFLICT:
+                    try {
+                        list.removeCourse(c);
+                    } catch (Exception e) {
+                        logError("Could not undo adding course: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                    UserAction associatedRemove = actionStack.pop();
+                    if(associatedRemove.getaType() != actionType.REMOVE_IN_CONFLICT){logError("conflict add and remove actions were not connected as expected.");}
+                    CourseList rList = associatedRemove.getAffectedList();
+                    Course rCourse = associatedRemove.getAffectedCourse();
+                    rList.addCourse(rCourse);
             }
-        }while(action.getaType() != actionType.ADD_COURSE && action.getaType() != actionType.REMOVE_COURSE);
+        }while(type != actionType.ADD_COURSE && type != actionType.REMOVE_COURSE && type != actionType.ADD_IN_CONFLICT);
     }
 }

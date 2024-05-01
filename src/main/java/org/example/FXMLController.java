@@ -236,11 +236,9 @@ public class FXMLController {
         switch (currentTab) {
             case "Fall Semester":
                 addCourseToSemesterSchedule(c, fallSemester, fallSemesterPane);
-                LogHelper.logUserAction(new UserAction(fallSemester,c,null, UserAction.actionType.ADD_COURSE));
                 break;
             case "Spring Semester":
                 addCourseToSemesterSchedule(c, springSemester, springSemesterPane);
-                LogHelper.logUserAction(new UserAction(springSemester,c,null, UserAction.actionType.ADD_COURSE));
                 break;
             case "College Career":
                 if (pastSelected) {
@@ -260,13 +258,18 @@ public class FXMLController {
 
     private void addCourseToSemesterSchedule(Course toAdd, CourseList semester, Pane semesterPane) {
         Course existingCourse = semester.addCourse(toAdd);
+
         if (semester.getTotalCredits() > 21) {
+            LogHelper.logMessage("attempted to add more than 21 credits. Course not added.");
             launchCreditWarning();
             try { semester.removeCourse(toAdd); } catch (Exception e) {}
-        } else if (existingCourse != null) {
+        } else if (existingCourse != null) {//addCourse returns the existing course if there is a conflict
             launchConflictDialog(toAdd, existingCourse, semester);
         } else if (semester.getTotalCredits() > 18) {
             launchCreditDialog(toAdd, semester);
+        }
+        else{
+            LogHelper.logUserAction(new UserAction(semester,toAdd,null, UserAction.actionType.ADD_COURSE));
         }
         displayCalendarSchedule(semester, semesterPane);
     }
@@ -281,6 +284,9 @@ public class FXMLController {
             try {
                 semester.removeCourse(toAdd);
             } catch (Exception e) {}
+        }
+        else{
+            LogHelper.logUserAction(new UserAction(semester,toAdd,null, UserAction.actionType.ADD_COURSE));
         }
     }
 
@@ -306,6 +312,11 @@ public class FXMLController {
                 return;
             }
             semester.addCourse(conflictingCourse);
+            LogHelper.logUserAction(new UserAction(semester,existingCourse,null, UserAction.actionType.REMOVE_IN_CONFLICT));
+            LogHelper.logUserAction(new UserAction(semester,conflictingCourse,null, UserAction.actionType.ADD_IN_CONFLICT));
+        }
+        else{
+            LogHelper.logMessage("Conflicting course chosen. User kept original course.");
         }
     }
 
@@ -399,8 +410,21 @@ public class FXMLController {
 
     @FXML
     public void onUndoButtonClicked() {
-        // calls the log helper undo method
         LogHelper.undo();
+        //update the display
+        switch(currentTab){
+            case "Fall Semester":
+                displayCalendarSchedule(fallSemester, fallSemesterPane);
+                break;
+            case "Spring Semester":
+                displayCalendarSchedule(springSemester, springSemesterPane);
+                break;
+            case "College Career":
+                displaySchedule(courseWishList, courseWishListVBox);
+                displaySchedule(completedCourses, completedCoursesVBox);
+                break;
+        }
+        updateTotalCredits();
         LogHelper.logUserAction(new UserAction(null, null, null, UserAction.actionType.UNDO));
     }
 
