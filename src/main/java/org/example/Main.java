@@ -10,9 +10,10 @@ public class Main {
     public static CourseList future;
 
     public static void run() {
+        CourseList catalog = FileHandler.loadCatalog();
+
         LogHelper.initLogger();
 
-        CourseList catalog = FileHandler.loadCatalog();
         LogHelper.logProgressMessage("Catalog loading complete");
 
         search = new Search(catalog);

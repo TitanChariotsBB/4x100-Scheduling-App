@@ -267,6 +267,8 @@ public class FXMLController {
             launchConflictDialog(toAdd, existingCourse, semester);
         } else if (semester.getTotalCredits() > 18) {
             launchCreditDialog(toAdd, semester);
+        } else if (toAdd.unmetPrereq() != null) {
+            launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
         }
         displayCalendarSchedule(semester, semesterPane);
     }
@@ -306,6 +308,18 @@ public class FXMLController {
                 return;
             }
             semester.addCourse(conflictingCourse);
+        }
+    }
+
+    private void launchPrereqsDialog(Course toAdd, Course missing, CourseList semester) {
+        Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conflictAlert.setTitle("Unmet Prerequisites!");
+        conflictAlert.setContentText("Do you want to add " + missing.getCode() + " to past courses?");
+
+        Optional<ButtonType> result = conflictAlert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.OK)) {
+            Main.past.addCourse(missing);
+            semester.addCourse(toAdd);
         }
     }
 

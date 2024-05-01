@@ -14,6 +14,18 @@ public class Course {
     private Integer credits;
     private ArrayList<String> prerequisites;
 
+    public Course(String code) { //create a course with only a code
+        this.name = null;
+        this.code = code;
+        isFall = null;
+        meetingTimes = null;
+        description = null;
+        location = null;
+        professor = null;
+        credits = null;
+        prerequisites = null;
+    }
+
     public Course(String name, String code, LocalDateTime[][] meetingTimes, Boolean isFall,
                   String description, String location, String professor,
                   Integer credits, ArrayList<String> prerequisites) {
@@ -114,6 +126,39 @@ public class Course {
         }
 
         return day;
+    }
+
+    public ArrayList<String> getPrerequisites() {
+        //ArrayList<Course> prereqs = new ArrayList<>();
+        return prerequisites;
+    }
+
+    public Course unmetPrereq() {
+        Boolean contains = false;
+        Course unmet;
+        if (prerequisites != null) {
+            for (String prereq : prerequisites) {
+                for (Course c : Main.past.getCourses()) {
+                    if (prereq.equalsIgnoreCase(c.getCode())) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains) {
+                    unmet = new Course(prereq);
+                    return unmet;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> pastCourses() {
+        ArrayList<String> out = new ArrayList<>();
+        for (int i = 0; i < Main.past.getCourses().size(); i++) {
+            out.add(Main.past.getCourses().get(i).getCode());
+        }
+        return out;
     }
 
     public String getMeetingTimeStringAlex() {
