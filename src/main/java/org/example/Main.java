@@ -13,14 +13,14 @@ public class Main {
         LogHelper.initLogger();
 
         CourseList catalog = FileHandler.loadCatalog();
-        LogHelper.logProgressMessage("Catalog loading complete");
+        LogHelper.logMessage("Catalog loading complete");
 
         search = new Search(catalog);
-        LogHelper.logProgressMessage("Search initialization complete");
+        LogHelper.logMessage("Search initialization complete");
 
         try {
             autoLoad();
-            LogHelper.logProgressMessage("Previously autosaved courseLists were successfully loaded");
+            LogHelper.logMessage("Previously autosaved courseLists were successfully loaded");
         }catch(FileNotFoundException fnfe){
             LogHelper.logError("One or more autosaved courseLists could not be found");
             springSemester = new CourseList();
@@ -30,7 +30,7 @@ public class Main {
         }
         MainApp.launchGUI();
         autoSave();
-        LogHelper.logProgressMessage("autoSave complete. Program terminating.");
+        LogHelper.logMessage("autoSave complete. Program terminating.");
     }
 
     public static void main(String[] args) {
