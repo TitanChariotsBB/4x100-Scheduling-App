@@ -36,6 +36,14 @@ public class Search {
         /*if (results.isEmpty()) {
             populateResults();
         }*/
+//        ArrayList<Course> sortedResults = new ArrayList<>();
+//        for(Course c: results) {
+//            if(Main.major.getRequirements().contains(c.getCode())) {
+//                sortedResults.add(0,c);
+//            } else {
+//                sortedResults.add(c);
+//            }
+//        }
         return results;
     }
 

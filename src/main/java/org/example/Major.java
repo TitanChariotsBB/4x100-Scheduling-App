@@ -10,14 +10,16 @@ import java.util.Scanner;
 
 public class Major {
     private String major;
-    private int year;
     private ArrayList<String> requirements;
 
-    public Major(String major, int year) {
+    public Major(String major) {
         this.major = major;
-        this.year = year;
         requirements = new ArrayList<>();
         loadRequirements();
+    }
+
+    public ArrayList<String> getRequirements() {
+        return requirements;
     }
 
     public String requirementsToString() {
@@ -28,24 +30,22 @@ public class Major {
         return out;
     }
     private void loadRequirements() {
+
         String text = "";
-        if (year == 2023) {
-            try {
-                String l = major.replace(" ","");
-                String s = "https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/" + l + "_" + (year+4) + ".pdf";
-                URL url = new URL(s);
-                PDDocument document = PDDocument.load(url.openStream());
-
-                PDFTextStripper pdfStripper = new PDFTextStripper();
-                pdfStripper.setStartPage(1);
-                pdfStripper.setEndPage(1);
-                text = pdfStripper.getText(document);
-
-                document.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            String l = major.replace(" ","");
+            String s = "https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/" + l + "_2027.pdf";
+            URL url = new URL(s);
+            PDDocument document = PDDocument.load(url.openStream());
+            PDFTextStripper pdfStripper = new PDFTextStripper();
+            pdfStripper.setStartPage(1);
+            pdfStripper.setEndPage(1);
+            text = pdfStripper.getText(document);
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
 
         Scanner scnr = new Scanner(text);
         while(scnr.hasNext()) {
@@ -67,10 +67,10 @@ public class Major {
         }
     }
 
-    public static void main(String[] args) {
-        Major cs = new Major("Computer Science BS", 2023);
-        System.out.println(cs.requirementsToString());
-
-    }
+//    public static void main(String[] args) {
+//        Major cs = new Major("Computer Science BS");
+//        System.out.println(cs.requirementsToString());
+//
+//    }
 
 }
