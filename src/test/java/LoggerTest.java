@@ -44,7 +44,7 @@ public class LoggerTest {
         CourseList cl = new CourseList();
         Course c = new Course("Computer Programming 7","Comp505",null,true,"A cool computer class for cool computer people","STEM056","Dr. Hutchins",6,null);
 
-        UserAction ua = new UserAction(cl,c,null,UserAction.actionType.ADD_COURSE);
+        UserAction ua = new UserAction(cl,c,UserAction.actionType.ADD_COURSE);
         LogHelper.logUserAction(ua);
     }
 }

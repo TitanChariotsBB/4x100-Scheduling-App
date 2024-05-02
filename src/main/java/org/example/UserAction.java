@@ -7,10 +7,10 @@ public class UserAction {
     public enum actionType {ADD_COURSE, REMOVE_COURSE, SEARCH, ADD_FILTER, CLEAR_FILTERS, ADD_IN_CONFLICT, REMOVE_IN_CONFLICT, UNDO}
     private actionType aType;
 
-    public UserAction(CourseList affectedList, Course affectedCourse, Search search, actionType aType){
+    public UserAction(CourseList affectedList, Course affectedCourse, actionType aType){
         this.affectedList = affectedList;
         this.affectedCourse = affectedCourse;
-        this.search = search;
+        this.search = Main.search;
         this.aType = aType;
     }
 
