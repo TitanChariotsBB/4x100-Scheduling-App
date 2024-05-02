@@ -49,12 +49,12 @@ public class Course {
         for (int i = 0; i < 5; i++) {
             if (meetingTimes[i] == null || toCompare.meetingTimes[i] == null) continue;
 
-            aStart = meetingTimes[i][0].getHour() + (meetingTimes[i][0].getMinute() / 30.0);
-            aEnd = meetingTimes[i][1].getHour() + (meetingTimes[i][1].getMinute() / 30.0);
+            aStart = meetingTimes[i][0].getHour() + (meetingTimes[i][0].getMinute() / 60.0);
+            aEnd = meetingTimes[i][1].getHour() + (meetingTimes[i][1].getMinute() / 60.0);
             bStart = toCompare.meetingTimes[i][0].getHour() +
-                    (toCompare.meetingTimes[i][0].getMinute() / 30.0);
+                    (toCompare.meetingTimes[i][0].getMinute() / 60.0);
             bEnd = toCompare.meetingTimes[i][1].getHour() +
-                    (toCompare.meetingTimes[i][1].getMinute() / 30.0);
+                    (toCompare.meetingTimes[i][1].getMinute() / 60.0);
 
             // If the classes start at the same time
             if (aStart == bStart) return true;
