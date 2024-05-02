@@ -344,6 +344,14 @@ public class FXMLController {
         LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
     }
 
+    @FXML
+    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
+        cl.removeCourse(c);
+        displaySchedule(cl, vb);
+        updateTotalCredits();
+        LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
+    }
+
     public void updateTotalCredits() {
         totalCreditsFall.setText("Total Credits: " + fallSemester.getTotalCredits());
         totalCreditsSpring.setText("Total Credits: " + springSemester.getTotalCredits());
