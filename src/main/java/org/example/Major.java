@@ -48,6 +48,15 @@ public class Major {
 
 
         Scanner scnr = new Scanner(text);
+        while(scnr.hasNext()){
+            if(scnr.nextLine().startsWith("General Education")) {
+                break;
+            }
+        }
+
+        //System.out.println(text);
+
+
         while(scnr.hasNext()) {
             String s = scnr.next();
             if(s.length() == 4) {
@@ -67,9 +76,60 @@ public class Major {
         }
     }
 
+    public void loadRequirements(String n) {
+        String text = "";
+        try {
+            String l = major.replace(" ","");
+            String s = "https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/" + l + "_2027.pdf";
+            URL url = new URL(s);
+            PDDocument document = PDDocument.load(url.openStream());
+            PDFTextStripper pdfStripper = new PDFTextStripper();
+            pdfStripper.setStartPage(1);
+            pdfStripper.setEndPage(1);
+            text = pdfStripper.getText(document);
+            document.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Scanner scnr = new Scanner(text);
+        while(scnr.hasNext()){
+            if(scnr.nextLine().startsWith("General Education")) {
+                break;
+            }
+        }
+        while(scnr.hasNextLine()) {
+            String line = scnr.nextLine();
+            if(hasCourse(line)) {
+
+            }
+        }
+    }
+
+    public Boolean hasCourse(String s) {
+        Scanner sc = new Scanner(s);
+        while(sc.hasNext()) {
+            if(s.length() == 4) {
+                Boolean isCapital = true;
+                for (int i = 0; i < 4; i++) {
+                    if(!Character.isUpperCase(s.charAt(i))) {
+                        isCapital = false;
+                        break;
+                    }
+                }
+                if(isCapital) {
+                    String s2 = sc.next();
+                    if(s2.matches("[0-9]+"))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
 //    public static void main(String[] args) {
 //        Major cs = new Major("Computer Science BS");
-//        System.out.println(cs.requirementsToString());
+//        //System.out.println(cs.requirementsToString());
 //
 //    }
 
