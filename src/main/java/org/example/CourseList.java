@@ -31,13 +31,15 @@ public class CourseList {
     }
 
     @Override
-    public String toString() {
-        /*StringBuilder sb = new StringBuilder();
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
         for (Course course : courses) {
             sb.append(course.getName() + " ");
         }
         return sb.toString();
-         */
+    }
+
+    public String toLogString() {
         return "list of " + courses.size() + " courses stored at: " + super.toString();
     }
 }
