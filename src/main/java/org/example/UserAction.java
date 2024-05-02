@@ -37,11 +37,11 @@ public class UserAction {
         switch(aType) {
             case actionType.ADD_IN_CONFLICT:
             case actionType.ADD_COURSE:
-                result = "Added " + affectedCourse.getName() + " to " + affectedList;
+                result = "Added " + affectedCourse.getName() + " to " + affectedList.toLogString();
                 break;
             case actionType.REMOVE_IN_CONFLICT:
             case actionType.REMOVE_COURSE:
-                result = "Removed " + affectedCourse.getName() + " from " + affectedList;
+                result = "Removed " + affectedCourse.getName() + " from " + affectedList.toLogString();
                 break;
             case actionType.SEARCH:
                 result = "Searched for " + search.getCurrentQuery();

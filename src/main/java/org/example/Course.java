@@ -14,6 +14,18 @@ public class Course {
     private Integer credits;
     private ArrayList<String> prerequisites;
 
+    public Course(String code) { //create a course with only a code
+        this.name = "";
+        this.code = code;
+        isFall = null;
+        meetingTimes = null;
+        description = "";
+        location = "";
+        professor = "";
+        credits = 0;
+        prerequisites = null;
+    }
+
     public Course(String name, String code, LocalDateTime[][] meetingTimes, Boolean isFall,
                   String description, String location, String professor,
                   Integer credits, ArrayList<String> prerequisites) {
@@ -37,12 +49,12 @@ public class Course {
         for (int i = 0; i < 5; i++) {
             if (meetingTimes[i] == null || toCompare.meetingTimes[i] == null) continue;
 
-            aStart = meetingTimes[i][0].getHour() + (meetingTimes[i][0].getMinute() / 30.0);
-            aEnd = meetingTimes[i][1].getHour() + (meetingTimes[i][1].getMinute() / 30.0);
+            aStart = meetingTimes[i][0].getHour() + (meetingTimes[i][0].getMinute() / 60.0);
+            aEnd = meetingTimes[i][1].getHour() + (meetingTimes[i][1].getMinute() / 60.0);
             bStart = toCompare.meetingTimes[i][0].getHour() +
-                    (toCompare.meetingTimes[i][0].getMinute() / 30.0);
+                    (toCompare.meetingTimes[i][0].getMinute() / 60.0);
             bEnd = toCompare.meetingTimes[i][1].getHour() +
-                    (toCompare.meetingTimes[i][1].getMinute() / 30.0);
+                    (toCompare.meetingTimes[i][1].getMinute() / 60.0);
 
             // If the classes start at the same time
             if (aStart == bStart) return true;
@@ -128,6 +140,39 @@ public class Course {
         }
 
         return day;
+    }
+
+    public ArrayList<String> getPrerequisites() {
+        //ArrayList<Course> prereqs = new ArrayList<>();
+        return prerequisites;
+    }
+
+    public Course unmetPrereq() {
+        Boolean contains = false;
+        Course unmet;
+        if (prerequisites != null) {
+            for (String prereq : prerequisites) {
+                for (Course c : Main.past.getCourses()) {
+                    if (prereq.equalsIgnoreCase(c.getCode())) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains) {
+                    unmet = new Course(prereq);
+                    return unmet;
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> pastCourses() {
+        ArrayList<String> out = new ArrayList<>();
+        for (int i = 0; i < Main.past.getCourses().size(); i++) {
+            out.add(Main.past.getCourses().get(i).getCode());
+        }
+        return out;
     }
 
     public String getMeetingTimeStringAlex() {

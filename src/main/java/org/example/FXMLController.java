@@ -277,6 +277,8 @@ public class FXMLController {
             launchConflictDialog(toAdd, existingCourse, semester);
         } else if (semester.getTotalCredits() > 18) {
             launchCreditDialog(toAdd, semester);
+        } else if (toAdd.unmetPrereq() != null) {
+            launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
         }
         else{
             LogHelper.logUserAction(new UserAction(semester,toAdd,null, UserAction.actionType.ADD_COURSE));
@@ -330,10 +332,32 @@ public class FXMLController {
         }
     }
 
+    private void launchPrereqsDialog(Course toAdd, Course missing, CourseList semester) {
+        Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        conflictAlert.setTitle("Unmet Prerequisites!");
+        conflictAlert.setContentText("Do you want to add " + missing.getCode() + " to past courses?");
+
+        Optional<ButtonType> result = conflictAlert.showAndWait();
+        if (result.isPresent() && (result.get() == ButtonType.OK)) {
+            Main.past.addCourse(missing);
+            semester.addCourse(toAdd);
+            displaySchedule(completedCourses, completedCoursesVBox);
+        }
+
+    }
+
     @FXML
     public void onRemoveButtonClicked(Course c, CourseList cl, Pane p) throws Exception {
         cl.removeCourse(c);
         displayCalendarSchedule(cl, p);
+        updateTotalCredits();
+        LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
+    }
+
+    @FXML
+    public void onRemoveButtonClicked(Course c, CourseList cl, VBox vb) throws Exception {
+        cl.removeCourse(c);
+        displaySchedule(cl, vb);
         updateTotalCredits();
         LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
     }

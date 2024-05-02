@@ -17,6 +17,7 @@ public class Main {
         CourseList catalog = FileHandler.loadCatalog();
         LogHelper.logMessage("Catalog loading complete");
 
+
         search = new Search(catalog);
         LogHelper.logMessage("Search initialization complete");
 
