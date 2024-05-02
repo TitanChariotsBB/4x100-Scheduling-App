@@ -1,7 +1,7 @@
 package org.example;
 
 public class ControllerHelper {
-    public String[] dptOptions = {"ACCT", "ART", "ASTR", "BIOL", "CHEM", "COMM", "COMP", "DESI",
+    public String[] dptOptions = {"Any", "ACCT", "ART", "ASTR", "BIOL", "CHEM", "COMM", "COMP", "DESI",
             "ECON", "EDUC", "ELEE", "ENGL", "ENGR", "ENTR", "EXER", "FNCE", "FREN", "GEOL",
             "GREK", "HEBR", "HIST", "HUMA", "INBS", "LATN", "MARK", "MATH", "MECE", "MNGT",
             "MUSI", "NURS", "PHIL", "PHYE", "PHYS", "POLS", "PSYC", "RELI", "ROBO", "SCIC",

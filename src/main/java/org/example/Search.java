@@ -15,7 +15,8 @@ public class Search {
         COURSE_NAME,
         PROFESSOR,
         TIME,
-        DATE
+        DATE,
+        TIME_RANGE
     }
     private ArrayList<Course> unfilteredResults;
     private ArrayList<Course> results;
@@ -106,6 +107,16 @@ public class Search {
             return;
         }
         else if (sb.equals(SearchBy.COURSE_CODE)) { // If filtering by course_code
+            if (filter.equals("Any ")) {
+                return;
+            }
+            else if (filter.contains("Any")) {
+                System.out.println(filter);
+                String number = filter.split(" ")[1];
+                System.out.println(number);
+                results.removeIf(result -> !result.getCode().contains(number));
+                return;
+            }
             results.removeIf(result -> !result.getCode().contains(filter));
 
         }
@@ -176,6 +187,28 @@ public class Search {
 //                    }
 //                }
             }*/
+        }
+        else if (sb.equals(SearchBy.TIME_RANGE)) {
+            if (filter.equals("Any")) {
+                return;
+            }
+
+            String[] hourMinuteAMPM = filter.split("[: ]");
+            int hour = Integer.parseInt(hourMinuteAMPM[0]);
+            int minute = Integer.parseInt(hourMinuteAMPM[1]);
+            String AMPM = hourMinuteAMPM[2];
+
+            if (AMPM.equals("PM") && hour != 12) {
+                hour+=12;
+            }
+
+            hour*=100;
+            hour+=minute;
+
+            int militaryTime = hour;
+
+            results.removeIf(result -> result.getMeetingTimes() == null ||
+                    result.getMeetingTimeRangeStringAlex() < militaryTime);
         }
     }
 

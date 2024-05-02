@@ -146,6 +146,25 @@ public class Course {
         return time;
     }
 
+    public int getMeetingTimeRangeStringAlex() {
+        String time;
+        int hour = 0;
+        int minute = 0;
+
+        if (meetingTimes[0] != null) {
+            hour = meetingTimes[0][0].getHour();
+            minute = meetingTimes[0][0].getMinute();
+        }
+        if (meetingTimes[1] != null) {
+            hour = meetingTimes[1][0].getHour();
+            minute = meetingTimes[1][0].getMinute();
+        }
+
+        hour*=100;
+        hour+=minute;
+        return hour;
+    }
+
     public boolean getIsFall() {
         return isFall;
     }
