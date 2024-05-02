@@ -10,7 +10,7 @@ public class UserAction {
     public UserAction(CourseList affectedList, Course affectedCourse, Search search, actionType aType){
         this.affectedList = affectedList;
         this.affectedCourse = affectedCourse;
-        this.search = search;
+        this.search = Main.search;
         this.aType = aType;
     }
 
