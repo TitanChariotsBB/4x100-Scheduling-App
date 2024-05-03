@@ -332,14 +332,16 @@ public class FXMLController {
         }
     }
 
-    private void launchPrereqsDialog(Course toAdd, Course missing, CourseList semester) {
+    private void launchPrereqsDialog(Course toAdd, ArrayList<Course> missing, CourseList semester) {
         Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
         conflictAlert.setTitle("Unmet Prerequisites!");
-        conflictAlert.setContentText("Do you want to add " + missing.getCode() + " to past courses?");
+        conflictAlert.setContentText("Do you want to add " + missing.size() + " unmet prerequisites to past courses?");
 
         Optional<ButtonType> result = conflictAlert.showAndWait();
         if (result.isPresent() && (result.get() == ButtonType.OK)) {
-            Main.past.addCourse(missing);
+            for(Course c : missing) {
+                Main.past.addCourse(c);
+            }
             semester.addCourse(toAdd);
             displaySchedule(completedCourses, completedCoursesVBox);
         }

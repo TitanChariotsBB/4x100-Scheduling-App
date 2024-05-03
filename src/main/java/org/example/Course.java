@@ -147,20 +147,26 @@ public class Course {
         return prerequisites;
     }
 
-    public Course unmetPrereq() {
-        Boolean contains = false;
+    public ArrayList<Course> unmetPrereq() { //checks if classes have unmet prereqs
+        int unmetCount = prerequisites.size();
+        ArrayList<String> newPre = new ArrayList<>();
+        newPre.addAll(prerequisites);
         Course unmet;
         if (prerequisites != null) {
-            for (String prereq : prerequisites) {
-                for (Course c : Main.past.getCourses()) {
-                    if (prereq.equalsIgnoreCase(c.getCode())) {
-                        contains = true;
+            for (String prereq : prerequisites) { //loop through all prereqs
+                for (Course c : Main.past.getCourses()) { //loop through past courses
+                    if (prereq.equalsIgnoreCase(c.getCode())) { //if past contains prerequisite, lower count
+                        unmetCount--;
+                        newPre.remove(c.getCode());
+                        System.out.println("prereq " + c.getCode() + " met");
                         break;
                     }
                 }
-                if (!contains) {
-                    unmet = new Course(prereq);
-                    return unmet;
+            }
+            if (unmetCount > 0) {
+                ArrayList<Course> out = new ArrayList<>();
+                for (int i = 0; i < unmetCount; i++) {
+                    out.add(new Course(newPre.get(i)));
                 }
             }
         }
