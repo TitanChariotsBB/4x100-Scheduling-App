@@ -207,6 +207,12 @@ public class Search {
 
             int militaryTime = hour;
 
+            //System.out.println("Filter time: " + militaryTime);
+
+            /*for (Course result : results) {
+                System.out.println("Course list time: " + result.getMeetingTimeRangeStringAlex());
+            }*/
+
             results.removeIf(result -> result.getMeetingTimes() == null ||
                     result.getMeetingTimeRangeStringAlex() < militaryTime);
         }
@@ -274,6 +280,8 @@ public class Search {
 
     public void removeAllFilters() {
         activeFilters.clear();
+        results.clear();
+        populateResults();
     } // Clears all filters
 
     public String toString() { // For testing purposes

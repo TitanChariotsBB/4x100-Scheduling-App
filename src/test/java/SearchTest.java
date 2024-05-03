@@ -97,5 +97,28 @@ public class SearchTest {
         s.fuzzySearch("foundations", cs);
         System.out.println("Why do they exist, Matt?\n");
         s.fuzzySearch("zalloon", cs);
+
+        s.addFilter(Search.SearchBy.TIME_RANGE, "1:00 PM");
+        for (int i = 0; i < s.activeFilters.size(); i++) {
+            System.out.println("Yo: " + s.activeFilters.get(i).filter);
+        }
+        s.removeAllFilters();
+        assertEquals(3, s.getResults().size());
+
+        s.addFilter(Search.SearchBy.TIME_RANGE, "1:00 PM");
+        assertEquals(1, s.getResults().size());
+        System.out.println(s);
+        s.removeAllFilters();
+
+        assertEquals(3, s.getResults().size());
+
+        s.addFilter(Search.SearchBy.TIME_RANGE, "10:00 AM");
+        assertEquals(2, s.getResults().size());
+        System.out.println(s);
+        s.removeAllFilters();
+
+
+        s.addFilter(Search.SearchBy.TIME_RANGE, "12:00 PM");
+        assertEquals(2, s.getResults().size());
     }
 }
