@@ -152,6 +152,14 @@ public class FXMLController {
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
+        if (courses.isEmpty()) {
+            searchResults.getChildren().clear();
+            Label noMatch = new Label("No matching courses found.");
+            noMatch.setPadding(new Insets(5));
+            searchResults.getChildren().add(noMatch);
+            return;
+        }
+
         ArrayList<HBox> topCourses = new ArrayList<>();
         int i = 0;
         int max = 60;
