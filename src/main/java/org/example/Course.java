@@ -179,6 +179,7 @@ public class Course {
         String time;
         int hour = 0;
         int minute = 0;
+        String minuteStr;
 
         if (meetingTimes[0] != null) {
             hour = meetingTimes[0][0].getHour();
@@ -189,8 +190,9 @@ public class Course {
             minute = meetingTimes[1][0].getMinute();
         }
         if (hour < 12) {
-            time = hour + ":" + minute;
-            if (minute == 0) time += "0";
+            if (minute < 10) minuteStr = "0" + minute;
+            else minuteStr = "" + minute;
+            time = hour + ":" + minuteStr;
             time += " AM";
         } else if (hour == 12) {
             time = hour + ":" + minute;
