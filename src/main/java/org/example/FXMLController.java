@@ -152,16 +152,6 @@ public class FXMLController {
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
-//        ArrayList<Course> sortedCourses = new ArrayList<>();
-//        for (Course c : courses) {
-//            if(Main.major.getRequirements().contains(c.getCode())) {
-//                sortedCourses.add(0, c);
-//            } else {
-//                sortedCourses.add(c);
-//            }
-//        }
-
-
         ArrayList<HBox> topCourses = new ArrayList<>();
         int i = 0;
         int max = 60;
