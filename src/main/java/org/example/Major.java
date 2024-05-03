@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class Major {
     private String major;
     private ArrayList<String> requirements;
-    private enum majors {
+    private enum majors { //most gcc majors
         ACCOUNTING,
         FINANCE,
         PHILOSOPHY,
@@ -77,25 +77,25 @@ public class Major {
         }
         return out;
     }
-    private void loadRequirements() {
+    private void loadRequirements() { //visits the correct url for the major and returns all courses on status sheet
 
         String text = "";
         try {
             String l = major.replace(" ","");
-            String s = "https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/" + l + "_2027.pdf";
+            String s = "https://my.gcc.edu/docs/registrar/programguides/statussheets/2023/" + l + "_2027.pdf"; //go to major status sheet pdf
             URL url = new URL(s);
             PDDocument document = PDDocument.load(url.openStream());
             PDFTextStripper pdfStripper = new PDFTextStripper();
-            pdfStripper.setStartPage(1);
+            pdfStripper.setStartPage(1); //only the first page
             pdfStripper.setEndPage(1);
-            text = pdfStripper.getText(document);
+            text = pdfStripper.getText(document); //get all text into a string
             document.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
-        Scanner scnr = new Scanner(text);
+        Scanner scnr = new Scanner(text); //skip the top couple lines
         while(scnr.hasNext()){
             if(scnr.nextLine().startsWith("General Education")) {
                 break;
@@ -105,26 +105,26 @@ public class Major {
         //System.out.println(text);
 
 
-        while(scnr.hasNext()) {
+        while(scnr.hasNext()) { //go through each word in the string
             String s = scnr.next();
             if(s.length() == 4) {
                 Boolean isCapital = true;
                 for (int i = 0; i < 4; i++) {
-                    if(!Character.isUpperCase(s.charAt(i))) {
+                    if(!Character.isUpperCase(s.charAt(i))) { //if it is a 4 letters and they are all uppercase
                         isCapital = false;
                         break;
                     }
                 }
                 if(isCapital) {
                     String s2 = scnr.next();
-                    if(s2.matches("[0-9]+"))
-                    requirements.add(s + s2);
+                    if(s2.matches("[0-9]+")) //if the next thing in the text is an int
+                    requirements.add(s + s2); //add the 4 letters and integer to the list of requirements
                 }
             }
         }
     }
 
-    public void loadRequirements(String n) {
+    public void loadRequirements(String n) { //same as above but with line reading
         String text = "";
         try {
             String l = major.replace(" ","");
@@ -154,7 +154,7 @@ public class Major {
         }
     }
 
-    public Boolean hasCourse(String s) {
+    public Boolean hasCourse(String s) { //checks if the next line has a course code in it
         Scanner sc = new Scanner(s);
         while(sc.hasNext()) {
             if(s.length() == 4) {
@@ -188,19 +188,23 @@ public class Major {
     }
 
     public static void main(String[] args) {
-        for (majors m : majors.values()){
+        for (majors m : majors.values()) {
             System.out.println(m.name());
         }
-        Major major;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Type your major:");
-        String m = sc.next();
-        for (majors s : majors.values())
-            if(s.name().equalsIgnoreCase(m)) {
-                major = new Major(m);
-                System.out.println(major.requirementsToString());
-                return;
+        while (1 > 0) {
+            Major major;
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Type your major:");
+            String m = sc.next();
+            for (majors s : majors.values()) {
+                if (s.name().equalsIgnoreCase(m)) {
+                    major = new Major(m);
+                    System.out.println(major.requirementsToString());
+                    return;
+                }
             }
+            System.out.println("Not a valid major!!");
+        }
 
 //        int currScore = 0;
 //        String currMatch = "";
@@ -216,6 +220,6 @@ public class Major {
 //        if (next.equalsIgnoreCase("y")) {
 //            major = new Major(currMatch);
 //        }
-    }
 
+    }
 }

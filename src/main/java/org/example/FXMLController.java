@@ -277,7 +277,7 @@ public class FXMLController {
             launchConflictDialog(toAdd, existingCourse, semester);
         } else if (semester.getTotalCredits() > 18) {
             launchCreditDialog(toAdd, semester);
-        } else if (toAdd.unmetPrereq() != null) {
+        } else if (toAdd.unmetPrereq() != null) { //checks if there are unmet prereqs
             launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
         }
         else{
@@ -332,6 +332,7 @@ public class FXMLController {
         }
     }
 
+    //tells a user there are unmet prereqs and prompts them to add the missing classes
     private void launchPrereqsDialog(Course toAdd, ArrayList<Course> missing, CourseList semester) {
         Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
         conflictAlert.setTitle("Unmet Prerequisites!");

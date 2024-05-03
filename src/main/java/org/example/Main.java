@@ -1,6 +1,9 @@
 package org.example;
 
+import org.apache.commons.math3.analysis.function.Abs;
+
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Main {
     public static Search search;
@@ -14,6 +17,11 @@ public class Main {
 
         CourseList catalog = FileHandler.loadCatalog();
         LogHelper.logMessage("Catalog loading complete");
+
+//        ArrayList<String> prereqs = new ArrayList<>();
+//        prereqs.add("GGEE112");
+//        prereqs.add("LMNO345");
+//        catalog.getCourses().getFirst().setPrerequisites(prereqs);
 
 
         search = new Search(catalog);
