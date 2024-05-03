@@ -332,6 +332,9 @@ public class FXMLController {
             Main.past.addCourse(missing);
             semester.addCourse(toAdd);
             displaySchedule(completedCourses, completedCoursesVBox);
+
+            LogHelper.logUserAction(new UserAction(Main.past, missing, UserAction.actionType.ADD_COURSE));
+            LogHelper.logUserAction(new UserAction(semester, toAdd, UserAction.actionType.ADD_COURSE));
         }
 
     }
@@ -449,7 +452,6 @@ public class FXMLController {
                 break;
         }
         updateTotalCredits();
-        LogHelper.logUserAction(new UserAction(null, null, UserAction.actionType.UNDO));
     }
 
     public void onTabSwitch() {
