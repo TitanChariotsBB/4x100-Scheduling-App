@@ -17,9 +17,10 @@ public class CourseList {
 
     public int getTotalCredits(){return totalCredits;}
 
-    public void addCourse(Course course) throws IllegalArgumentException {
+    public Course addCourse(Course course) throws IllegalArgumentException {
         courses.add(course);
         totalCredits += course.getCredits();
+        return null;
     }
 
     public void removeCourse(Course course) throws Exception {
@@ -30,7 +31,7 @@ public class CourseList {
     }
 
     @Override
-    public String toString() {
+    public String toString(){
         StringBuilder sb = new StringBuilder();
         for (Course course : courses) {
             sb.append(course.getName() + " ");
@@ -38,4 +39,7 @@ public class CourseList {
         return sb.toString();
     }
 
+    public String toLogString() {
+        return "list of " + courses.size() + " courses stored at: " + super.toString();
+    }
 }
