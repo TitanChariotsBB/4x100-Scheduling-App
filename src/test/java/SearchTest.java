@@ -120,5 +120,10 @@ public class SearchTest {
 
         s.addFilter(Search.SearchBy.TIME_RANGE, "12:00 PM");
         assertEquals(2, s.getResults().size());
+
+        s.removeAllFilters();
+
+        s.addFilter(Search.SearchBy.TIME_RANGE, "4:00 PM");
+        assertEquals(0, s.getResults().size());
     }
 }
