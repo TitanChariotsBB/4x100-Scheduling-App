@@ -40,6 +40,10 @@ public class Course {
         this.prerequisites = prerequisites;
     }
 
+    public void setPrerequisites(ArrayList<String> in) {
+        prerequisites = in;
+    }
+
     public boolean overlapsWith(Course toCompare) {
         double aStart;
         double aEnd;
@@ -146,27 +150,33 @@ public class Course {
         return prerequisites;
     }
 
-    public Course unmetPrereq() {
-        Boolean contains = false;
-        Course unmet;
+    public ArrayList<Course> unmetPrereq() { //checks if classes have unmet prereqs
         if (prerequisites != null) {
-            for (String prereq : prerequisites) {
-                for (Course c : Main.past.getCourses()) {
-                    if (prereq.equalsIgnoreCase(c.getCode())) {
-                        contains = true;
+            int unmetCount = prerequisites.size();
+            ArrayList<String> newPre = new ArrayList<>();
+            newPre.addAll(prerequisites); //gets an arraylist with all prerequisites
+            for (String prereq : prerequisites) { //loop through all prereqs
+                for (Course c : Main.past.getCourses()) { //loop through past courses
+                    if (prereq.equalsIgnoreCase(c.getCode())) { //if past contains prerequisite, lower count
+                        unmetCount--;
+                        newPre.remove(c.getCode()); //remove the course from prereqs
+                        System.out.println("prereq " + c.getCode() + " met");
                         break;
                     }
                 }
-                if (!contains) {
-                    unmet = new Course(prereq);
-                    return unmet;
+            }
+            if (unmetCount > 0) {
+                ArrayList<Course> out = new ArrayList<>();
+                for (int i = 0; i < unmetCount; i++) {
+                    out.add(new Course(newPre.get(i))); //return the unmet prereqs as an arraylist
+                    return out;
                 }
             }
         }
         return null;
     }
 
-    public ArrayList<String> pastCourses() {
+    public ArrayList<String> pastCourses() { //an arraylist to return all past courses as course codes
         ArrayList<String> out = new ArrayList<>();
         for (int i = 0; i < Main.past.getCourses().size(); i++) {
             out.add(Main.past.getCourses().get(i).getCode());

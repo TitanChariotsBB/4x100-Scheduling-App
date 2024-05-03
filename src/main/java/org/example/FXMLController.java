@@ -267,7 +267,7 @@ public class FXMLController {
             launchConflictDialog(toAdd, existingCourse, semester);
         } else if (semester.getTotalCredits() > 18) {
             launchCreditDialog(toAdd, semester);
-        } else if (toAdd.unmetPrereq() != null) {
+        } else if (toAdd.unmetPrereq() != null) { //checks if there are unmet prereqs
             launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
         }
         else{
@@ -322,18 +322,21 @@ public class FXMLController {
         }
     }
 
-    private void launchPrereqsDialog(Course toAdd, Course missing, CourseList semester) {
+    //tells a user there are unmet prereqs and prompts them to add the missing classes
+    private void launchPrereqsDialog(Course toAdd, ArrayList<Course> missing, CourseList semester) {
         Alert conflictAlert = new Alert(Alert.AlertType.CONFIRMATION);
         conflictAlert.setTitle("Unmet Prerequisites!");
-        conflictAlert.setContentText("Do you want to add " + missing.getCode() + " to past courses?");
+        conflictAlert.setContentText("Do you want to add " + missing.size() + " unmet prerequisites to past courses?");
 
         Optional<ButtonType> result = conflictAlert.showAndWait();
         if (result.isPresent() && (result.get() == ButtonType.OK)) {
-            Main.past.addCourse(missing);
+            for(Course c : missing) {
+                Main.past.addCourse(c);
+            }
             semester.addCourse(toAdd);
             displaySchedule(completedCourses, completedCoursesVBox);
 
-            LogHelper.logUserAction(new UserAction(Main.past, missing, UserAction.actionType.ADD_COURSE));
+            LogHelper.logUserAction(new UserAction(Main.past, missing.get(0), UserAction.actionType.ADD_COURSE)); // Will only add the first missing course to the log
             LogHelper.logUserAction(new UserAction(semester, toAdd, UserAction.actionType.ADD_COURSE));
         }
 

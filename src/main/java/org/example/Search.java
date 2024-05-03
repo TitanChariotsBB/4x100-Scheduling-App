@@ -265,8 +265,8 @@ public class Search {
         ArrayList<Integer> distances = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
         for (String word : words) {
-            System.out.println("Loop check");
-            System.out.println("Current word: " + word);
+            //System.out.println("Loop check");
+            //System.out.println("Current word: " + word);
 
             distances.add(l.apply(word, fuzzyQuery));
             names.add(word);
@@ -274,16 +274,16 @@ public class Search {
         Integer maxDist = distances.getFirst();
         String closeMatch = "";
         for (int i = 0; i < distances.size(); i++) {
-            System.out.println("Max distance: " + maxDist);
-            System.out.println("Current distance: " + distances.get(i));
+            //System.out.println("Max distance: " + maxDist);
+            //System.out.println("Current distance: " + distances.get(i));
 
             if (distances.get(i) < maxDist) {
                 maxDist = distances.get(i);
                 closeMatch = names.get(i);
-                System.out.println("Current match: " + names.get(i));
+                //System.out.println("Current match: " + names.get(i));
             }
         }
-        System.out.println("Did you mean: " + closeMatch); // Helper print statment
+        //System.out.println("Did you mean: " + closeMatch); // Helper print statment
         return closeMatch;
     }
 }
