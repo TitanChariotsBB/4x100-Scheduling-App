@@ -35,16 +35,18 @@
                                     <TextField fx:id="courseNameTF" layoutX="14.0" layoutY="76.0" prefHeight="25.0" prefWidth="190.0" />
                                     <TextField fx:id="professorTF" layoutX="14.0" layoutY="129.0" prefHeight="25.0" prefWidth="190.0" />
                                     <ComboBox fx:id="dptComboBox" layoutX="14.0" layoutY="26.0" prefHeight="25.0" prefWidth="90.0" />
-                                    <ComboBox fx:id="mtgDaysComboBox" layoutX="14.0" layoutY="184.0" prefHeight="25.0" prefWidth="90.0" />
-                                    <ComboBox fx:id="startTimeComboBox" layoutX="112.0" layoutY="184.0" prefHeight="25.0" prefWidth="94.0" />
+                                    <ComboBox fx:id="mtgDaysComboBox" layoutX="14.0" layoutY="184.0" prefHeight="25.0" prefWidth="60.0" />
+                                    <ComboBox fx:id="rangeStartComboBox" layoutX="81.0" layoutY="184.0" prefHeight="25.0" prefWidth="60.0" />
                                     <Label layoutX="14.0" layoutY="8.0" text="Department" />
                                     <Label layoutX="114.0" layoutY="8.0" text="Number" />
                                     <Label layoutX="14.0" layoutY="58.0" text="Course name" />
                                     <Label layoutX="14.0" layoutY="112.0" text="Professor" />
-                                    <Label layoutX="14.0" layoutY="167.0" text="Meeting days" />
-                                    <Label layoutX="112.0" layoutY="167.0" text="Start time" />
+                                    <Label layoutX="14.0" layoutY="167.0" text="Mtng. Days" />
+                                    <Label layoutX="80.0" layoutY="167.0" text="Range start" />
                                     <Button layoutX="14.0" layoutY="232.0" mnemonicParsing="false" onMouseClicked="#onClearFiltersButtonClicked" text="Clear Filters" />
                                     <Button layoutX="112.0" layoutY="232.0" mnemonicParsing="false" onAction="#onApplyFiltersButtonClicked" text="Apply Filters" />
+                                    <ComboBox fx:id="rangeEndComboBox" layoutX="148.0" layoutY="184.0" prefHeight="25.0" prefWidth="60.0" />
+                                    <Label layoutX="148.0" layoutY="167.0" text="Range end" />
                                             </children>
                                         </AnchorPane>
                                     </content>
