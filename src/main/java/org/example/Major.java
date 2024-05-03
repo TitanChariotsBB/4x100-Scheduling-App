@@ -11,6 +11,54 @@ import java.util.Scanner;
 public class Major {
     private String major;
     private ArrayList<String> requirements;
+    private enum majors {
+        ACCOUNTING,
+        FINANCE,
+        PHILOSOPHY,
+        CHRISTIANMINISTRIES,
+        BIOLOGY,
+        BIOLOGYHEALTH,
+        CONSERVATIONBIOLOGY,
+        MOLECULARBIOLOGY,
+        BIOCHEMISTRY,
+        CHEMISTRY,
+        BIOCHEMISTRY_HEALTH,
+        COMMUNICATIONARTS,
+        DESIGNANDINNOVATION,
+        COMPUTERSCIENCEBA,
+        COMPUTERSCIENCEBS,
+        DATASCIENCE,
+        ECONOMICS,
+        BUSINESSECONOMICS,
+        ELEMENTARYEDUC,
+        ELECTRICALENGINEERING,
+        COMPUTERENGINEERING,
+        ENGLISH,
+        ENTREPRENEURSHIP,
+        EXERCISESCIENCE,
+        HISTORY,
+        BUSINESSANALYSIS,
+        BUSINESSSTATISTICS,
+        HUMANRESOURCEMANAGEMENT,
+        INTERNATIONALBUSINESS,
+        MANAGEMENT,
+        MARKETING,
+        SUPPLYCHAINMANAGEMENT,
+        MATHEMATICS,
+        APPLIEDSTATISTICS,
+        MECHANICALENGINEERING,
+        FRENCH,
+        SPANISH,
+        MUSIC,
+        MUSICBUSINESS,
+        NURSING,
+        PHYSICS,
+        POLITICALSCIENCE,
+        PYSCHOLOGYBA,
+        PSYCHOLOGYBS,
+        SOCIOLOGY;
+    }
+
 
     public Major(String major) {
         this.major = major;
@@ -127,10 +175,47 @@ public class Major {
         return false;
     }
 
-//    public static void main(String[] args) {
-//        Major cs = new Major("Computer Science BS");
-//        //System.out.println(cs.requirementsToString());
-//
-//    }
+    public static int countSimilarChars(String str1, String str2) {
+        int minLength = Math.min(str1.length(), str2.length());
+        int count = 0;
+
+        for (int i = 0; i < minLength; i++) {
+            if (str1.charAt(i) == str2.charAt(i)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+        for (majors m : majors.values()){
+            System.out.println(m.name());
+        }
+        Major major;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Type your major:");
+        String m = sc.next();
+        for (majors s : majors.values())
+            if(s.name().equalsIgnoreCase(m)) {
+                major = new Major(m);
+                System.out.println(major.requirementsToString());
+                return;
+            }
+
+//        int currScore = 0;
+//        String currMatch = "";
+//        for (majors s : majors.values()) {
+//            String newS = s.name();
+//            if (countSimilarChars(m, newS) > currScore) {
+//                currScore = countSimilarChars(m, newS);
+//                currMatch = newS;
+//            }
+//        }
+//        System.out.println("Did you mean " + currMatch + " (Y/n)?");
+//        String next = sc.next();
+//        if (next.equalsIgnoreCase("y")) {
+//            major = new Major(currMatch);
+//        }
+    }
 
 }

@@ -8,11 +8,9 @@ public class Main {
     public static CourseList springSemester;
     public static CourseList past;
     public static CourseList future;
-    public static Major major;
 
     public static void run() {
         LogHelper.initLogger();
-        major = new Major("Entrepreneurship");
 
         CourseList catalog = FileHandler.loadCatalog();
         LogHelper.logMessage("Catalog loading complete");
