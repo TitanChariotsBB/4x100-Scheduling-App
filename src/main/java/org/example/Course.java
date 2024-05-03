@@ -143,7 +143,6 @@ public class Course {
     }
 
     public ArrayList<String> getPrerequisites() {
-        //ArrayList<Course> prereqs = new ArrayList<>();
         return prerequisites;
     }
 
