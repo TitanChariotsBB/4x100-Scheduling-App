@@ -24,7 +24,7 @@ public class SearchTest {
         LocalDateTime[][] meetings3 = {null, {time3, time3}, null, {time3, time3}, null};
         Course course3 = new Course("Visual novel writing", "HUMA 501", meetings3,true, "A transcendental, relativistic, and egoistic class", "HAL 306", "Dr. Lipnichan", 3, null);
 
-        System.out.println("HELP ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n \n\n\n\n\n\n");
+        //System.out.println("HELP ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n \n\n\n\n\n\n");
 
         CourseList cs = new CourseList();
 
@@ -35,31 +35,31 @@ public class SearchTest {
         Search s = new Search(cs);
         assertEquals(3, s.getResults().size());
         s.addFilter(Search.SearchBy.PROFESSOR, "Lipnichan");
-        for (int i = 0; i < s.getResults().size(); i++) {
+        /*for (int i = 0; i < s.getResults().size(); i++) {
             System.out.println("Yo: " + s.getResults().get(i).getProfessor());
-        }
-        System.out.println(s.activeFilters.getFirst().filter);
+        }*/
+        //System.out.println(s.activeFilters.getFirst().filter);
         assertEquals(1, s.getResults().size());
         s.removeFilter(Search.SearchBy.PROFESSOR);
-        System.out.println(s.activeFilters.size());
+        //System.out.println(s.activeFilters.size());
         assertEquals(3, s.getResults().size());
-        for (int i = 0; i < s.getResults().size(); i++) {
+        /*for (int i = 0; i < s.getResults().size(); i++) {
             System.out.println("Yo: " + s.getResults().get(i).getProfessor());
-        }
-        System.out.println(s.toString());
+        }*/
+        //System.out.println(s.toString());
 
         s.addFilter(Search.SearchBy.PROFESSOR, "Bibza");
-        for (int i = 0; i < s.getResults().size(); i++) {
+        /*for (int i = 0; i < s.getResults().size(); i++) {
             System.out.println("Yo: " + s.getResults().get(i).getProfessor());
-        }
-        System.out.println(s.activeFilters.getFirst().filter);
-        System.out.println(s);
+        }*/
+        //System.out.println(s.activeFilters.getFirst().filter);
+        //System.out.println(s);
         assertEquals(2, s.getResults().size());
         s.addFilter(Search.SearchBy.COURSE_CODE, "COMP");
-        for (int i = 0; i < s.activeFilters.size(); i++) {
+        /*for (int i = 0; i < s.activeFilters.size(); i++) {
             System.out.println("Yo: " + s.activeFilters.get(i).filter);
-        }
-        System.out.println(s);
+        }*/
+        //System.out.println(s);
         assertEquals(1, s.getResults().size());
         assertEquals(2, s.activeFilters.size());
         s.removeFilter(Search.SearchBy.PROFESSOR);
@@ -92,16 +92,16 @@ public class SearchTest {
 
         s.fuzzySearch("bisual", cs);
         s.fuzzySearch("visual", cs);
-        System.out.println("Why do they exist, Matt?\n");
+        //System.out.println("Why do they exist, Matt?\n");
         s.fuzzySearch("bovel", cs);
         s.fuzzySearch("foundations", cs);
-        System.out.println("Why do they exist, Matt?\n");
+        //System.out.println("Why do they exist, Matt?\n");
         s.fuzzySearch("zalloon", cs);
 
         s.addFilter(Search.SearchBy.TIME_RANGE, "1:00 PM");
-        for (int i = 0; i < s.activeFilters.size(); i++) {
+        /*for (int i = 0; i < s.activeFilters.size(); i++) {
             System.out.println("Yo: " + s.activeFilters.get(i).filter);
-        }
+        }*/
         s.removeAllFilters();
         assertEquals(3, s.getResults().size());
 
