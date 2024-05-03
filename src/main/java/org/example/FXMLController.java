@@ -95,7 +95,7 @@ public class FXMLController {
         String searchQuery = searchBar.getText();
         search.setQuery(searchQuery);
         displaySearchResults(filterBySemester(search.getResults(), currentTab));
-        LogHelper.logUserAction(new UserAction(null,null,search, UserAction.actionType.SEARCH));
+        LogHelper.logUserAction(new UserAction(null,null, UserAction.actionType.SEARCH));
     }
 
     @FXML
@@ -109,7 +109,7 @@ public class FXMLController {
         mtgDaysComboBox.getSelectionModel().clearSelection();
         startTimeComboBox.getSelectionModel().clearSelection();
 
-        LogHelper.logUserAction(new UserAction(null,null,search,UserAction.actionType.CLEAR_FILTERS));
+        LogHelper.logUserAction(new UserAction(null,null, UserAction.actionType.CLEAR_FILTERS));
     }
 
     @FXML
@@ -148,7 +148,7 @@ public class FXMLController {
             System.out.println(filter.filter);
         }
 
-        LogHelper.logUserAction(new UserAction(null,null,null, UserAction.actionType.ADD_FILTER));
+        LogHelper.logUserAction(new UserAction(null,null, UserAction.actionType.ADD_FILTER));
     }
 
     public void displaySearchResults(ArrayList<Course> courses) {
@@ -244,11 +244,11 @@ public class FXMLController {
                 if (pastSelected) {
                     completedCourses.addCourse(c);
                     displaySchedule(completedCourses, completedCoursesVBox);
-                    LogHelper.logUserAction(new UserAction(completedCourses,c,null, UserAction.actionType.ADD_COURSE));
+                    LogHelper.logUserAction(new UserAction(completedCourses,c, UserAction.actionType.ADD_COURSE));
                 } else {
                     courseWishList.addCourse(c);
                     displaySchedule(courseWishList, courseWishListVBox);
-                    LogHelper.logUserAction(new UserAction(courseWishList,c,null, UserAction.actionType.ADD_COURSE));
+                    LogHelper.logUserAction(new UserAction(courseWishList,c, UserAction.actionType.ADD_COURSE));
                 }
             default:
                 break;
@@ -271,7 +271,7 @@ public class FXMLController {
             launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
         }
         else{
-            LogHelper.logUserAction(new UserAction(semester,toAdd,null, UserAction.actionType.ADD_COURSE));
+            LogHelper.logUserAction(new UserAction(semester,toAdd, UserAction.actionType.ADD_COURSE));
         }
         displayCalendarSchedule(semester, semesterPane);
     }
@@ -288,7 +288,7 @@ public class FXMLController {
             } catch (Exception e) {}
         }
         else{
-            LogHelper.logUserAction(new UserAction(semester,toAdd,null, UserAction.actionType.ADD_COURSE));
+            LogHelper.logUserAction(new UserAction(semester,toAdd, UserAction.actionType.ADD_COURSE));
         }
     }
 
@@ -314,8 +314,8 @@ public class FXMLController {
                 return;
             }
             semester.addCourse(conflictingCourse);
-            LogHelper.logUserAction(new UserAction(semester,existingCourse,null, UserAction.actionType.REMOVE_IN_CONFLICT));
-            LogHelper.logUserAction(new UserAction(semester,conflictingCourse,null, UserAction.actionType.ADD_IN_CONFLICT));
+            LogHelper.logUserAction(new UserAction(semester,existingCourse, UserAction.actionType.REMOVE_IN_CONFLICT));
+            LogHelper.logUserAction(new UserAction(semester,conflictingCourse, UserAction.actionType.ADD_IN_CONFLICT));
         }
         else{
             LogHelper.logMessage("Conflicting course chosen. User kept original course.");
@@ -335,6 +335,9 @@ public class FXMLController {
             }
             semester.addCourse(toAdd);
             displaySchedule(completedCourses, completedCoursesVBox);
+
+            LogHelper.logUserAction(new UserAction(Main.past, missing, UserAction.actionType.ADD_COURSE));
+            LogHelper.logUserAction(new UserAction(semester, toAdd, UserAction.actionType.ADD_COURSE));
         }
 
     }
@@ -344,7 +347,7 @@ public class FXMLController {
         cl.removeCourse(c);
         displayCalendarSchedule(cl, p);
         updateTotalCredits();
-        LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
+        LogHelper.logUserAction(new UserAction(cl,c, UserAction.actionType.REMOVE_COURSE));
     }
 
     @FXML
@@ -352,7 +355,7 @@ public class FXMLController {
         cl.removeCourse(c);
         displaySchedule(cl, vb);
         updateTotalCredits();
-        LogHelper.logUserAction(new UserAction(cl,c,null, UserAction.actionType.REMOVE_COURSE));
+        LogHelper.logUserAction(new UserAction(cl,c, UserAction.actionType.REMOVE_COURSE));
     }
 
     public void updateTotalCredits() {
@@ -452,7 +455,6 @@ public class FXMLController {
                 break;
         }
         updateTotalCredits();
-        LogHelper.logUserAction(new UserAction(null, null, null, UserAction.actionType.UNDO));
     }
 
     public void onTabSwitch() {

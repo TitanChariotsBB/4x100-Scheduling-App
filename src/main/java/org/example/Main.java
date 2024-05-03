@@ -30,7 +30,7 @@ public class Main {
         }
         MainApp.launchGUI();
         autoSave();
-        LogHelper.logMessage("autoSave complete. Program terminating.");
+        LogHelper.logMessage("autoSave complete. Program terminating normally.");
     }
 
     public static void main(String[] args) {
