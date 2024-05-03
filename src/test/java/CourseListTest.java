@@ -3,6 +3,7 @@ import org.example.CourseList;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +48,10 @@ class CourseListTest {
 
     @Test
     void removeCourse() {
+    }
+
+    @Test
+    void prereqs() {
     }
 
     @Test

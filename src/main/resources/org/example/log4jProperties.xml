@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="Console">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level: %m%n" />
+        </Console>
+        <RollingFile name="fileAppender" filePattern="Logs\${date:MM-dd-yyyy}-session_%i.log.txt">
+            <OnStartupTriggeringPolicy />
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level: %m%n" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="fileLogger" level="DEBUG">
+            <AppenderRef ref="fileAppender"/>
+        </Logger>
+        <Root>
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
