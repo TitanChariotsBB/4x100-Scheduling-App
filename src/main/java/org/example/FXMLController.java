@@ -336,7 +336,7 @@ public class FXMLController {
             semester.addCourse(toAdd);
             displaySchedule(completedCourses, completedCoursesVBox);
 
-            LogHelper.logUserAction(new UserAction(Main.past, missing.get(0), UserAction.actionType.ADD_COURSE));
+            LogHelper.logUserAction(new UserAction(Main.past, missing.get(0), UserAction.actionType.ADD_COURSE)); // Will only add the first missing course to the log
             LogHelper.logUserAction(new UserAction(semester, toAdd, UserAction.actionType.ADD_COURSE));
         }
 
