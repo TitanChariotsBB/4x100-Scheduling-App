@@ -38,8 +38,8 @@ public class FXMLController {
     private ComboBox<String> dptComboBox;
     @FXML
     private ComboBox<String> mtgDaysComboBox;
-    @FXML
-    private ComboBox<String> startTimeComboBox;
+//    @FXML
+//    private ComboBox<String> startTimeComboBox;
     @FXML
     private TextField courseNumberTF;
     @FXML
@@ -59,6 +59,10 @@ public class FXMLController {
     private Label totalCreditsFall;
     @FXML
     private Label totalCreditsSpring;
+    @FXML
+    private ComboBox<String> rangeStartComboBox;
+    @FXML
+    private ComboBox<String> rangeEndComboBox;
 
     @FXML
     public void initialize() {
@@ -74,7 +78,9 @@ public class FXMLController {
         ControllerHelper ch = new ControllerHelper();
         dptComboBox.getItems().setAll(ch.dptOptions);
         mtgDaysComboBox.getItems().setAll(ch.dayOptions);
-        startTimeComboBox.getItems().setAll(ch.timeOptions);
+        //startTimeComboBox.getItems().setAll(ch.timeOptions);
+        rangeStartComboBox.getItems().setAll(ch.timeOptions);
+        rangeEndComboBox.getItems().setAll(ch.timeOptions);
 
 //        fallSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
 //        springSemesterPane.setBackground(Background.fill(Paint.valueOf("BBBBBB")));
@@ -107,7 +113,9 @@ public class FXMLController {
         professorTF.setText("");
         dptComboBox.getSelectionModel().clearSelection();
         mtgDaysComboBox.getSelectionModel().clearSelection();
-        startTimeComboBox.getSelectionModel().clearSelection();
+        //startTimeComboBox.getSelectionModel().clearSelection();
+        rangeStartComboBox.getSelectionModel().clearSelection();
+        rangeEndComboBox.getSelectionModel().clearSelection();
 
         LogHelper.logUserAction(new UserAction(null,null, UserAction.actionType.CLEAR_FILTERS));
     }
@@ -118,15 +126,22 @@ public class FXMLController {
 
         String dpt = dptComboBox.getSelectionModel().getSelectedItem();
         String courseCode;
-        if (dpt != null) {
-            courseCode = dpt + courseNumberTF.getText();
-        } else {
+
+        if (dpt == null) {
             courseCode = "";
+        }
+        else if (dpt.equals("Any")) {
+            courseCode = dpt + " " + courseNumberTF.getText();
+        }
+        else {
+            courseCode = dpt + courseNumberTF.getText();
         }
 
         String professor = professorTF.getText();
         String mtgDays = mtgDaysComboBox.getSelectionModel().getSelectedItem();
-        String startTime = startTimeComboBox.getSelectionModel().getSelectedItem();
+        //String startTime = startTimeComboBox.getSelectionModel().getSelectedItem();
+        String rangeStart = rangeStartComboBox.getSelectionModel().getSelectedItem();
+        String rangeEnd = rangeEndComboBox.getSelectionModel().getSelectedItem();
 
         search.removeAllFilters(); // Clear filters for each application of new filters.
         // Only whatever is currently filled out should be filtered.
@@ -139,14 +154,24 @@ public class FXMLController {
             search.addFilter(Search.SearchBy.PROFESSOR, professor);
         if (mtgDays != null)
             search.addFilter(Search.SearchBy.DATE, mtgDays);
-        if (startTime != null)
-            search.addFilter(Search.SearchBy.TIME, startTime);
+//        if (startTime != null)
+//            search.addFilter(Search.SearchBy.TIME, startTime);
+
+        if (rangeStart != null || rangeEnd != null) {
+            //System.out.println("Range Start:" + rangeStart);
+            if  (rangeEnd == null) {
+                //System.out.println("Range end:" + rangeEnd);
+            }
+            //System.out.println(rangeStart + "," + rangeEnd);
+
+            search.addFilter(Search.SearchBy.TIME_RANGE, rangeStart + "," + rangeEnd);
+        }
 
 
-        for (Filter filter : search.activeFilters) { // Testing
+        /*for (Filter filter : search.activeFilters) { // Testing
             System.out.println(filter.sb);
             System.out.println(filter.filter);
-        }
+        }*/
 
         LogHelper.logUserAction(new UserAction(null,null, UserAction.actionType.ADD_FILTER));
     }
