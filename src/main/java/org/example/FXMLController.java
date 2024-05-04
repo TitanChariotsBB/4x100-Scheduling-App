@@ -126,14 +126,15 @@ public class FXMLController {
 
         String dpt = dptComboBox.getSelectionModel().getSelectedItem();
         String courseCode;
-        if (dpt.equals("Any")) {
+
+        if (dpt == null) {
+            courseCode = "";
+        }
+        else if (dpt.equals("Any")) {
             courseCode = dpt + " " + courseNumberTF.getText();
         }
-        else if (dpt != null) {
-            courseCode = dpt + courseNumberTF.getText();
-        }
         else {
-            courseCode = "";
+            courseCode = dpt + courseNumberTF.getText();
         }
 
         String professor = professorTF.getText();
@@ -156,13 +157,21 @@ public class FXMLController {
 //        if (startTime != null)
 //            search.addFilter(Search.SearchBy.TIME, startTime);
 
-        // TODO: add range filters to search
+        if (rangeStart != null || rangeEnd != null) {
+            //System.out.println("Range Start:" + rangeStart);
+            if  (rangeEnd == null) {
+                //System.out.println("Range end:" + rangeEnd);
+            }
+            //System.out.println(rangeStart + "," + rangeEnd);
+
+            search.addFilter(Search.SearchBy.TIME_RANGE, rangeStart + "," + rangeEnd);
+        }
 
 
-        for (Filter filter : search.activeFilters) { // Testing
+        /*for (Filter filter : search.activeFilters) { // Testing
             System.out.println(filter.sb);
             System.out.println(filter.filter);
-        }
+        }*/
 
         LogHelper.logUserAction(new UserAction(null,null, UserAction.actionType.ADD_FILTER));
     }

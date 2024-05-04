@@ -114,9 +114,9 @@ public class Search {
                 return;
             }
             else if (filter.contains("Any")) {
-                System.out.println(filter);
+                //System.out.println(filter);
                 String number = filter.split(" ")[1];
-                System.out.println(number);
+                //System.out.println(number);
                 results.removeIf(result -> !result.getCode().contains(number));
                 return;
             }
@@ -192,32 +192,87 @@ public class Search {
             }*/
         }
         else if (sb.equals(SearchBy.TIME_RANGE)) {
-            if (filter.equals("Any")) {
+            if (filter.equals("Any,Any")) {
                 return;
             }
 
-            String[] hourMinuteAMPM = filter.split("[: ]");
-            int hour = Integer.parseInt(hourMinuteAMPM[0]);
-            int minute = Integer.parseInt(hourMinuteAMPM[1]);
-            String AMPM = hourMinuteAMPM[2];
+            String[] startEndTime = filter.split(",");
 
-            if (AMPM.equals("PM") && hour != 12) {
-                hour+=12;
-            }
+                if (startEndTime[0].equals("null") || startEndTime[0].equals("Any")) {
+                    String[] hourMinuteAMPM = startEndTime[1].split("[: ]");
+                    int hour = Integer.parseInt(hourMinuteAMPM[0]);
+                    int minute = Integer.parseInt(hourMinuteAMPM[1]);
+                    String AMPM = hourMinuteAMPM[2];
 
-            hour*=100;
-            hour+=minute;
+                    if (AMPM.equals("PM") && hour != 12) {
+                        hour+=12;
+                    }
 
-            int militaryTime = hour;
+                    hour*=100;
+                    hour+=minute;
 
-            System.out.println("Filter time: " + militaryTime);
+                    int militaryTime = hour;
+
+                    results.removeIf(result -> result.getMeetingTimes() == null ||
+                            result.getMeetingTimeRangeStringAlex() > militaryTime);
+                }
+                else if (startEndTime[1].equals("null") || startEndTime[1].equals("Any")) {
+                    String[] hourMinuteAMPM = startEndTime[0].split("[: ]");
+                    int hour = Integer.parseInt(hourMinuteAMPM[0]);
+                    int minute = Integer.parseInt(hourMinuteAMPM[1]);
+                    String AMPM = hourMinuteAMPM[2];
+
+                    if (AMPM.equals("PM") && hour != 12) {
+                        hour+=12;
+                    }
+
+                    hour*=100;
+                    hour+=minute;
+
+                    int militaryTime = hour;
+
+                    results.removeIf(result -> result.getMeetingTimes() == null ||
+                            result.getMeetingTimeRangeStringAlex() < militaryTime);
+                }
+                else {
+                    String[] startHourMinuteAMPM = startEndTime[0].split("[: ]");
+                    String[] endHourMinuteAMPM = startEndTime[1].split("[: ]");
+                    int startHour = Integer.parseInt(startHourMinuteAMPM[0]);
+                    int endHour = Integer.parseInt(endHourMinuteAMPM[0]);
+                    int startMinute = Integer.parseInt(startHourMinuteAMPM[1]);
+                    int endMinute = Integer.parseInt(endHourMinuteAMPM[1]);
+                    String startAMPM = startHourMinuteAMPM[2];
+                    String endAMPM = endHourMinuteAMPM[2];
+
+                    if (startAMPM.equals("PM") && startHour != 12) {
+                        startHour+=12;
+                    }
+
+                    if (endAMPM.equals("PM") && endHour != 12) {
+                        endHour+=12;
+                    }
+
+                    startHour*=100;
+                    endHour*=100;
+                    startHour+=startMinute;
+                    endHour+=startMinute;
+
+                    int startMilitaryTime = startHour;
+                    int endMilitaryTime = endHour;
+
+                    results.removeIf(result -> result.getMeetingTimes() == null ||
+                            result.getMeetingTimeRangeStringAlex() < startMilitaryTime ||
+                            result.getMeetingTimeRangeStringAlex() > endMilitaryTime);
+                }
+
+
+
+
+            /*System.out.println("Filter time: " + militaryTime);
 
             for (Course result : results) {
                 System.out.println("Course list time: " + result.getMeetingTimeRangeStringAlex());
-            }
-
-            results.removeIf(result -> result.getMeetingTimes() == null ||
-                    result.getMeetingTimeRangeStringAlex() < militaryTime);
+            }*/
         }
     }
 
@@ -306,8 +361,8 @@ public class Search {
         ArrayList<Integer> distances = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
         for (String word : words) {
-            System.out.println("Loop check");
-            System.out.println("Current word: " + word);
+            //System.out.println("Loop check");
+            //System.out.println("Current word: " + word);
 
             distances.add(l.apply(word, fuzzyQuery));
             names.add(word);
@@ -315,16 +370,16 @@ public class Search {
         Integer maxDist = distances.getFirst();
         String closeMatch = "";
         for (int i = 0; i < distances.size(); i++) {
-            System.out.println("Max distance: " + maxDist);
-            System.out.println("Current distance: " + distances.get(i));
+            //System.out.println("Max distance: " + maxDist);
+            //System.out.println("Current distance: " + distances.get(i));
 
             if (distances.get(i) < maxDist) {
                 maxDist = distances.get(i);
                 closeMatch = names.get(i);
-                System.out.println("Current match: " + names.get(i));
+                //System.out.println("Current match: " + names.get(i));
             }
         }
-        System.out.println("Did you mean: " + closeMatch); // Helper print statment
+        //System.out.println("Did you mean: " + closeMatch); // Helper print statment
         return closeMatch;
     }
 }

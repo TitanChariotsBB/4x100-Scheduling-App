@@ -67,27 +67,27 @@ public class SearchTest {
         assertEquals(1, s.getResults().size());
         assertEquals("Foundations of balloon fabrication", s.getResults().get(0).getName());
         assertEquals("Dr. Bibza", s.getResults().get(0).getProfessor());
-        System.out.println(s);
+        //System.out.println(s);
         s.removeFilter(Search.SearchBy.COURSE_CODE);
         assertEquals(0, s.activeFilters.size());
         assertEquals(3, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
         s.addFilter(Search.SearchBy.TIME, "2:00 PM");
         assertEquals(1, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
         s.removeFilter(Search.SearchBy.TIME);
         assertEquals(3, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
         s.addFilter(Search.SearchBy.TIME, "9:00 AM");
         assertEquals(1, s.getResults().size());
         assertEquals("Underwater basket weaving", s.getResults().get(0).getName());
-        System.out.println(s);
+        //System.out.println(s);
         s.removeFilter(Search.SearchBy.TIME);
         assertEquals(3, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
         s.addFilter(Search.SearchBy.DATE, "MWF");
         assertEquals(1, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
 
 
         s.fuzzySearch("bisual", cs);
@@ -98,32 +98,32 @@ public class SearchTest {
         //System.out.println("Why do they exist, Matt?\n");
         s.fuzzySearch("zalloon", cs);
 
-        s.addFilter(Search.SearchBy.TIME_RANGE, "1:00 PM");
+        s.addFilter(Search.SearchBy.TIME_RANGE, "10:00 AM,1:00 PM");
         /*for (int i = 0; i < s.activeFilters.size(); i++) {
             System.out.println("Yo: " + s.activeFilters.get(i).filter);
         }*/
         s.removeAllFilters();
         assertEquals(3, s.getResults().size());
 
-        s.addFilter(Search.SearchBy.TIME_RANGE, "1:00 PM");
+        s.addFilter(Search.SearchBy.TIME_RANGE, "10:00 AM,1:00 PM");
         assertEquals(1, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
         s.removeAllFilters();
 
         assertEquals(3, s.getResults().size());
 
-        s.addFilter(Search.SearchBy.TIME_RANGE, "10:00 AM");
+        s.addFilter(Search.SearchBy.TIME_RANGE, "10:00 AM," + null);
         assertEquals(2, s.getResults().size());
-        System.out.println(s);
+        //System.out.println(s);
         s.removeAllFilters();
 
 
-        s.addFilter(Search.SearchBy.TIME_RANGE, "12:00 PM");
+        s.addFilter(Search.SearchBy.TIME_RANGE, "12:00 PM,Any");
         assertEquals(2, s.getResults().size());
 
         s.removeAllFilters();
 
-        s.addFilter(Search.SearchBy.TIME_RANGE, "4:00 PM");
-        assertEquals(0, s.getResults().size());
+        s.addFilter(Search.SearchBy.TIME_RANGE, null+",4:00 PM");
+        assertEquals(3, s.getResults().size());
     }
 }
