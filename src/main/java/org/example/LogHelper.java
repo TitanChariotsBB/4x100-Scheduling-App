@@ -35,6 +35,7 @@ public class LogHelper {
 
     public static void undo(){
         if(actionStack.empty()){
+            LogHelper.logMessage("Attempted to undo from an empty action stack");
             return;
         }
 
@@ -71,5 +72,6 @@ public class LogHelper {
                     rList.addCourse(rCourse);
             }
         }while(type != actionType.ADD_COURSE && type != actionType.REMOVE_COURSE && type != actionType.ADD_IN_CONFLICT);
+        LogHelper.logUserAction(new UserAction(null, null, UserAction.actionType.UNDO));
     }
 }
