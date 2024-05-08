@@ -18,10 +18,12 @@ public class Main {
         CourseList catalog = FileHandler.loadCatalog();
         LogHelper.logMessage("Catalog loading complete");
 
-//        ArrayList<String> prereqs = new ArrayList<>();
-//        prereqs.add("GGEE112");
-//        prereqs.add("LMNO345");
-//        catalog.getCourses().getFirst().setPrerequisites(prereqs);
+        ArrayList<String> prereqs = new ArrayList<>();
+        prereqs.add("GGEE112");
+        prereqs.add("LMNO345");
+        catalog.getCourses().getFirst().setPrerequisites(prereqs);
+        System.out.println(catalog.getCourses().getFirst().getPrerequisites());
+        System.out.println(catalog.getCourses().getFirst().getPrerequisites().size());
 
 
         search = new Search(catalog);
