@@ -409,8 +409,8 @@ public class FXMLController {
     public HBox makeSearchResultHBox(Course c) {
         String code = c.getCode();
         String name = c.getName();
-        if (name.length() > 15) {
-            name = name.substring(0,15);
+        if (name.length() > 25) {
+            name = name.substring(0,25);
             name += "...";
         }
         String meetingTime;
