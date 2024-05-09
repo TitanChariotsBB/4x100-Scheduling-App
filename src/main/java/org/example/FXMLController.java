@@ -425,7 +425,7 @@ public class FXMLController {
         Button addButton = new Button("Add");
         addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
         HBox h = new HBox(10, courseInfo, addButton);
-        h.setPadding(new Insets(5, 0, 5, 0));
+        h.setPadding(new Insets(5, 0, 5, 3));
         return h;
     }
 
