@@ -188,14 +188,15 @@ public class Major {
     }
 
     public static void main(String[] args) {
-        for (majors m : majors.values()) {
-            System.out.println(m.name());
-        }
+//        for (majors m : majors.values()) {
+//            System.out.println(m.name());
+//        }
         while (1 > 0) {
             Major major;
             Scanner sc = new Scanner(System.in);
             System.out.println("Type your major:");
-            String m = sc.next();
+            String m = sc.nextLine().replaceAll("\\s+", "");
+            //System.out.println(m);
             for (majors s : majors.values()) {
                 if (s.name().equalsIgnoreCase(m)) {
                     major = new Major(m);
