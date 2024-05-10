@@ -409,8 +409,8 @@ public class FXMLController {
     public HBox makeSearchResultHBox(Course c) {
         String code = c.getCode();
         String name = c.getName();
-        if (name.length() > 15) {
-            name = name.substring(0,15);
+        if (name.length() > 25) {
+            name = name.substring(0,25);
             name += "...";
         }
         String meetingTime;
@@ -425,7 +425,7 @@ public class FXMLController {
         Button addButton = new Button("Add");
         addButton.setOnMouseClicked(event -> onAddButtonClicked(c));
         HBox h = new HBox(10, courseInfo, addButton);
-        h.setPadding(new Insets(5, 0, 5, 0));
+        h.setPadding(new Insets(5, 0, 5, 3));
         return h;
     }
 
