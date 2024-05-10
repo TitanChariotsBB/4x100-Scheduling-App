@@ -198,7 +198,7 @@ public class Search {
 
             String[] startEndTime = filter.split(",");
 
-                if (startEndTime[0].equals("null") || startEndTime[0].equals("Any")) {
+                if (startEndTime[0].equals(null) || startEndTime[0].equals("Any")) {
                     String[] hourMinuteAMPM = startEndTime[1].split("[: ]");
                     int hour = Integer.parseInt(hourMinuteAMPM[0]);
                     int minute = Integer.parseInt(hourMinuteAMPM[1]);
@@ -216,7 +216,7 @@ public class Search {
                     results.removeIf(result -> result.getMeetingTimes() == null ||
                             result.getMeetingTimeRangeStringAlex() > militaryTime);
                 }
-                else if (startEndTime[1].equals("null") || startEndTime[1].equals("Any")) {
+                else if (startEndTime[1].equals(null) || startEndTime[1].equals("Any")) {
                     String[] hourMinuteAMPM = startEndTime[0].split("[: ]");
                     int hour = Integer.parseInt(hourMinuteAMPM[0]);
                     int minute = Integer.parseInt(hourMinuteAMPM[1]);
@@ -356,30 +356,24 @@ public class Search {
             return "";
         }
 
-        ArrayList<String> words = new ArrayList<>(List.of(courseCatalog.toString().toLowerCase().split(" ")));
+        ArrayList<String> words = new ArrayList<>(List.of
+                (courseCatalog.toString().toLowerCase().split(" ")));
         LevenshteinDistance l = new LevenshteinDistance();
         ArrayList<Integer> distances = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
-        for (String word : words) {
-            //System.out.println("Loop check");
-            //System.out.println("Current word: " + word);
 
+        for (String word : words) {
             distances.add(l.apply(word, fuzzyQuery));
             names.add(word);
         }
         Integer maxDist = distances.getFirst();
         String closeMatch = "";
         for (int i = 0; i < distances.size(); i++) {
-            //System.out.println("Max distance: " + maxDist);
-            //System.out.println("Current distance: " + distances.get(i));
-
             if (distances.get(i) < maxDist) {
                 maxDist = distances.get(i);
                 closeMatch = names.get(i);
-                //System.out.println("Current match: " + names.get(i));
             }
         }
-        //System.out.println("Did you mean: " + closeMatch); // Helper print statment
         return closeMatch;
     }
 }
