@@ -15,7 +15,8 @@ public class Search {
         COURSE_NAME,
         PROFESSOR,
         TIME,
-        DATE
+        DATE,
+        TIME_RANGE
     }
     private ArrayList<Course> unfilteredResults;
     private ArrayList<Course> results;
@@ -109,6 +110,16 @@ public class Search {
             return;
         }
         else if (sb.equals(SearchBy.COURSE_CODE)) { // If filtering by course_code
+            if (filter.equals("Any ")) {
+                return;
+            }
+            else if (filter.contains("Any")) {
+                //System.out.println(filter);
+                String number = filter.split(" ")[1];
+                //System.out.println(number);
+                results.removeIf(result -> !result.getCode().contains(number));
+                return;
+            }
             results.removeIf(result -> !result.getCode().contains(filter));
 
         }
@@ -180,6 +191,89 @@ public class Search {
 //                }
             }*/
         }
+        else if (sb.equals(SearchBy.TIME_RANGE)) {
+            if (filter.equals("Any,Any")) {
+                return;
+            }
+
+            String[] startEndTime = filter.split(",");
+
+                if (startEndTime[0].equals("null") || startEndTime[0].equals("Any")) {
+                    String[] hourMinuteAMPM = startEndTime[1].split("[: ]");
+                    int hour = Integer.parseInt(hourMinuteAMPM[0]);
+                    int minute = Integer.parseInt(hourMinuteAMPM[1]);
+                    String AMPM = hourMinuteAMPM[2];
+
+                    if (AMPM.equals("PM") && hour != 12) {
+                        hour+=12;
+                    }
+
+                    hour*=100;
+                    hour+=minute;
+
+                    int militaryTime = hour;
+
+                    results.removeIf(result -> result.getMeetingTimes() == null ||
+                            result.getMeetingTimeRangeStringAlex() > militaryTime);
+                }
+                else if (startEndTime[1].equals("null") || startEndTime[1].equals("Any")) {
+                    String[] hourMinuteAMPM = startEndTime[0].split("[: ]");
+                    int hour = Integer.parseInt(hourMinuteAMPM[0]);
+                    int minute = Integer.parseInt(hourMinuteAMPM[1]);
+                    String AMPM = hourMinuteAMPM[2];
+
+                    if (AMPM.equals("PM") && hour != 12) {
+                        hour+=12;
+                    }
+
+                    hour*=100;
+                    hour+=minute;
+
+                    int militaryTime = hour;
+
+                    results.removeIf(result -> result.getMeetingTimes() == null ||
+                            result.getMeetingTimeRangeStringAlex() < militaryTime);
+                }
+                else {
+                    String[] startHourMinuteAMPM = startEndTime[0].split("[: ]");
+                    String[] endHourMinuteAMPM = startEndTime[1].split("[: ]");
+                    int startHour = Integer.parseInt(startHourMinuteAMPM[0]);
+                    int endHour = Integer.parseInt(endHourMinuteAMPM[0]);
+                    int startMinute = Integer.parseInt(startHourMinuteAMPM[1]);
+                    int endMinute = Integer.parseInt(endHourMinuteAMPM[1]);
+                    String startAMPM = startHourMinuteAMPM[2];
+                    String endAMPM = endHourMinuteAMPM[2];
+
+                    if (startAMPM.equals("PM") && startHour != 12) {
+                        startHour+=12;
+                    }
+
+                    if (endAMPM.equals("PM") && endHour != 12) {
+                        endHour+=12;
+                    }
+
+                    startHour*=100;
+                    endHour*=100;
+                    startHour+=startMinute;
+                    endHour+=startMinute;
+
+                    int startMilitaryTime = startHour;
+                    int endMilitaryTime = endHour;
+
+                    results.removeIf(result -> result.getMeetingTimes() == null ||
+                            result.getMeetingTimeRangeStringAlex() < startMilitaryTime ||
+                            result.getMeetingTimeRangeStringAlex() > endMilitaryTime);
+                }
+
+
+
+
+            /*System.out.println("Filter time: " + militaryTime);
+
+            for (Course result : results) {
+                System.out.println("Course list time: " + result.getMeetingTimeRangeStringAlex());
+            }*/
+        }
     }
 
     /*private void filterCourses(SearchBy sb, LocalDateTime ld) {
@@ -244,6 +338,8 @@ public class Search {
 
     public void removeAllFilters() {
         activeFilters.clear();
+        results.clear();
+        populateResults();
     } // Clears all filters
 
     public String toString() { // For testing purposes
