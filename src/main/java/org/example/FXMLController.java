@@ -292,18 +292,20 @@ public class FXMLController {
     private void addCourseToSemesterSchedule(Course toAdd, CourseList semester, Pane semesterPane) {
         Course existingCourse = semester.addCourse(toAdd);
 
+        if (toAdd.unmetPrereq() != null) { //checks if there are unmet prereqs
+            launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
+        }
         if (semester.getTotalCredits() > 21) {
             LogHelper.logMessage("attempted to add more than 21 credits. Course not added.");
             launchCreditWarning();
             try { semester.removeCourse(toAdd); } catch (Exception e) {}
-        } else if (existingCourse != null) {//addCourse returns the existing course if there is a conflict
-            launchConflictDialog(toAdd, existingCourse, semester);
-        } else if (semester.getTotalCredits() > 18) {
-            launchCreditDialog(toAdd, semester);
-        } else if (toAdd.unmetPrereq() != null) { //checks if there are unmet prereqs
-            launchPrereqsDialog(toAdd, toAdd.unmetPrereq(), semester);
         }
-        else{
+        if (existingCourse != null) {//addCourse returns the existing course if there is a conflict
+            launchConflictDialog(toAdd, existingCourse, semester);
+        }
+        if (semester.getTotalCredits() > 18) {
+            launchCreditDialog(toAdd, semester);
+        } else {
             LogHelper.logUserAction(new UserAction(semester,toAdd, UserAction.actionType.ADD_COURSE));
         }
         displayCalendarSchedule(semester, semesterPane);
