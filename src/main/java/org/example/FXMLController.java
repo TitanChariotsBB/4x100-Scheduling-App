@@ -477,18 +477,10 @@ public class FXMLController {
     public void onUndoButtonClicked() {
         LogHelper.undo();
         //update the display
-        switch(currentTab){
-            case "Fall Semester":
-                displayCalendarSchedule(fallSemester, fallSemesterPane);
-                break;
-            case "Spring Semester":
-                displayCalendarSchedule(springSemester, springSemesterPane);
-                break;
-            case "College Career":
-                displaySchedule(courseWishList, courseWishListVBox);
-                displaySchedule(completedCourses, completedCoursesVBox);
-                break;
-        }
+        displayCalendarSchedule(fallSemester, fallSemesterPane);
+        displayCalendarSchedule(springSemester, springSemesterPane);
+        displaySchedule(courseWishList, courseWishListVBox);
+        displaySchedule(completedCourses, completedCoursesVBox);
         updateTotalCredits();
     }
 
